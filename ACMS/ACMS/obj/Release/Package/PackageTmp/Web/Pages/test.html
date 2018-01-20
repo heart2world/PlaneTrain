@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>测试</title>
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+</head>
+<body>
+    <button onclick="getUserList()">请求用户列表</button>
+
+    <button onclick="getRoleList()">请求角色列表</button>
+    <button onclick="addRole()">添加角色</button>
+    <button onclick="editRole()">编辑角色</button>
+    <button onclick="deleteRole()">删除角色</button>
+    <button onclick="getMenuList()">获取菜单列表</button>
+    <button onclick="login('Admin','111111')">登录1</button>
+    <button onclick="login('test','111111')">登录2</button>
+
+    <button onclick="add()">添加机型</button>
+    <script type="text/javascript">
+        var loginContext = { "ticket": "" };
+
+        var getUserList = function () {
+            $.ajax({
+                type: "get",
+                url: "../../api/user/getlist",
+                data: {},
+                beforeSend: function (XHR) {
+                    //发送ajax请求之前向http的head里面加入验证信息
+                    XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+                },
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                },
+                error: function (e) {
+                    window.location.href = "login.html";
+                },
+                complete: function () {
+
+                }
+
+            });
+        };
+
+        var getRoleList = function () {
+            $.ajax({
+                type: "get",
+                url: "../../api/role/getlist",
+                data: { "pageSize": 10, "pageNo": 1, "keyWord": "" },
+
+                success: function (data, status) {
+                    console.log(data);
+                },
+                error: function (e) {
+                    //$("#div_test").html("Error");
+                },
+                complete: function () {
+
+                }
+
+            });
+        };
+
+        var getMenuList = function () {
+            $.ajax({
+                type: "get",
+                url: "../../api/menu/getlist",
+                data: {},
+
+                success: function (data, status) {
+                    console.log(data);
+                },
+                error: function (e) {
+                    //$("#div_test").html("Error");
+                },
+                complete: function () {
+
+                }
+
+            });
+        };
+
+        var login = function (userName, pwd) {
+            $.post('../../api/account/login', {
+                "LoginAccount": userName,
+                "Password": pwd
+            }).success(function (data) {
+                console.log(data);
+                if (data.LoginResult) {
+                    loginContext.ticket = data.Ticket;
+                }
+            });
+        };
+
+        var add = function () {
+            $.post('../../api/planetype/add', {
+                "ID": "sample string 1",
+                "TypeName": "sample string 2",
+                "Memo": "sample string 3",
+                "IsActive": true,
+                "CreateTime": "sample string 5",
+                "Creator": "sample string 6",
+                "UpdateTime": "sample string 7",
+                "Updator": "sample string 8"
+            }).success(function (data) {
+                console.log(data);
+                if (data.LoginResult) {
+                    loginContext.ticket = data.Ticket;
+                }
+            });
+        };
+
+        var addRole = function () {
+            $.post('../../api/role/add', {
+
+                "RoleName": "sample string 2 ",
+                "RoleDesc": "sample string 3"
+
+
+            }).success(function (data) {
+                console.log(data);
+
+            });
+        };
+        var editRole = function () {
+            $.post('../../api/role/edit', {
+                "ID": "e77c201f-d69b-4ae8-a02b-2bae1ed3dfad",
+                "RoleName": "sample strin11",
+                "RoleDesc": "sample string 3"
+
+
+            }).success(function (data) {
+                console.log(data);
+
+            });
+        };
+        var deleteRole = function () {
+            $.ajax({
+                type: "get",
+                url: "../../api/role/delete",
+                data: { "ID": "f6e291c4-11e8-4225-a89c-e0bc645f3c09" },
+
+                success: function (data, status) {
+                    console.log(data);
+                },
+                error: function (e) {
+                    //$("#div_test").html("Error");
+                },
+                complete: function () {
+
+                }
+
+            });
+        };
+    </script>
+</body>
+</html>

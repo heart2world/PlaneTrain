@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ACMSModelStoreContainer" CdmEntityContainer="ACMSEFEntities">
+    <EntitySetMapping Name="Role">
+      <EntityTypeMapping TypeName="ACMSModel.Role">
+        <MappingFragment StoreEntitySet="Role">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RoleDesc" ColumnName="RoleDesc" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User">
+      <EntityTypeMapping TypeName="ACMSModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="LoginAccount" ColumnName="LoginAccount" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleMenu">
+      <EntityTypeMapping TypeName="ACMSModel.RoleMenu">
+        <MappingFragment StoreEntitySet="RoleMenu">
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserRole">
+      <EntityTypeMapping TypeName="ACMSModel.UserRole">
+        <MappingFragment StoreEntitySet="UserRole">
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Menu">
+      <EntityTypeMapping TypeName="ACMSModel.Menu">
+        <MappingFragment StoreEntitySet="Menu">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
+          <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
+          <ScalarProperty Name="ParentMenuID" ColumnName="ParentMenuID" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="MenuURL" ColumnName="MenuURL" />
+          <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlaneType">
+      <EntityTypeMapping TypeName="ACMSModel.PlaneType">
+        <MappingFragment StoreEntitySet="PlaneType">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlTypeTCtrlList">
+      <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList">
+        <MappingFragment StoreEntitySet="PlTypeTCtrlList">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_PlTypeTCtrlList">
+      <EntityTypeMapping TypeName="ACMSModel.V_PlTypeTCtrlList">
+        <MappingFragment StoreEntitySet="V_PlTypeTCtrlList">
+          <ScalarProperty Name="PlaneTypeName" ColumnName="PlaneTypeName" />
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CESSNA172RDailyRecord">
+      <EntityTypeMapping TypeName="ACMSModel.CESSNA172RDailyRecord">
+        <MappingFragment StoreEntitySet="CESSNA172RDailyRecord">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
+          <ScalarProperty Name="EngineNewTSN" ColumnName="EngineNewTSN" />
+          <ScalarProperty Name="EngineCorrectTSO" ColumnName="EngineCorrectTSO" />
+          <ScalarProperty Name="EngineNo" ColumnName="EngineNo" />
+          <ScalarProperty Name="EngineType" ColumnName="EngineType" />
+          <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
+          <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+          <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
+          <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
+          <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
+          <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
+          <ScalarProperty Name="CorrectAirTime" ColumnName="CorrectAirTime" />
+          <ScalarProperty Name="CorrectClearingTime" ColumnName="CorrectClearingTime" />
+          <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
+          <ScalarProperty Name="DayAirTime" ColumnName="DayAirTime" />
+          <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+          <ScalarProperty Name="DayClearingTime" ColumnName="DayClearingTime" />
+          <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PA44_180DailyRecord">
+      <EntityTypeMapping TypeName="ACMSModel.PA44_180DailyRecord">
+        <MappingFragment StoreEntitySet="PA44-180DailyRecord">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
+          <ScalarProperty Name="HeatingMachineNewTSN" ColumnName="HeatingMachineNewTSN" />
+          <ScalarProperty Name="HeatingMachineCorrectTSO" ColumnName="HeatingMachineCorrectTSO" />
+          <ScalarProperty Name="HeatingMachineDayTime" ColumnName="HeatingMachineDayTime" />
+          <ScalarProperty Name="RightEngineNewTSN" ColumnName="RightEngineNewTSN" />
+          <ScalarProperty Name="RightEngineCorrectTSO" ColumnName="RightEngineCorrectTSO" />
+          <ScalarProperty Name="RightEngineNo" ColumnName="RightEngineNo" />
+          <ScalarProperty Name="RightEngineType" ColumnName="RightEngineType" />
+          <ScalarProperty Name="LeftEngineNewTSN" ColumnName="LeftEngineNewTSN" />
+          <ScalarProperty Name="LeftEngineCorrectTSO" ColumnName="LeftEngineCorrectTSO" />
+          <ScalarProperty Name="LeftEngineNo" ColumnName="LeftEngineNo" />
+          <ScalarProperty Name="LeftEngineType" ColumnName="LeftEngineType" />
+          <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
+          <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+          <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
+          <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
+          <ScalarProperty Name="PlanNewHeatingMachineTime" ColumnName="PlanNewHeatingMachineTime" />
+          <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
+          <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
+          <ScalarProperty Name="CorrectHeatingMachineTime" ColumnName="CorrectHeatingMachineTime" />
+          <ScalarProperty Name="CorrectAirTime" ColumnName="CorrectAirTime" />
+          <ScalarProperty Name="CorrectClearingTime" ColumnName="CorrectClearingTime" />
+          <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
+          <ScalarProperty Name="DayHeatingMachineTime" ColumnName="DayHeatingMachineTime" />
+          <ScalarProperty Name="DayAirTime" ColumnName="DayAirTime" />
+          <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+          <ScalarProperty Name="DayClearingTime" ColumnName="DayClearingTime" />
+          <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlTypeTCtrlList_Log">
+      <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList_Log">
+        <MappingFragment StoreEntitySet="PlTypeTCtrlList_Log">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+          <ScalarProperty Name="TCtrlID" ColumnName="TCtrlID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_V_PlTypeTCtrlList_Log">
+      <EntityTypeMapping TypeName="ACMSModel.V_V_PlTypeTCtrlList_Log">
+        <MappingFragment StoreEntitySet="V_V_PlTypeTCtrlList_Log">
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+          <ScalarProperty Name="TCtrlID" ColumnName="TCtrlID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AirTimeAlarmSet">
+      <EntityTypeMapping TypeName="ACMSModel.AirTimeAlarmSet">
+        <MappingFragment StoreEntitySet="AirTimeAlarmSet">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ReNewOnOffTime" ColumnName="ReNewOnOffTime" />
+          <ScalarProperty Name="ReNewUpTempTime" ColumnName="ReNewUpTempTime" />
+          <ScalarProperty Name="ReNewAirTime" ColumnName="ReNewAirTime" />
+          <ScalarProperty Name="Days" ColumnName="Days" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Planes">
+      <EntityTypeMapping TypeName="ACMSModel.Planes">
+        <MappingFragment StoreEntitySet="Planes">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RankNo" ColumnName="RankNo" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="IsMonitored" ColumnName="IsMonitored" />
+          <ScalarProperty Name="PlaneFacDate" ColumnName="PlaneFacDate" />
+          <ScalarProperty Name="PlaneSeria" ColumnName="PlaneSeria" />
+          <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlanesTCtrlItem_ReList">
+      <EntityTypeMapping TypeName="ACMSModel.PlanesTCtrlItem_ReList">
+        <MappingFragment StoreEntitySet="PlanesTCtrlItem_ReList">
+          <ScalarProperty Name="PlTypeTCtrl" ColumnName="PlTypeTCtrl" />
+          <ScalarProperty Name="PlanesTCtrlItemID" ColumnName="PlanesTCtrlItemID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_Planes">
+      <EntityTypeMapping TypeName="ACMSModel.V_Planes">
+        <MappingFragment StoreEntitySet="V_Planes">
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RankNo" ColumnName="RankNo" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="IsMonitored" ColumnName="IsMonitored" />
+          <ScalarProperty Name="PlaneFacDate" ColumnName="PlaneFacDate" />
+          <ScalarProperty Name="PlaneSeria" ColumnName="PlaneSeria" />
+          <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlanesTCtrlItem">
+      <EntityTypeMapping TypeName="ACMSModel.PlanesTCtrlItem">
+        <MappingFragment StoreEntitySet="PlanesTCtrlItem">
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="IsWatUpTemprTime" ColumnName="IsWatUpTemprTime" />
+          <ScalarProperty Name="IsWatOnOffTime" ColumnName="IsWatOnOffTime" />
+          <ScalarProperty Name="IsWatAirTime" ColumnName="IsWatAirTime" />
+          <ScalarProperty Name="IsWatDate" ColumnName="IsWatDate" />
+          <ScalarProperty Name="ExeCapacity" ColumnName="ExeCapacity" />
+          <ScalarProperty Name="TSO" ColumnName="TSO" />
+          <ScalarProperty Name="TSN" ColumnName="TSN" />
+          <ScalarProperty Name="SerialNO" ColumnName="SerialNO" />
+          <ScalarProperty Name="JianNO" ColumnName="JianNO" />
+          <ScalarProperty Name="IsCtrl" ColumnName="IsCtrl" />
+          <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_PlanesTCtrlItem">
+      <EntityTypeMapping TypeName="ACMSModel.V_PlanesTCtrlItem">
+        <MappingFragment StoreEntitySet="V_PlanesTCtrlItem">
+          <ScalarProperty Name="RUpTemprTime2" ColumnName="RUpTemprTime2" />
+          <ScalarProperty Name="ROnOffTime2" ColumnName="ROnOffTime2" />
+          <ScalarProperty Name="RAirTime2" ColumnName="RAirTime2" />
+          <ScalarProperty Name="RCheckDate2" ColumnName="RCheckDate2" />
+          <ScalarProperty Name="FUpTemprTime2" ColumnName="FUpTemprTime2" />
+          <ScalarProperty Name="FOnOffTime2" ColumnName="FOnOffTime2" />
+          <ScalarProperty Name="FAirTime2" ColumnName="FAirTime2" />
+          <ScalarProperty Name="FCheckDate2" ColumnName="FCheckDate2" />
+          <ScalarProperty Name="PlTypeTCtrl" ColumnName="PlTypeTCtrl" />
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="IsWatUpTemprTime" ColumnName="IsWatUpTemprTime" />
+          <ScalarProperty Name="IsWatOnOffTime" ColumnName="IsWatOnOffTime" />
+          <ScalarProperty Name="IsWatAirTime" ColumnName="IsWatAirTime" />
+          <ScalarProperty Name="IsWatDate" ColumnName="IsWatDate" />
+          <ScalarProperty Name="ExeCapacity" ColumnName="ExeCapacity" />
+          <ScalarProperty Name="TSO" ColumnName="TSO" />
+          <ScalarProperty Name="TSN" ColumnName="TSN" />
+          <ScalarProperty Name="SerialNO" ColumnName="SerialNO" />
+          <ScalarProperty Name="JianNO" ColumnName="JianNO" />
+          <ScalarProperty Name="IsCtrl" ColumnName="IsCtrl" />
+          <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+          <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+          <ScalarProperty Name="PlaneNoName" ColumnName="PlaneNoName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_PlanesTCtrlItem_Log">
+      <EntityTypeMapping TypeName="ACMSModel.V_PlanesTCtrlItem_Log">
+        <MappingFragment StoreEntitySet="V_PlanesTCtrlItem_Log">
+          <ScalarProperty Name="RUpTemprTime2" ColumnName="RUpTemprTime2" />
+          <ScalarProperty Name="ROnOffTime2" ColumnName="ROnOffTime2" />
+          <ScalarProperty Name="RAirTime2" ColumnName="RAirTime2" />
+          <ScalarProperty Name="RCheckDate2" ColumnName="RCheckDate2" />
+          <ScalarProperty Name="FUpTemprTime2" ColumnName="FUpTemprTime2" />
+          <ScalarProperty Name="FOnOffTime2" ColumnName="FOnOffTime2" />
+          <ScalarProperty Name="FAirTime2" ColumnName="FAirTime2" />
+          <ScalarProperty Name="FCheckDate2" ColumnName="FCheckDate2" />
+          <ScalarProperty Name="PlanesNoName" ColumnName="PlanesNoName" />
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+          <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+          <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+          <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+          <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+          <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+          <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+          <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+          <ScalarProperty Name="IsWatUpTemprTime" ColumnName="IsWatUpTemprTime" />
+          <ScalarProperty Name="IsWatOnOffTime" ColumnName="IsWatOnOffTime" />
+          <ScalarProperty Name="IsWatAirTime" ColumnName="IsWatAirTime" />
+          <ScalarProperty Name="IsWatDate" ColumnName="IsWatDate" />
+          <ScalarProperty Name="ExeCapacity" ColumnName="ExeCapacity" />
+          <ScalarProperty Name="TSO" ColumnName="TSO" />
+          <ScalarProperty Name="TSN" ColumnName="TSN" />
+          <ScalarProperty Name="SerialNO" ColumnName="SerialNO" />
+          <ScalarProperty Name="JianNO" ColumnName="JianNO" />
+          <ScalarProperty Name="IsCtrl" ColumnName="IsCtrl" />
+          <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+          <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

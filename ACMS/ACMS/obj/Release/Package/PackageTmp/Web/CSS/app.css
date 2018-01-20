@@ -1,0 +1,52 @@
+/*
+	app.css created by Kevin on 2017/12/26
+*/
+[v-cloak]{ display: none;}
+i,em{ font-style: normal;}
+table{ border-collapse: collapse; background: #fff;}
+label{ font-size: 13px; font-weight: normal;}
+.main-sidebar .fa{ width: 20px;}
+.box-body{ padding: 0;}
+.content-header h1{ font-size: 20px;}
+.login-box, .register-box{ margin: 0 auto; padding: 12.78333% 0;}
+.login-logo b{ font-size: 26px; font-weight: normal;}
+.home-content{ padding-top: 20px; text-align: center; overflow: hidden;}
+.home-content .query-panel{ padding: 6.781235% 0; text-align: center; background-color: none;}
+.home-content .query-panel a{ font-size: 16px; color: #282828;}
+.home-content .query-panel .fa-calendar{ margin-right: 8px; color: #3c8dbc; font-size: 20px;}
+.err-msg{ font-size: 12px; color: #f44; padding-top: 8px; text-align: center;}
+.header-fn{ padding: 10px 15px 0; overflow: hidden;}
+.content table th,
+.content table tr td{ text-align: center;}
+.input-groups{ padding: 0; overflow: hidden; float: right !important; text-align: right;}
+.input-groups .input-text{ padding: 0 0 0 15px;}
+.choose-page{ line-height: 34px;}
+.form-content{ padding: 15px;}
+.content table tr:hover{ cursor: default; }
+.content table tr.checked{ background-color: #3c8dbc;}
+.content table tr.checked td{ border: 0 none; color: #fff;}
+.data-null{ text-align: center; font-size: 14px; color: #282828;}
+.planetype a{ display: inline-block; text-align: center; min-width: 200px; margin: 0 18px; font-size: 16px; color: #282828; padding: 10px 12px; background-color: #dfe3e8;}
+.panel-content{ padding: 30px 15px; overflow: auto; font-size: 16px; text-align: left;}
+.panel-content .planetype{ padding-bottom: 15px;}
+
+.box-body table th,
+.box-body table td{ font-size: 14px; height: 28px; vertical-align: middle !important; white-space: nowrap; border: 1px solid #ddd !important;}
+.box-body table td{ font-size: 13px;}
+.input-title{ padding: 10px 0; margin-left: -15px; font-size: 16px; font-weight: 700;}
+.form-horizontal .form-group{ margin-bottom: 0;}
+.ctr-form-input input{ width: 80px !important;}
+.ctr-dete-hd span{ font-size: 15px; padding-left: 100px; color: #3c8dbc;}
+.ctr-dete-hd  p{ padding: 8px 0; font-size: 13px;}
+[aria-label]{ display: none;}
+.main-footer{ color: #333;}
+.print-content header{ font-size: 15px; padding: 0 4.352%; text-align: justify; }
+.print-content header div:last-child{ text-align: right;}
+.print-table{ padding: 12px 4.758% 4.352%;}
+.box-plane{ text-align: center;}
+.calculator{ width: 320px; padding: 13px 16px; background: #cacaca;}
+/*print*/
+@media print{
+	.header-fn,
+	.main-footer{ display: none;}
+}
