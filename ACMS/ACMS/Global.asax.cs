@@ -20,7 +20,7 @@ namespace ACMS
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //注册Mapper 及测试
+            //注册Mapper
             AutoMapperForMvc.Register();
         }
 
