@@ -141,12 +141,16 @@
     <Compile Include="Applications\Impl\PlTypeTCtrlListService.cs" />
     <Compile Include="Applications\Impl\RoleService.cs" />
     <Compile Include="Applications\Impl\UserService.cs" />
+    <Compile Include="Applications\Impl\V_PlanesTCtrlItem_CheckService.cs" />
+    <Compile Include="Applications\Impl\WatchPrintListSerivce.cs" />
     <Compile Include="Applications\IPlanesService.cs" />
     <Compile Include="Applications\IPlanesTCtrlItemServices.cs" />
     <Compile Include="Applications\IPlaneTypeService.cs" />
     <Compile Include="Applications\IPlTypeTCtrlListService.cs" />
     <Compile Include="Applications\IRoleService.cs" />
     <Compile Include="Applications\IUserService.cs" />
+    <Compile Include="Applications\IV_PlanesTCtrlItem_CheckService.cs" />
+    <Compile Include="Applications\IWatchPrintListService.cs" />
     <Compile Include="App_Start\AutoMapperForMvc.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -180,6 +184,8 @@
     </Compile>
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\V_PlanesTCtrlItem_CheckController.cs" />
+    <Compile Include="Controllers\WatchPrintListController.cs" />
     <Compile Include="EF\ACMSEFEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -237,10 +243,16 @@
     <Compile Include="EF\UserRole.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\V_DailyRecordReport.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\V_Planes.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\V_PlanesTCtrlItem.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\V_PlanesTCtrlItem_Check.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\V_PlanesTCtrlItem_Log.cs">
@@ -252,11 +264,15 @@
     <Compile Include="EF\V_V_PlTypeTCtrlList_Log.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\WatchPrintList.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mappers\SourceProfile.cs" />
     <Compile Include="Models\DailyRecordDto.cs" />
+    <Compile Include="Models\DailyRecordReportDto.cs" />
     <Compile Include="Models\MenuDto.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="Models\PlanesTCtrlItemDto.cs" />

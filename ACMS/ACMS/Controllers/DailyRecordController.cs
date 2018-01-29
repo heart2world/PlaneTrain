@@ -17,6 +17,18 @@ namespace ACMS.Controllers
     {
         IDailyRecordService _dailyRecordService = new DailyRecordService();
 
+        [HttpGet, Route("getreportlist")]
+        public IHttpActionResult GetDailyRecordReportList(string planTypeID, string planID, string ExecUnit, string startDate, string endDate)
+        {
+            List<string> planTypeIDList = new List<string>();
+            planTypeIDList = !string.IsNullOrEmpty(planTypeID) ? planTypeID.Split(',').ToList() : null;
+            List<string> planIDList = new List<string>();
+            planIDList = !string.IsNullOrEmpty(planID) ?planID.Split(',').ToList():null;
+            List<string> ExecUnitList = new List<string>();
+            ExecUnitList = !string.IsNullOrEmpty(ExecUnit) ? ExecUnit.Split(',').ToList() : null;
+            return Ok(_dailyRecordService.GetDailyRecordReportList(planTypeIDList, planIDList, ExecUnitList, startDate, endDate));
+        }
+
         #region CESSNA172RDailyRecord
 
         [HttpGet, Route("cessna172r/getlist")]

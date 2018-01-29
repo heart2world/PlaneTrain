@@ -273,6 +273,19 @@
     <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
   </EntityType>
+  <EntityType Name="WatchPrintList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="CtrlItem" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PlaneID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+  </EntityType>
   <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_Planes”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
   <EntityType Name="V_Planes">
@@ -313,10 +326,10 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="PlaneNoName" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="ProSource" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="MainTainName" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="PlaneNoName" Type="varchar" MaxLength="50" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProSource" Type="varchar" MaxLength="50" />
+    <Property Name="MainTainName" Type="varchar" MaxLength="200" />
     <Property Name="Capacity" Type="int" />
     <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
     <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" Nullable="false" />
@@ -345,15 +358,70 @@
     <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
     <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
-    <Property Name="PlTypeTCtrl" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="FCheckDate2" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PlTypeTCtrl" Type="nvarchar" MaxLength="50" />
+    <Property Name="FCheckDate2" Type="varchar" MaxLength="50" />
     <Property Name="FAirTime2" Type="decimal" Precision="10" Scale="2" />
     <Property Name="FOnOffTime2" Type="int" />
     <Property Name="FUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="RCheckDate2" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="RCheckDate2" Type="varchar" MaxLength="50" />
     <Property Name="RAirTime2" Type="decimal" Precision="10" Scale="2" />
     <Property Name="ROnOffTime2" Type="int" />
     <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem_Check”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="V_PlanesTCtrlItem_Check">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="PlaneNoName" Type="varchar" MaxLength="50" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProSource" Type="varchar" MaxLength="50" />
+    <Property Name="MainTainName" Type="varchar" MaxLength="200" />
+    <Property Name="Capacity" Type="int" />
+    <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="PlaneNo" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IsCtrl" Type="bit" Nullable="false" />
+    <Property Name="JianNO" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="SerialNO" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TSN" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="TSO" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="ExeCapacity" Type="int" Nullable="false" />
+    <Property Name="IsWatDate" Type="bit" />
+    <Property Name="IsWatAirTime" Type="bit" />
+    <Property Name="IsWatOnOffTime" Type="bit" />
+    <Property Name="IsWatUpTemprTime" Type="bit" />
+    <Property Name="FCheckDate" Type="varchar" MaxLength="50" />
+    <Property Name="FAirTime" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="FOnOffTime" Type="int" />
+    <Property Name="FUpTemprTime" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="RCheckDate" Type="varchar" MaxLength="50" />
+    <Property Name="RAirTime" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="ROnOffTime" Type="int" />
+    <Property Name="RUpTemprTime" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Memo" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="PlTypeTCtrl" Type="nvarchar" MaxLength="50" />
+    <Property Name="FCheckDate2" Type="varchar" MaxLength="50" />
+    <Property Name="FAirTime2" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="FOnOffTime2" Type="int" />
+    <Property Name="FUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="RCheckDate2" Type="varchar" MaxLength="50" />
+    <Property Name="RAirTime2" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="ROnOffTime2" Type="int" />
+    <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="PlanID" Type="varchar" MaxLength="128" />
+    <Property Name="PlanNewClearingTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PlanNewAirTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PlanNewRiseAndFallNum" Type="int" />
+    <Property Name="PlanNewHeatingMachineTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="IsPrinted" Type="int" Nullable="false" />
+    <Property Name="DateDiffValue" Type="int" />
   </EntityType>
   <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -361,9 +429,9 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="MainTainName" Type="varchar" MaxLength="200" Nullable="false" />
-    <Property Name="ProSource" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MainTainName" Type="varchar" MaxLength="200" />
+    <Property Name="ProSource" Type="varchar" MaxLength="50" />
     <Property Name="Capacity" Type="int" />
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="ItemID" Type="varchar" MaxLength="128" Nullable="false" />
@@ -393,12 +461,12 @@
     <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
     <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
-    <Property Name="PlanesNoName" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="FCheckDate2" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PlanesNoName" Type="varchar" MaxLength="50" />
+    <Property Name="FCheckDate2" Type="varchar" MaxLength="50" />
     <Property Name="FAirTime2" Type="decimal" Precision="10" Scale="2" />
     <Property Name="FOnOffTime2" Type="int" />
     <Property Name="FUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="RCheckDate2" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="RCheckDate2" Type="varchar" MaxLength="50" />
     <Property Name="RAirTime2" Type="decimal" Precision="10" Scale="2" />
     <Property Name="ROnOffTime2" Type="int" />
     <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
@@ -471,6 +539,7 @@
     <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WatchPrintList" EntityType="Self.WatchPrintList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="V_Planes" EntityType="Self.V_Planes" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [V_Planes].[ID] AS [ID], 
@@ -533,6 +602,58 @@
     [V_PlanesTCtrlItem].[ROnOffTime2] AS [ROnOffTime2], 
     [V_PlanesTCtrlItem].[RUpTemprTime2] AS [RUpTemprTime2]
     FROM [dbo].[V_PlanesTCtrlItem] AS [V_PlanesTCtrlItem]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="V_PlanesTCtrlItem_Check" EntityType="Self.V_PlanesTCtrlItem_Check" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [V_PlanesTCtrlItem_Check].[PlaneNoName] AS [PlaneNoName], 
+    [V_PlanesTCtrlItem_Check].[TypeName] AS [TypeName], 
+    [V_PlanesTCtrlItem_Check].[ProSource] AS [ProSource], 
+    [V_PlanesTCtrlItem_Check].[MainTainName] AS [MainTainName], 
+    [V_PlanesTCtrlItem_Check].[Capacity] AS [Capacity], 
+    [V_PlanesTCtrlItem_Check].[ID] AS [ID], 
+    [V_PlanesTCtrlItem_Check].[PlaneTypeID] AS [PlaneTypeID], 
+    [V_PlanesTCtrlItem_Check].[PlaneNo] AS [PlaneNo], 
+    [V_PlanesTCtrlItem_Check].[IsCtrl] AS [IsCtrl], 
+    [V_PlanesTCtrlItem_Check].[JianNO] AS [JianNO], 
+    [V_PlanesTCtrlItem_Check].[SerialNO] AS [SerialNO], 
+    [V_PlanesTCtrlItem_Check].[TSN] AS [TSN], 
+    [V_PlanesTCtrlItem_Check].[TSO] AS [TSO], 
+    [V_PlanesTCtrlItem_Check].[ExeCapacity] AS [ExeCapacity], 
+    [V_PlanesTCtrlItem_Check].[IsWatDate] AS [IsWatDate], 
+    [V_PlanesTCtrlItem_Check].[IsWatAirTime] AS [IsWatAirTime], 
+    [V_PlanesTCtrlItem_Check].[IsWatOnOffTime] AS [IsWatOnOffTime], 
+    [V_PlanesTCtrlItem_Check].[IsWatUpTemprTime] AS [IsWatUpTemprTime], 
+    [V_PlanesTCtrlItem_Check].[FCheckDate] AS [FCheckDate], 
+    [V_PlanesTCtrlItem_Check].[FAirTime] AS [FAirTime], 
+    [V_PlanesTCtrlItem_Check].[FOnOffTime] AS [FOnOffTime], 
+    [V_PlanesTCtrlItem_Check].[FUpTemprTime] AS [FUpTemprTime], 
+    [V_PlanesTCtrlItem_Check].[RCheckDate] AS [RCheckDate], 
+    [V_PlanesTCtrlItem_Check].[RAirTime] AS [RAirTime], 
+    [V_PlanesTCtrlItem_Check].[ROnOffTime] AS [ROnOffTime], 
+    [V_PlanesTCtrlItem_Check].[RUpTemprTime] AS [RUpTemprTime], 
+    [V_PlanesTCtrlItem_Check].[Memo] AS [Memo], 
+    [V_PlanesTCtrlItem_Check].[IsActive] AS [IsActive], 
+    [V_PlanesTCtrlItem_Check].[CreateTime] AS [CreateTime], 
+    [V_PlanesTCtrlItem_Check].[Creator] AS [Creator], 
+    [V_PlanesTCtrlItem_Check].[UpdateTime] AS [UpdateTime], 
+    [V_PlanesTCtrlItem_Check].[Updator] AS [Updator], 
+    [V_PlanesTCtrlItem_Check].[PlTypeTCtrl] AS [PlTypeTCtrl], 
+    [V_PlanesTCtrlItem_Check].[FCheckDate2] AS [FCheckDate2], 
+    [V_PlanesTCtrlItem_Check].[FAirTime2] AS [FAirTime2], 
+    [V_PlanesTCtrlItem_Check].[FOnOffTime2] AS [FOnOffTime2], 
+    [V_PlanesTCtrlItem_Check].[FUpTemprTime2] AS [FUpTemprTime2], 
+    [V_PlanesTCtrlItem_Check].[RCheckDate2] AS [RCheckDate2], 
+    [V_PlanesTCtrlItem_Check].[RAirTime2] AS [RAirTime2], 
+    [V_PlanesTCtrlItem_Check].[ROnOffTime2] AS [ROnOffTime2], 
+    [V_PlanesTCtrlItem_Check].[RUpTemprTime2] AS [RUpTemprTime2], 
+    [V_PlanesTCtrlItem_Check].[PlanID] AS [PlanID], 
+    [V_PlanesTCtrlItem_Check].[PlanNewClearingTime] AS [PlanNewClearingTime], 
+    [V_PlanesTCtrlItem_Check].[PlanNewAirTime] AS [PlanNewAirTime], 
+    [V_PlanesTCtrlItem_Check].[PlanNewRiseAndFallNum] AS [PlanNewRiseAndFallNum], 
+    [V_PlanesTCtrlItem_Check].[PlanNewHeatingMachineTime] AS [PlanNewHeatingMachineTime], 
+    [V_PlanesTCtrlItem_Check].[IsPrinted] AS [IsPrinted], 
+    [V_PlanesTCtrlItem_Check].[DateDiffValue] AS [DateDiffValue]
+    FROM [dbo].[V_PlanesTCtrlItem_Check] AS [V_PlanesTCtrlItem_Check]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="V_PlanesTCtrlItem_Log" EntityType="Self.V_PlanesTCtrlItem_Log" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 

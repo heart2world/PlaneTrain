@@ -10,6 +10,17 @@ namespace ACMS.Applications
 {
     public interface IDailyRecordService
     {
+        /// <summary>
+        /// 飞行数据统计
+        /// </summary>
+        /// <param name="planTypeID"></param>
+        /// <param name="planID"></param>
+        /// <param name="ExecUnit"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        PageResult<DailyRecordReportDto> GetDailyRecordReportList(List<string> planTypeID, List<string> planID, List<string> ExecUnit, string startDate, string endDate);
+
         #region CESSNA172RDailyRecord
         /// <summary>
         /// 获取参数

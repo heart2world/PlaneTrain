@@ -20,6 +20,9 @@
     <EntitySet Name="PlanesTCtrlItem" EntityType="ACMSModel.PlanesTCtrlItem" />
     <EntitySet Name="V_PlanesTCtrlItem" EntityType="ACMSModel.V_PlanesTCtrlItem" />
     <EntitySet Name="V_PlanesTCtrlItem_Log" EntityType="ACMSModel.V_PlanesTCtrlItem_Log" />
+    <EntitySet Name="WatchPrintList" EntityType="ACMSModel.WatchPrintList" />
+    <EntitySet Name="V_PlanesTCtrlItem_Check" EntityType="ACMSModel.V_PlanesTCtrlItem_Check" />
+    <EntitySet Name="V_DailyRecordReport" EntityType="ACMSModel.V_DailyRecordReport" />
   </EntityContainer>
   <EntityType Name="Role">
     <Key>
@@ -379,10 +382,10 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="PlaneNoName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="TypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ProSource" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="MainTainName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PlaneNoName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProSource" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MainTainName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Capacity" Type="Int32" />
     <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
     <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
@@ -411,12 +414,12 @@
     <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
     <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-    <Property Name="PlTypeTCtrl" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="FCheckDate2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlTypeTCtrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="FAirTime2" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="FOnOffTime2" Type="Int32" />
     <Property Name="FUpTemprTime2" Type="Decimal" Precision="10" Scale="2" />
-    <Property Name="RCheckDate2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="RAirTime2" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="ROnOffTime2" Type="Int32" />
     <Property Name="RUpTemprTime2" Type="Decimal" Precision="10" Scale="2" />
@@ -425,9 +428,9 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="TypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MainTainName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ProSource" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MainTainName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ProSource" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Capacity" Type="Int32" />
     <Property Name="ID" Type="Int32" Nullable="false" />
     <Property Name="ItemID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
@@ -457,14 +460,104 @@
     <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
     <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-    <Property Name="PlanesNoName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="FCheckDate2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlanesNoName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="FAirTime2" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="FOnOffTime2" Type="Int32" />
     <Property Name="FUpTemprTime2" Type="Decimal" Precision="10" Scale="2" />
-    <Property Name="RCheckDate2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="RAirTime2" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="ROnOffTime2" Type="Int32" />
     <Property Name="RUpTemprTime2" Type="Decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="WatchPrintList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CtrlItem" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlaneID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="V_PlanesTCtrlItem_Check">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="PlaneNoName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProSource" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MainTainName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Capacity" Type="Int32" />
+    <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="PlaneNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsCtrl" Type="Boolean" Nullable="false" />
+    <Property Name="JianNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SerialNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TSN" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="TSO" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="ExeCapacity" Type="Int32" Nullable="false" />
+    <Property Name="IsWatDate" Type="Boolean" />
+    <Property Name="IsWatAirTime" Type="Boolean" />
+    <Property Name="IsWatOnOffTime" Type="Boolean" />
+    <Property Name="IsWatUpTemprTime" Type="Boolean" />
+    <Property Name="FCheckDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FAirTime" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="FOnOffTime" Type="Int32" />
+    <Property Name="FUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="RCheckDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RAirTime" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="ROnOffTime" Type="Int32" />
+    <Property Name="RUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="PlTypeTCtrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FAirTime2" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="FOnOffTime2" Type="Int32" />
+    <Property Name="FUpTemprTime2" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="RCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RAirTime2" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="ROnOffTime2" Type="Int32" />
+    <Property Name="RUpTemprTime2" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="PlanID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="PlanNewClearingTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
+    <Property Name="PlanNewHeatingMachineTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="IsPrinted" Type="Int32" Nullable="false" />
+    <Property Name="DateDiffValue" Type="Int32" />
+  </EntityType>
+  <EntityType Name="V_DailyRecordReport">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="DayRiseAndFallNum" Type="Int32" Nullable="false" />
+    <Property Name="DayMaintenaceTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="PlanDayClearingTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PlanDayGroundTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="HeatingMachineDayTime" Type="Int32" Nullable="false" />
+    <Property Name="PlaneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PlaneTypeID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

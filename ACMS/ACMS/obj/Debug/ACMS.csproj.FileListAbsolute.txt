@@ -92,4 +92,3 @@ E:\Work\ACMS\ACMS\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 E:\Work\ACMS\ACMS\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
 E:\Work\ACMS\ACMS\obj\Debug\ACMS.dll
 E:\Work\ACMS\ACMS\obj\Debug\ACMS.pdb
-E:\Work\ACMS\ACMS\obj\Debug\ACMS.csprojResolveAssemblyReference.cache

@@ -22,8 +22,81 @@ namespace ACMS.Applications.Impl
             base.AddDisposableObject(_dbContext);
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planTypeID"></param>
+        /// <param name="planID"></param>
+        /// <param name="ExecUnit"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public PageResult<DailyRecordReportDto> GetDailyRecordReportList(List<string> planTypeID, List<string> planID, List<string> ExecUnit, string startDate, string endDate)
+        {
+            PageResult<DailyRecordReportDto> list = new PageResult<DailyRecordReportDto>();
 
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                result = result.Where(x => string.Compare(x.CreateTime , startDate)>0);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                result = result.Where(x => string.Compare(x.CreateTime, endDate) <0 );
+            }
+            list.ResultData  = result.GroupBy(a => new { a.TypeName, a.PlanID, a.PlaneNo, a.PlaneTypeID })
+                         .Select(g => new DailyRecordReportDto()
+                         {
+                             DayMaintenaceTime = g.Sum(i => i.DayMaintenaceTime),
+                             ExecUnit = "遂宁飞行学院",
+                             DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
+                             HeatingMachineDayTime = g.Sum(i => i.HeatingMachineDayTime),
+                             PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
+                             PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime),
+                             PlanDayGroundTime = g.Sum(i => i.PlanDayGroundTime),
+                             PlaneNo = g.Key.PlaneNo,
+                             PlanID = g.Key.PlanID,
+                             TypeName = g.Key.TypeName,
+                             //FlightDays=10,
+                             PlaneTypeID = g.Key.PlaneTypeID
 
+                         }).OrderByDescending(m=>m.PlanID).ToList();
+            //机号查询
+            if (planID != null && planID.Count > 0)
+            {
+                foreach (string item in planID)
+                {
+                    list.ResultData = list.ResultData.Where(x => x.PlanID == item).ToList();
+                }
+
+            }
+            //机型查询
+            if (planTypeID != null && planTypeID.Count > 0)
+            {
+                foreach (string item in planTypeID)
+                {
+                    list.ResultData = list.ResultData.Where(x => x.PlaneTypeID == item).ToList();
+                }
+
+            }
+
+            //执行单位查询
+            if (ExecUnit != null && ExecUnit.Count > 0)
+            {
+                foreach (string item in ExecUnit)
+                {
+                    list.ResultData = list.ResultData.Where(x => x.ExecUnit == item).ToList();
+                }
+
+            }
+
+            list.Total = list.ResultData.Count();
+            return list;
+        }
         #region CESSNA172RDailyRecord
         /// <summary>
         /// 获取参数
