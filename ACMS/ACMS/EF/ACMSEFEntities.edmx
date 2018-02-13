@@ -228,6 +228,22 @@
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
+        <EntityType Name="ReportRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Reportor" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="ReportTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="StartDate" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="EndDate" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="ID" />
@@ -296,6 +312,17 @@
         <EntityType Name="V_DailyRecordReport">
           <Key>
             <PropertyRef Name="ID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
@@ -625,6 +652,7 @@
           <EntitySet Name="PlaneType" EntityType="Self.PlaneType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlTypeTCtrlList" EntityType="Self.PlTypeTCtrlList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlTypeTCtrlList_Log" EntityType="Self.PlTypeTCtrlList_Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportRecord" EntityType="Self.ReportRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -888,6 +916,7 @@
           <EntitySet Name="WatchPrintList" EntityType="ACMSModel.WatchPrintList" />
           <EntitySet Name="V_PlanesTCtrlItem_Check" EntityType="ACMSModel.V_PlanesTCtrlItem_Check" />
           <EntitySet Name="V_DailyRecordReport" EntityType="ACMSModel.V_DailyRecordReport" />
+          <EntitySet Name="ReportRecord" EntityType="ACMSModel.ReportRecord" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1424,6 +1453,22 @@
           <Property Name="PlaneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PlaneTypeID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ReportRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Reportor" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="ReportTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EndDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1971,6 +2016,23 @@
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportRecord">
+            <EntityTypeMapping TypeName="ACMSModel.ReportRecord">
+              <MappingFragment StoreEntitySet="ReportRecord">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ReportTime" ColumnName="ReportTime" />
+                <ScalarProperty Name="Reportor" ColumnName="Reportor" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

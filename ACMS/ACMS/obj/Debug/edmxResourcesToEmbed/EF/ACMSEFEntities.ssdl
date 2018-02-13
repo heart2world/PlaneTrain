@@ -223,6 +223,22 @@
     <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
   </EntityType>
+  <EntityType Name="ReportRecord">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="ReportType" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="Reportor" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="ReportTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="StartDate" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="EndDate" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="ID" />
@@ -561,6 +577,7 @@
     <EntitySet Name="PlaneType" EntityType="Self.PlaneType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PlTypeTCtrlList" EntityType="Self.PlTypeTCtrlList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PlTypeTCtrlList_Log" EntityType="Self.PlTypeTCtrlList_Log" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ReportRecord" EntityType="Self.ReportRecord" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />

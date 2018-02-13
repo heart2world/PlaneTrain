@@ -139,6 +139,7 @@
     <Compile Include="Applications\Impl\PlanesTCtrlItemServices.cs" />
     <Compile Include="Applications\Impl\PlaneTypeService.cs" />
     <Compile Include="Applications\Impl\PlTypeTCtrlListService.cs" />
+    <Compile Include="Applications\Impl\ReportRecordService.cs" />
     <Compile Include="Applications\Impl\RoleService.cs" />
     <Compile Include="Applications\Impl\UserService.cs" />
     <Compile Include="Applications\Impl\V_PlanesTCtrlItem_CheckService.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Applications\IPlanesTCtrlItemServices.cs" />
     <Compile Include="Applications\IPlaneTypeService.cs" />
     <Compile Include="Applications\IPlTypeTCtrlListService.cs" />
+    <Compile Include="Applications\IReportRecordService.cs" />
     <Compile Include="Applications\IRoleService.cs" />
     <Compile Include="Applications\IUserService.cs" />
     <Compile Include="Applications\IV_PlanesTCtrlItem_CheckService.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Controllers\PlTypeTCtrlListController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\ReportRecordController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\V_PlanesTCtrlItem_CheckController.cs" />
@@ -229,6 +232,9 @@
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\PlTypeTCtrlList_Log.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ReportRecord.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\Role.cs">

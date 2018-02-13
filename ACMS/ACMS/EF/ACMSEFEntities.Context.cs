@@ -47,5 +47,6 @@ namespace ACMS.EF
         public virtual DbSet<WatchPrintList> WatchPrintList { get; set; }
         public virtual DbSet<V_PlanesTCtrlItem_Check> V_PlanesTCtrlItem_Check { get; set; }
         public virtual DbSet<V_DailyRecordReport> V_DailyRecordReport { get; set; }
+        public virtual DbSet<ReportRecord> ReportRecord { get; set; }
     }
 }
