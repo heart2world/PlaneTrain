@@ -319,7 +319,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -331,7 +331,7 @@ namespace ACMS.Applications.Impl
         /// <returns>数据实体</returns>
         public CESSNA172RDailyRecord GetCESSNA172RDailyRecord(string ID)
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.ID == ID).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.ID == ID && x.IsActive).FirstOrDefault();
             return query;
         }
 
@@ -501,7 +501,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord()
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.InputDate).FirstOrDefault();
             return query;
         }
         #endregion
@@ -589,7 +589,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -786,7 +786,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public PA44_180DailyRecord GetLatestPA44_180DailyRecord()
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.IsActive).OrderByDescending(o => o.InputDate).FirstOrDefault();
             return query;
         }
 
