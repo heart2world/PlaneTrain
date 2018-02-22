@@ -10,6 +10,7 @@ namespace ACMS.Models
         public string ID { get; set; }
         public int Type { get; set; }
         public string PlanID { get; set; }
+        public string PlanTypeID { get; set; }
         public string PlaneNo { get; set; }
         public string InputDate { get; set; }
         public decimal DayClearingTime { get; set; }

@@ -22,8 +22,133 @@ namespace ACMS.Applications.Impl
             base.AddDisposableObject(_dbContext);
 
         }
+
+
         /// <summary>
-        /// 
+        /// 飞机生产信息月报
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public PageResult<PlaneWorkReportDto> PlaneWorkReportDtoList(string startDate, string endDate)
+        {
+            PageResult<PlaneWorkReportDto> list = new PageResult<PlaneWorkReportDto>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+            }
+            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlaneTypeID })
+                         .Select(g => new PlaneWorkReportDto()
+                         {
+                             DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
+                             PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
+                             PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime),
+                             PlaneTypeID = g.Key.PlaneTypeID,
+                             TypeName = g.Key.TypeName
+                         }).ToList();
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
+            }
+
+            #region 用于统计机型下的飞机数目
+            if (list.ResultData != null && list.ResultData.Count > 0)
+            {
+                //用于统计机型下的飞机数目
+                var result2 = (from a in _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive)
+                               where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+                               select new { PlaneNo = a.PlaneNo, PlaneTypeID = a.PlaneTypeID }
+
+                              ).Distinct().ToList();
+                foreach (var item in list.ResultData)
+                {
+                    item.PlanesCount = result2.Where(m => m.PlaneTypeID == item.PlaneTypeID).Count();
+                }
+            }
+            #endregion
+            list.Total = list.ResultData.Count();
+            return list;
+        }
+
+        /// <summary>
+        /// 飞机月报
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public PageResult<PlaneReportDto> PlaneReportDtoList(string startDate, string endDate)
+        {
+            PageResult<PlaneReportDto> list = new PageResult<PlaneReportDto>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive);
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+            }
+            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlaneNo })
+                         .Select(g => new PlaneReportDto()
+                         {
+                             DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
+                             PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
+                             PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime),
+                             PlaneNo = g.Key.PlaneNo,
+                             TypeName = g.Key.TypeName
+                         }).ToList();
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
+            }
+
+            #region 用于计算飞机自新数据
+            if (list.ResultData != null && list.ResultData.Count > 0)
+            {
+                //用于统计机型下的飞机数目
+                var result2 = (from a in _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive)
+                               where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+                               select a
+
+                              ).OrderByDescending(m => m.InputDate);
+                foreach (var item in list.ResultData)
+                {
+                    var tempItem = result2.Where(m => m.PlaneNo == item.PlaneNo).First();
+                    item.PlanNewAirTime = tempItem.PlanNewAirTime;
+                    item.PlanNewClearingTime = tempItem.PlanNewClearingTime;
+                    item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum;
+                }
+            }
+            #endregion
+            list.Total = list.ResultData.Count();
+            return list;
+        }
+
+        /// <summary>
+        /// 飞机数据统计
         /// </summary>
         /// <param name="planTypeID"></param>
         /// <param name="planID"></param>
@@ -42,13 +167,13 @@ namespace ACMS.Applications.Impl
             var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
             if (!string.IsNullOrEmpty(startDate))
             {
-                result = result.Where(x => string.Compare(x.CreateTime , startDate)>0);
+                result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
             }
             if (!string.IsNullOrEmpty(endDate))
             {
-                result = result.Where(x => string.Compare(x.CreateTime, endDate) <0 );
+                result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
             }
-            list.ResultData  = result.GroupBy(a => new { a.TypeName, a.PlanID, a.PlaneNo, a.PlaneTypeID })
+            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlanID, a.PlaneNo, a.PlaneTypeID })
                          .Select(g => new DailyRecordReportDto()
                          {
                              DayMaintenaceTime = g.Sum(i => i.DayMaintenaceTime),
@@ -64,7 +189,7 @@ namespace ACMS.Applications.Impl
                              //FlightDays=10,
                              PlaneTypeID = g.Key.PlaneTypeID
 
-                         }).OrderByDescending(m=>m.PlanID).ToList();
+                         }).OrderByDescending(m => m.PlanID).ToList();
             //机号查询
             if (planID != null && planID.Count > 0)
             {
@@ -93,6 +218,29 @@ namespace ACMS.Applications.Impl
                 }
 
             }
+            //if (list != null && list.ResultData.Count > 0)
+            //{
+            //    //飞行天数查询
+            //    var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+            //    if (!string.IsNullOrEmpty(startDate))
+            //    {
+            //        result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+            //    }
+            //    if (!string.IsNullOrEmpty(endDate))
+            //    {
+            //        result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+            //    }
+            //    var result3 =from item in result2
+            //    group item by { item.PlaneNo,} into stgrp
+            //    select stgrp;
+            //    result.GroupBy(a => new { a.PlaneNo, a.InputDate })
+            //             .Select(g => new { PlaneNo } ()
+            //             {
+
+            //                  g.Key.PlaneNo,
+            //                 PlanID = g.Key.InputDate
+            //             })
+            //}
 
             list.Total = list.ResultData.Count();
             return list;
@@ -124,6 +272,7 @@ namespace ACMS.Applications.Impl
                              ID = a.ID,
                              Type = a.Type,
                              PlanID = a.PlanID,
+                             PlanTypeID = b.PlaneTypeID,
                              PlaneNo = b.PlaneNo,
                              InputDate = a.InputDate,
                              DayClearingTime = a.DayClearingTime,
@@ -150,22 +299,23 @@ namespace ACMS.Applications.Impl
                              UpdateTime = a.UpdateTime,
                              Updator = a.Updator
                          };
+
             //如果没选择数据性质，则返回所有的数据
             if (type != -1)
             {
                 result = result.Where(x => x.Type == type);
             }
-            if (string.IsNullOrEmpty(planID))
+            if (!string.IsNullOrEmpty(planID) && planID != "-1")
             {
                 result = result.Where(x => x.PlanID == planID);
             }
-            if (string.IsNullOrEmpty(startDate))
+            if (!string.IsNullOrEmpty(startDate))
             {
-                result = result.Where(x => Convert.ToDateTime(x.InputDate) >= Convert.ToDateTime(startDate));
+                result = result.Where(x => string.Compare(x.InputDate, startDate, StringComparison.Ordinal) >= 0);
             }
-            if (string.IsNullOrEmpty(endDate))
+            if (!string.IsNullOrEmpty(endDate))
             {
-                result = result.Where(x => Convert.ToDateTime(x.InputDate) >= Convert.ToDateTime(endDate));
+                result = result.Where(x => string.Compare(x.InputDate, endDate, StringComparison.Ordinal) <= 0);
             }
 
             list.Total = result.Count();
@@ -415,17 +565,17 @@ namespace ACMS.Applications.Impl
             {
                 result = result.Where(x => x.Type == type);
             }
-            if (string.IsNullOrEmpty(planID))
+            if (!string.IsNullOrEmpty(planID) && planID != "-1")
             {
                 result = result.Where(x => x.PlanID == planID);
             }
-            if (string.IsNullOrEmpty(startDate))
+            if (!string.IsNullOrEmpty(startDate))
             {
-                result = result.Where(x => Convert.ToDateTime(x.InputDate) >= Convert.ToDateTime(startDate));
+                result = result.Where(x => string.Compare(x.InputDate, startDate, StringComparison.Ordinal) >= 0);
             }
-            if (string.IsNullOrEmpty(endDate))
+            if (!string.IsNullOrEmpty(endDate))
             {
-                result = result.Where(x => Convert.ToDateTime(x.InputDate) >= Convert.ToDateTime(endDate));
+                result = result.Where(x => string.Compare(x.InputDate, endDate, StringComparison.Ordinal) <= 0);
             }
 
             list.Total = result.Count();

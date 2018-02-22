@@ -23,7 +23,7 @@ namespace ACMS.Controllers
             List<string> planTypeIDList = new List<string>();
             planTypeIDList = !string.IsNullOrEmpty(planTypeID) ? planTypeID.Split(',').ToList() : null;
             List<string> planIDList = new List<string>();
-            planIDList = !string.IsNullOrEmpty(planID) ?planID.Split(',').ToList():null;
+            planIDList = !string.IsNullOrEmpty(planID) ? planID.Split(',').ToList() : null;
             List<string> ExecUnitList = new List<string>();
             ExecUnitList = !string.IsNullOrEmpty(ExecUnit) ? ExecUnit.Split(',').ToList() : null;
             return Ok(_dailyRecordService.GetDailyRecordReportList(planTypeIDList, planIDList, ExecUnitList, startDate, endDate));

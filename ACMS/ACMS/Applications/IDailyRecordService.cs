@@ -10,6 +10,24 @@ namespace ACMS.Applications
 {
     public interface IDailyRecordService
     {
+
+
+        /// <summary>
+        /// 飞机生产信息月报
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        PageResult<PlaneWorkReportDto> PlaneWorkReportDtoList(string startDate, string endDate);
+
+        /// <summary>
+        /// 飞机月报
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        PageResult<PlaneReportDto> PlaneReportDtoList(string startDate, string endDate);
+
         /// <summary>
         /// 飞行数据统计
         /// </summary>

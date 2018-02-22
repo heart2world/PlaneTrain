@@ -540,6 +540,36 @@
     <Property Name="PlaneTypeName" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_RecordMonthReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="V_RecordMonthReport">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="PlanID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="InputDate" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="DayRiseAndFallNum" Type="int" Nullable="false" />
+    <Property Name="DayMaintenaceTime" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PlanDayClearingTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PlanDayAirTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PlanDayGroundTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="ExecUnit" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="HeatingMachineDayTime" Type="int" Nullable="false" />
+    <Property Name="PlaneNo" Type="varchar" MaxLength="50" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
+    <Property Name="PlanNewClearingTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PlanNewAirTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PlanNewRiseAndFallNum" Type="int" />
+    <Property Name="PlanNewHeatingMachineTime" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_V_PlTypeTCtrlList_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
   <EntityType Name="V_V_PlTypeTCtrlList_Log">
     <Key>
@@ -788,6 +818,33 @@
     [V_PlTypeTCtrlList].[Updator] AS [Updator], 
     [V_PlTypeTCtrlList].[PlaneTypeName] AS [PlaneTypeName]
     FROM [dbo].[V_PlTypeTCtrlList] AS [V_PlTypeTCtrlList]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="V_RecordMonthReport" EntityType="Self.V_RecordMonthReport" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [V_RecordMonthReport].[ID] AS [ID], 
+    [V_RecordMonthReport].[Type] AS [Type], 
+    [V_RecordMonthReport].[PlanID] AS [PlanID], 
+    [V_RecordMonthReport].[InputDate] AS [InputDate], 
+    [V_RecordMonthReport].[DayRiseAndFallNum] AS [DayRiseAndFallNum], 
+    [V_RecordMonthReport].[DayMaintenaceTime] AS [DayMaintenaceTime], 
+    [V_RecordMonthReport].[PlanDayClearingTime] AS [PlanDayClearingTime], 
+    [V_RecordMonthReport].[PlanDayAirTime] AS [PlanDayAirTime], 
+    [V_RecordMonthReport].[PlanDayGroundTime] AS [PlanDayGroundTime], 
+    [V_RecordMonthReport].[ExecUnit] AS [ExecUnit], 
+    [V_RecordMonthReport].[IsActive] AS [IsActive], 
+    [V_RecordMonthReport].[CreateTime] AS [CreateTime], 
+    [V_RecordMonthReport].[Creator] AS [Creator], 
+    [V_RecordMonthReport].[UpdateTime] AS [UpdateTime], 
+    [V_RecordMonthReport].[Updator] AS [Updator], 
+    [V_RecordMonthReport].[HeatingMachineDayTime] AS [HeatingMachineDayTime], 
+    [V_RecordMonthReport].[PlaneNo] AS [PlaneNo], 
+    [V_RecordMonthReport].[TypeName] AS [TypeName], 
+    [V_RecordMonthReport].[PlaneTypeID] AS [PlaneTypeID], 
+    [V_RecordMonthReport].[PlanNewClearingTime] AS [PlanNewClearingTime], 
+    [V_RecordMonthReport].[PlanNewAirTime] AS [PlanNewAirTime], 
+    [V_RecordMonthReport].[PlanNewRiseAndFallNum] AS [PlanNewRiseAndFallNum], 
+    [V_RecordMonthReport].[PlanNewHeatingMachineTime] AS [PlanNewHeatingMachineTime]
+    FROM [dbo].[V_RecordMonthReport] AS [V_RecordMonthReport]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="V_V_PlTypeTCtrlList_Log" EntityType="Self.V_V_PlTypeTCtrlList_Log" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 

@@ -604,6 +604,36 @@
           <Property Name="PlaneTypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_RecordMonthReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="V_RecordMonthReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="PlanID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="InputDate" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DayRiseAndFallNum" Type="int" Nullable="false" />
+          <Property Name="DayMaintenaceTime" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PlanDayClearingTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayAirTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayGroundTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ExecUnit" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="HeatingMachineDayTime" Type="int" Nullable="false" />
+          <Property Name="PlaneNo" Type="varchar" MaxLength="50" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
+          <Property Name="PlanNewClearingTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewAirTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewRiseAndFallNum" Type="int" />
+          <Property Name="PlanNewHeatingMachineTime" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_V_PlTypeTCtrlList_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_V_PlTypeTCtrlList_Log">
           <Key>
@@ -864,6 +894,33 @@
     [V_PlTypeTCtrlList].[PlaneTypeName] AS [PlaneTypeName]
     FROM [dbo].[V_PlTypeTCtrlList] AS [V_PlTypeTCtrlList]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="V_RecordMonthReport" EntityType="Self.V_RecordMonthReport" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_RecordMonthReport].[ID] AS [ID], 
+    [V_RecordMonthReport].[Type] AS [Type], 
+    [V_RecordMonthReport].[PlanID] AS [PlanID], 
+    [V_RecordMonthReport].[InputDate] AS [InputDate], 
+    [V_RecordMonthReport].[DayRiseAndFallNum] AS [DayRiseAndFallNum], 
+    [V_RecordMonthReport].[DayMaintenaceTime] AS [DayMaintenaceTime], 
+    [V_RecordMonthReport].[PlanDayClearingTime] AS [PlanDayClearingTime], 
+    [V_RecordMonthReport].[PlanDayAirTime] AS [PlanDayAirTime], 
+    [V_RecordMonthReport].[PlanDayGroundTime] AS [PlanDayGroundTime], 
+    [V_RecordMonthReport].[ExecUnit] AS [ExecUnit], 
+    [V_RecordMonthReport].[IsActive] AS [IsActive], 
+    [V_RecordMonthReport].[CreateTime] AS [CreateTime], 
+    [V_RecordMonthReport].[Creator] AS [Creator], 
+    [V_RecordMonthReport].[UpdateTime] AS [UpdateTime], 
+    [V_RecordMonthReport].[Updator] AS [Updator], 
+    [V_RecordMonthReport].[HeatingMachineDayTime] AS [HeatingMachineDayTime], 
+    [V_RecordMonthReport].[PlaneNo] AS [PlaneNo], 
+    [V_RecordMonthReport].[TypeName] AS [TypeName], 
+    [V_RecordMonthReport].[PlaneTypeID] AS [PlaneTypeID], 
+    [V_RecordMonthReport].[PlanNewClearingTime] AS [PlanNewClearingTime], 
+    [V_RecordMonthReport].[PlanNewAirTime] AS [PlanNewAirTime], 
+    [V_RecordMonthReport].[PlanNewRiseAndFallNum] AS [PlanNewRiseAndFallNum], 
+    [V_RecordMonthReport].[PlanNewHeatingMachineTime] AS [PlanNewHeatingMachineTime]
+    FROM [dbo].[V_RecordMonthReport] AS [V_RecordMonthReport]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="V_V_PlTypeTCtrlList_Log" EntityType="Self.V_V_PlTypeTCtrlList_Log" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [V_V_PlTypeTCtrlList_Log].[ID] AS [ID], 
@@ -917,6 +974,7 @@
           <EntitySet Name="V_PlanesTCtrlItem_Check" EntityType="ACMSModel.V_PlanesTCtrlItem_Check" />
           <EntitySet Name="V_DailyRecordReport" EntityType="ACMSModel.V_DailyRecordReport" />
           <EntitySet Name="ReportRecord" EntityType="ACMSModel.ReportRecord" />
+          <EntitySet Name="V_RecordMonthReport" EntityType="ACMSModel.V_RecordMonthReport" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1469,6 +1527,34 @@
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_RecordMonthReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DayRiseAndFallNum" Type="Int32" Nullable="false" />
+          <Property Name="DayMaintenaceTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="PlanDayClearingTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayGroundTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="HeatingMachineDayTime" Type="Int32" Nullable="false" />
+          <Property Name="PlaneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlaneTypeID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="PlanNewClearingTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
+          <Property Name="PlanNewHeatingMachineTime" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2033,6 +2119,35 @@
                 <ScalarProperty Name="ReportTime" ColumnName="ReportTime" />
                 <ScalarProperty Name="Reportor" ColumnName="Reportor" />
                 <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_RecordMonthReport">
+            <EntityTypeMapping TypeName="ACMSModel.V_RecordMonthReport">
+              <MappingFragment StoreEntitySet="V_RecordMonthReport">
+                <ScalarProperty Name="PlanNewHeatingMachineTime" ColumnName="PlanNewHeatingMachineTime" />
+                <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
+                <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
+                <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
+                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+                <ScalarProperty Name="HeatingMachineDayTime" ColumnName="HeatingMachineDayTime" />
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
+                <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
+                <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+                <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
+                <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
+                <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

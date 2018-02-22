@@ -16,7 +16,21 @@ namespace ACMS.Controllers
     public class ReportRecordController : BaseController
     {
         IReportRecordService _service = new ReportRecordService();
+        IDailyRecordService _dailyRecordService = new DailyRecordService();
 
+        [HttpGet, Route("getPlaneWorkReport")]
+        public IHttpActionResult GetPlaneWorkReport(string startDate, string endDate)
+        {
+            return Ok(_dailyRecordService.PlaneWorkReportDtoList(startDate,endDate));
+        }
+
+        [HttpGet, Route("getPlaneReport")]
+        public IHttpActionResult GetPlaneReport(string startDate, string endDate)
+        {
+            return Ok(_dailyRecordService.PlaneReportDtoList(startDate, endDate));
+        }
+
+        
         [HttpGet, Route("getlist")]
         public IHttpActionResult GetList(int pageSize, int pageNo, string reportType, string keyWord, string startDate, string endDate)
         {

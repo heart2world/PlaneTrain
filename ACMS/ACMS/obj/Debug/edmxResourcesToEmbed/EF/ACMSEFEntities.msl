@@ -562,5 +562,34 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="V_RecordMonthReport">
+      <EntityTypeMapping TypeName="ACMSModel.V_RecordMonthReport">
+        <MappingFragment StoreEntitySet="V_RecordMonthReport">
+          <ScalarProperty Name="PlanNewHeatingMachineTime" ColumnName="PlanNewHeatingMachineTime" />
+          <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
+          <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
+          <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
+          <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+          <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+          <ScalarProperty Name="HeatingMachineDayTime" ColumnName="HeatingMachineDayTime" />
+          <ScalarProperty Name="Updator" ColumnName="Updator" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
+          <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
+          <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+          <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
+          <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
+          <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+          <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

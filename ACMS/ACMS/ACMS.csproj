@@ -267,6 +267,9 @@
     <Compile Include="EF\V_PlTypeTCtrlList.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\V_RecordMonthReport.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\V_V_PlTypeTCtrlList_Log.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
