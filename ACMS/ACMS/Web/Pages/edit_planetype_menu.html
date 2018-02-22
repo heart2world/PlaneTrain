@@ -380,7 +380,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -413,7 +414,8 @@
 						self.RUpTemprTime = data.RUpTemprTime;
 					},
 					error: function (e) {
-						location.href="login.html?auth=arror";
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -426,6 +428,22 @@
 			},
 			edit_airplane_menu:function(evt){
 				var self = this;
+				if(self.ProSource == ''){
+					Common.msg("请完成项目来源");
+					return;
+				}
+				if(self.PlaneTypeID == ''){
+					Common.msg("请完成机型选择");
+					return;
+				}
+				if(self.MainTainName == ''){
+					Common.msg("请完成维修项目名称");
+					return;
+				}
+				if(self.Capacity == ''){
+					Common.msg("请完成容限");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/PlTypeTCtrlList/edit',
@@ -443,6 +461,7 @@
 					  "RAirTime": self.RAirTime,
 					  "ROnOffTime": self.ROnOffTime,
 					  "RUpTemprTime": self.RUpTemprTime,
+					  "Creator":JSON.parse(Common.getStorage("user_info")).username
 					},
 					beforeSend:function(XHR){
 						//发送ajax请求之前向http的header里面加入验证信息
@@ -451,16 +470,16 @@
 					success:function(data){
 						//console.log(data);
 						if(data.Result){
-							Common.tips('修改成功，1500s后跳转！');
+							Common.tips('修改成功，即将跳转！');
 							setTimeout(function(){
 								location.href="planetype_menu.html?reload=true";
 							},1500);
 						}else{
-							self.msg="提交失败";
+							self.msg="提交失败,请完成必填项";
 						}
 					},
 					error:function(){
-						self.msg ='操作失败，请稍后再试~~';
+						self.msg ='请求失败，请稍后再试~~';
 						location.href="login.html?auth=error";
 					},
 					complete:function(){

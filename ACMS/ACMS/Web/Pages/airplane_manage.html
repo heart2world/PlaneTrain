@@ -139,10 +139,10 @@
 				<input class="form-control" type="text" placeholder="请输入飞机名称" v-model="uname" @keyup.enter="query_airplane_list($event);" />
 			</div>
 			<div class="form-group btns-group">
-				<button class="btn btn-default" @click="query_airplane_list($event);">查询</button>
-				<button class="btn btn-default" @click="jump_to_url('add_airplane.html?type=add_planetype',1);">新增</button>
-				<button class="btn btn-default" @click="jump_to_url('edit_airplane.html?type=edit_airplane&paramId='+checked_airplane_id,2);">编辑</button>
-				<button class="btn btn-default" @click="pop_alert();">删除</button>
+				<button class="btn btn-primary" @click="query_airplane_list($event);">查询</button>
+				<button class="btn btn-primary" @click="jump_to_url('add_airplane.html?type=add_planetype',1);">新增</button>
+				<button class="btn btn-primary" @click="jump_to_url('edit_airplane.html?type=edit_airplane&paramId='+checked_airplane_id,2);">编辑</button>
+				<button class="btn btn-danger" @click="pop_alert();">删除</button>
 			</div>
 		</div>	
 	</section>
@@ -168,11 +168,11 @@
                 <tbody>
                 <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in plane_data" :key="index" @click="checked_row_content(prop.ID,index);">
                   <td v-text="prop.ID"></td>
-                  <td v-text="prop.PlaneTypeID"></td>
+                  <td v-text="prop.TypeName"></td>
 				  <td v-text="prop.PlaneNo"></td>
 				  <td v-text="prop.PlaneSeria"></td>
 				  <td v-text="prop.PlaneFacDate"></td>
-                  <td>需补字段</td>
+                  <td v-text="prop.IsMonitored"></td>
 				  <td v-text="prop.Memo"></td>
                 </tr>
                 </tbody>
@@ -294,18 +294,19 @@
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
-						//console.log(data);
+						console.log(data);
 						self.total_page = data.Total;
 						setTimeout(function(){
-							self.plane_data = data.ResultData;
-							data.ResultData.forEach(function(m,n){
+							data.ResultData.forEach(function(n,m){
 								if(m <= data.ResultData.length){
 									self.plane_data.push({
 										'ID': n.ID,
+										'TypeName':n.TypeName,
 										'PlaneTypeID':n.PlaneTypeID,
 										'PlaneNo':n.PlaneNo,
 										'PlaneSeria':n.PlaneSeria,
 										'PlaneFacDate':n.PlaneFacDate,
+										'IsMonitored':n.IsMonitored ? '是' : '否',
 										'Memo':n.Memo
 									});
 								}
@@ -313,7 +314,7 @@
 						},0);
 					},
 					error: function (e) {
-						
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -371,7 +372,8 @@
 							}
 						},
 						error: function (e) {
-							Common.tips("操作失败");
+							Common.tips("请求失败");
+							location.href="login.html?auth=error";
 						},
 						complete: function () {
 

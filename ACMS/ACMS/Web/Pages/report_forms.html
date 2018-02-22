@@ -137,30 +137,30 @@
 		<div class="input-groups pull-right">
 			<div class="form-group">
 				<select class="form-control" @change="switch_page($event);">
-					<option>请选择报表类型</option>
-					<option value="1">飞机生产信息月报</option>
-					<option value="2">发动机报表</option>
-					<option value="3">飞机报表</option>
-					<option value="4">发动机月报表</option>
-					<option value="5">飞机月报表</option>
+					<option value=''>请选择报表类型</option>
+					<option value="飞机生产信息月报">飞机生产信息月报</option>
+					<option value="发动机报表">发动机报表</option>
+					<option value="飞机报表">飞机报表</option>
+					<option value="发动机月报表">发动机月报表</option>
+					<option value="飞机月报表">飞机月报表</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<input class="form-control" type="text" placeholder="填表人" v-model="uname" @keyup.enter="query_user_list();" />
+				<input class="form-control" type="text" placeholder="填表人" v-model="uname" @keyup.enter="query_report_list();" />
 			</div>
 			<div class="form-group">
 				<div class="input-group date" id="startdate">
 					<div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</div> 
-					<input type="text" id="datepicker" class="form-control pull-right" placeholder="填表时间" value="2018-01-04">
+					<input type="text" id="datepicker" class="form-control pull-right" placeholder="填表时间" value="2018-01-04" v-model="startDate">
 				</div>
 			</div>
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="query_role_list($event);">查询</button>
-				<button type="button" class="btn btn-default" @click="query_role_list($event);">查看</button>
-				<button type="button" class="btn btn-default" @click="pop_alert();">删除</button>
-				<button type="button" class="btn btn-default" @click="jump_to_url('report_filltype.html?type=fill',1);">填写报表</button>
+				<button type="button" class="btn btn-primary" @click="query_role_list($event);">查询</button>
+				<button type="button" class="btn btn-primary" @click="query_role_list($event);">查看</button>
+				<button type="button" class="btn btn-danger" @click="pop_alert();">删除</button>
+				<button type="button" class="btn btn-info" @click="jump_to_url('report_filltype.html?type=fill',1);">填写报表</button>
 			</div>
 		</form>
 		</div>	
@@ -182,7 +182,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in role_data" :key="index" @click="checked_row_content(prop.ID,index);">
+                <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in data_list" :key="index" @click="checked_row_content(prop.ID,index);">
                   <td>A00{{index}}</td>
                   <td>飞机生产信息月报</td>
                   <td>金红</td>
@@ -287,10 +287,11 @@
 			account:'',
 			total_page:1,
 			cur_page:1,
-			role_data:[],
-			checked_role_id:'',
+			data_list:[],
+			checked_rp_id:'',
 			checked_index:'',
 			cur_index:-1,
+			startDate:Common.getToMorrowDate(),
 			menus:[]
 		},
 		mounted:function(){
@@ -299,31 +300,31 @@
 				loginContext.ticket = Common.getStorage("ticket_code");
 				//console.log(loginContext.ticket);
 				this.get_menus();
-				this.getRoleList();
+				this.getReportList();
 			});
 		},
 		methods:{
 			switch_page:function(evt){
-				this.role_data = [];
-				this.getRoleList();
+				this.data_list = [];
+				this.getReportList();
 			},
-			query_role_list:function(evt){
-				this.role_data = [];
-				this.getRoleList();
+			query_report_list:function(evt){
+				this.data_list = [];
+				this.getReportList();
 			},
 			get_menus:function(){
 				var self = this;
 				$.getJSON("../Res/menu.json",function(data){
-					console.log(data);
+					//console.log(data);
 					self.menus = data.data;
 				});
 			},
-			getRoleList:function(){
+			getReportList:function(){
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/role/getlist",
-					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"keyWord":self.uname},
+					url: "../../api/ReportRecord/getlist",
+					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"keyWord":self.uname,"reportType":self.cartype,"startDate":self.startDate,"endDate":""},
 					beforeSend: function (XHR) {
                     //发送ajax请求之前向http的head里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
@@ -332,21 +333,20 @@
 						console.log(data);
 						self.total_page = data.Total;
 						setTimeout(function(){
-							self.role_data = data.ResultData;
 							data.ResultData.forEach(function(m,n){
-								if(m <= data.ResultData.length){
+								if(n <= data.ResultData.length){
 									self.role_data.push({
-										'ID': n.ID,
-										'RoleName':n.RoleName,
-										'CreateTime':n.CreateTime,
-										'RoleDesc':n.RoleDesc
+										'ID': m.ID,
+										'RoleName':m.RoleName,
+										'CreateTime':m.CreateTime,
+										'RoleDesc':m.RoleDesc
 									});
 								}
 							});
 						},0);
 					},
 					error: function (e) {
-						location.href="login.html?auth=error";
+						//location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -423,11 +423,10 @@
 		  autoclose: true,
 		  startView: 0,
           clearBtn:true,  
-          todayBtn:true,
-		  callback:function(){
-			alert(11);
-		  }
-		})
+          todayBtn:true
+		}).on('changeDate', function(ev){    
+			mvvm.startDate = $(ev.target).val();
+		  })
 		
 		//结束时间
 		$('#datepicker2').datepicker({

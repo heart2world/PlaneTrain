@@ -333,7 +333,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -387,7 +388,8 @@
 							}
 						},
 						error: function (e) {
-							Common.tips("操作错误");
+							Common.tips("请求失败");
+							location.href="login.html?auth=error";
 						},
 						complete: function () {
 

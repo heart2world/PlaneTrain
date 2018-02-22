@@ -50,7 +50,7 @@ namespace ACMS.Applications
         /// <param name="startDate">开始时间</param>
         /// <param name="endDate">结束时间</param>
         /// <returns>数据列表</returns>
-        PageResult<CESSNA172RDailyRecordDto> GetCESSNA172RDailyRecordList(int pageSize, int pageNo, int type, string planID, string startDate, string endDate);
+        PageResult<CESSNA172RDailyRecordDto> GetCESSNA172RDailyRecordList(int pageSize, int pageNo, string type, string planID, string startDate, string endDate);
 
 
         /// <summary>
@@ -93,6 +93,12 @@ namespace ACMS.Applications
         /// <returns></returns>
         bool CheckCESSNA172RDailyRecordHaveRecord();
 
+        /// <summary>
+        /// 获取CESSNA172R型号初始设置的最后一次记录
+        /// </summary>
+        /// <returns></returns>
+        CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord();
+
         #endregion
 
         #region PA44-180DailyRecord
@@ -107,7 +113,7 @@ namespace ACMS.Applications
         /// <param name="startDate">开始时间</param>
         /// <param name="endDate">结束时间</param>
         /// <returns>数据列表</returns>
-        PageResult<PA44_180DailyRecordDto> GetPA44_180DailyRecordList(int pageSize, int pageNo, int type, string planID, string startDate, string endDate);
+        PageResult<PA44_180DailyRecordDto> GetPA44_180DailyRecordList(int pageSize, int pageNo, string type, string planID, string startDate, string endDate);
 
         /// <summary>
         /// 根据主键获取数据
@@ -149,6 +155,12 @@ namespace ACMS.Applications
         /// </summary>
         /// <returns></returns>
         bool CheckPA44_180DailyRecordHaveRecord();
+
+        /// <summary>
+        /// 获取PA44_180型号初始设置的最后一次记录
+        /// </summary>
+        /// <returns></returns>
+        PA44_180DailyRecord GetLatestPA44_180DailyRecord();
 
         #endregion
     }

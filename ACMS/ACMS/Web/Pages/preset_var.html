@@ -248,6 +248,7 @@
 						self.ReNewUpTempTime = data.ReNewUpTempTime;
 					},
 					error: function (e) {
+						Common.tips("请求失败");
 						location.href="login.html?auth=error";
 					},
 					complete: function () {
@@ -257,6 +258,23 @@
 			},
 			edit_alarm:function(evt){
 				var self = this;
+				if(self.Days == ''){
+					Common.msg("请完成天数");
+					return;
+				}
+				if(self.ReNewAirTime == ''){
+					Common.msg("请完成自新空中时间");
+					return;
+				}
+				if(self.ReNewUpTempTime == ''){
+					Common.msg("请完成自新加温机时间");
+					return;
+				}
+				if(self.ReNewOnOffTime == ''){
+					Common.msg("请完成自新起落次数");
+					return;
+				}
+				
 				$.ajax({
 					type:'post',
 					url:'../../api/air_time_alarm_set/edit',
@@ -280,7 +298,8 @@
 						}
 					},
 					error:function(){
-						self.msg ='操作失败，请稍后再试~~';
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete:function(){
 						

@@ -256,7 +256,7 @@ namespace ACMS.Applications.Impl
         /// <param name="startDate">开始时间</param>
         /// <param name="endDate">结束时间</param>
         /// <returns>数据列表</returns>
-        public PageResult<CESSNA172RDailyRecordDto> GetCESSNA172RDailyRecordList(int pageSize, int pageNo, int type, string planID, string startDate, string endDate)
+        public PageResult<CESSNA172RDailyRecordDto> GetCESSNA172RDailyRecordList(int pageSize, int pageNo, string type, string planID, string startDate, string endDate)
         {
             PageResult<CESSNA172RDailyRecordDto> list = new PageResult<CESSNA172RDailyRecordDto>();
 
@@ -301,9 +301,9 @@ namespace ACMS.Applications.Impl
                          };
 
             //如果没选择数据性质，则返回所有的数据
-            if (type != -1)
+            if (!string.IsNullOrEmpty(type) && type != "-1")
             {
-                result = result.Where(x => x.Type == type);
+                result = result.Where(x => x.Type.ToString() == type);
             }
             if (!string.IsNullOrEmpty(planID) && planID != "-1")
             {
@@ -494,6 +494,16 @@ namespace ACMS.Applications.Impl
                 return true;
             }
         }
+
+        /// <summary>
+        /// 获取CESSNA172R型号初始设置的最后一次记录
+        /// </summary>
+        /// <returns></returns>
+        public CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord()
+        {
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
         #endregion
 
         #region PA44-180DailyRecord
@@ -508,7 +518,7 @@ namespace ACMS.Applications.Impl
         /// <param name="startDate">开始时间</param>
         /// <param name="endDate">结束时间</param>
         /// <returns>数据列表</returns>
-        public PageResult<PA44_180DailyRecordDto> GetPA44_180DailyRecordList(int pageSize, int pageNo, int type, string planID, string startDate, string endDate)
+        public PageResult<PA44_180DailyRecordDto> GetPA44_180DailyRecordList(int pageSize, int pageNo, string type, string planID, string startDate, string endDate)
         {
             PageResult<PA44_180DailyRecordDto> list = new PageResult<PA44_180DailyRecordDto>();
 
@@ -561,9 +571,9 @@ namespace ACMS.Applications.Impl
                              Updator = a.Updator
                          };
             //如果没选择数据性质，则返回所有的数据
-            if (type != -1)
+            if (!string.IsNullOrEmpty(type) && type != "-1")
             {
-                result = result.Where(x => x.Type == type);
+                result = result.Where(x => x.Type.ToString() == type);
             }
             if (!string.IsNullOrEmpty(planID) && planID != "-1")
             {
@@ -768,6 +778,16 @@ namespace ACMS.Applications.Impl
             {
                 return true;
             }
+        }
+
+        /// <summary>
+        /// 获取PA44_180型号初始设置的最后一次记录
+        /// </summary>
+        /// <returns></returns>
+        public PA44_180DailyRecord GetLatestPA44_180DailyRecord()
+        {
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
         }
 
         #endregion

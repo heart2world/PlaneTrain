@@ -341,7 +341,7 @@
 			get_menus:function(){
 				var self = this;
 				$.getJSON("../Res/menu.json",function(data){
-					console.log(data);
+					//console.log(data);
 					self.menus = data.data;
 				});
 			},
@@ -356,7 +356,7 @@
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
-						console.log(data);
+						//console.log(data);
 						self.total_page = data.Total;
 						setTimeout(function(){
 							data.ResultData.forEach(function(m,n){
@@ -370,7 +370,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						self.msg="请求失败";
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -379,6 +380,22 @@
 			},
 			add_airplane_menu:function(evt){
 				var self = this;
+				if(self.ProSource == ''){
+					Common.msg("请完成项目来源");
+					return;
+				}
+				if(self.PlaneTypeID == ''){
+					Common.msg("请完成机型选择");
+					return;
+				}
+				if(self.MainTainName == ''){
+					Common.msg("请完成维修项目名称");
+					return;
+				}
+				if(self.Capacity == ''){
+					Common.msg("请完成容限");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/PlTypeTCtrlList/add',
@@ -403,7 +420,7 @@
 					success:function(data){
 						//console.log(data);
 						if(data.Result){
-							Common.tips('新增时控项目清单成功，1500s后跳转！');
+							Common.tips('新增时控项目清单成功，即将跳转！');
 							setTimeout(function(){
 								location.href="planetype_menu.html?reload=true"
 							},1500);

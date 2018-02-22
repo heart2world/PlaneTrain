@@ -211,6 +211,10 @@
 			},
 			add_role:function(evt){
 				var self = this;
+				if(self.uname == ''){
+					Common.msg("请完成角色名");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/role/add',
@@ -234,7 +238,8 @@
 						}
 					},
 					error:function(){
-						self.msg ='操作失败，请稍后再试~~';
+						self.msg="请求失败";
+						location.href="login.html?auth=error";
 					},
 					complete:function(){
 					

@@ -138,10 +138,10 @@
 				<input class="form-control" type="text" placeholder="请输入姓名" v-model="uname" @keyup.enter="query_user_list();" />
 			</div>
 			<div class="form-group btns-group">
-				<button class="btn btn-default" @click="query_user_list($event);">查询</button>
-				<button class="btn btn-default" @click="jump_to_url('add_user.html?type=add_planetype',1);">新增</button>
-				<button class="btn btn-default" @click="jump_to_url('edit_user.html?type=edit_user&paramId='+checked_user_id,2);">编辑</button>
-				<button class="btn btn-default" @click="pop_alert();">删除</button>
+				<button class="btn btn-primary" @click="query_user_list($event);">查询</button>
+				<button class="btn btn-primary" @click="jump_to_url('add_user.html?type=add_planetype',1);">新增</button>
+				<button class="btn btn-primary" @click="jump_to_url('edit_user.html?type=edit_user&paramId='+checked_user_id,2);">编辑</button>
+				<button class="btn btn-danger" @click="pop_alert();">删除</button>
 			</div>
 		</div>	
 	</section>
@@ -315,7 +315,7 @@
 						//console.log(data);
 						self.total_page = data.Total || 1;
 						setTimeout(function(){
-							self.user_data = data;
+							self.user_data = data.ResultData;
 							data.forEach(function(m,n){
 								if(m <= data.length){
 									self.user_data.push({

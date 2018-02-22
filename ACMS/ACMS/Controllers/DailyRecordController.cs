@@ -32,7 +32,7 @@ namespace ACMS.Controllers
         #region CESSNA172RDailyRecord
 
         [HttpGet, Route("cessna172r/getlist")]
-        public IHttpActionResult GetCESSNA172RDailyRecordList(int pageSize, int pageNo, int type, string planID, string startDate, string endDate)
+        public IHttpActionResult GetCESSNA172RDailyRecordList(int pageSize, int pageNo, string type, string planID, string startDate, string endDate)
         {
             return Ok(_dailyRecordService.GetCESSNA172RDailyRecordList(pageSize, pageNo, type, planID, startDate, endDate));
 
@@ -86,12 +86,22 @@ namespace ACMS.Controllers
             return this.Ok(_dailyRecordService.CheckCESSNA172RDailyRecordHaveRecord());
         }
 
+        /// <summary>
+        /// 获取CESSNA172R型号初始设置的最后一次记录
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("cessna172r/getLatestRecord")]
+        public IHttpActionResult GetLatestCESSNA172RDailyRecord()
+        {
+            return this.Ok(_dailyRecordService.GetLatestCESSNA172RDailyRecord());
+        }
+
         #endregion
 
         #region PA44-180DailyRecord
 
         [HttpGet, Route("pa44-180/getlist")]
-        public IHttpActionResult GetPA44_180DailyRecordList(int pageSize, int pageNo, int type, string planID, string startDate, string endDate)
+        public IHttpActionResult GetPA44_180DailyRecordList(int pageSize, int pageNo, string type, string planID, string startDate, string endDate)
         {
             return Ok(_dailyRecordService.GetPA44_180DailyRecordList(pageSize, pageNo, type, planID, startDate, endDate));
 
@@ -144,6 +154,17 @@ namespace ACMS.Controllers
         public IHttpActionResult CheckPA44_180DailyRecordHaveRecord()
         {
             return this.Ok(_dailyRecordService.CheckPA44_180DailyRecordHaveRecord());
+        }
+
+
+        /// <summary>
+        /// 获取PA44_180型号初始设置的最后一次记录
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("pa44-180/getLatestRecord")]
+        public IHttpActionResult GetLatestPA44_180DailyRecord()
+        {
+            return this.Ok(_dailyRecordService.GetLatestPA44_180DailyRecord());
         }
 
         #endregion

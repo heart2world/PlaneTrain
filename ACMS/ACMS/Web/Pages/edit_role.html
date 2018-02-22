@@ -233,7 +233,8 @@
 						self.desc = data.RoleDesc;
 					},
 					error: function (e) {
-						//location.href="login.html?author=error";
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						
@@ -246,6 +247,10 @@
 			},
 			edit_role:function(evt){
 				var self = this;
+				if(self.uname == ''){
+					Common.msg("请完成角色名");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/role/edit',
@@ -270,7 +275,8 @@
 						}
 					},
 					error: function (e) {
-						self.msg ='操作失败，请稍后再试~~';
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						

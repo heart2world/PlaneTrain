@@ -120,7 +120,7 @@
     <section class="content-header">
       <h1>机型时控项目清单</h1>
     </section>
-	<section class="header-fn form-inline">
+	<section class="header-fn ctrtime-menu-hd form-inline">
 		<div class="choose-page form-group">
 			<div class="form-group">
 				<select class="form-control" v-model="note_num" @change="switch_page($event);">
@@ -135,10 +135,10 @@
 		</div>
 		<div class="input-groups pull-right">
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="jump_to_url('planetype_menu_log.html?type=log&paramId='+checked_planetype_id,2);">变更记录</button>
-				<button type="button" class="btn btn-default" @click="jump_to_url('add_planetype_menu.html?type=add_planetype_menu',1);">新增</button>
-				<button type="button" class="btn btn-default" @click="jump_to_url('edit_planetype_menu.html?type=edit_planetype_menu&paramId='+checked_planetype_id,2);">编辑</button>
-				<button type="button" class="btn btn-default" @click="pop_alert();">删除</button>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('planetype_menu_log.html?type=log&paramId='+checked_planetype_id,2);">变更记录</button>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('add_planetype_menu.html?type=add_planetype_menu',1);">新增</button>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('edit_planetype_menu.html?type=edit_planetype_menu&paramId='+checked_planetype_id,2);">编辑</button>
+				<button type="button" class="btn btn-danger" @click="pop_alert();">删除</button>
 			</div>
 		</div>	
 	</section>
@@ -327,7 +327,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -385,7 +386,8 @@
 							}
 						},
 						error: function (e) {
-							Common.tips("操作错误");
+							Common.tips("请求失败");
+							location.href="login.html?auth=error";
 						},
 						complete: function () {
 

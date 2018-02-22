@@ -132,7 +132,7 @@
 				<div class="form-group">
 				  <label class="control-label">飞机选择</label>
 				  <div class="input-wrap">
-					  <select class="form-control" v-model="PlanID">
+					  <select class="form-control" v-model="PlanID" @change="switch_table($event);">
 						  <option value="" disabled>请选择飞机机号（必选）</option>
 						  <option v-for="opt in plane_data" :value="opt.ID" v-text="opt.PlaneNo"></options>
 					 </select>
@@ -210,13 +210,13 @@
 					<div class="form-group">
 					  <label class="control-label">自新空中时间</label>
 					  <div class="input-wrap">
-						  <input type="text" class="form-control" placeholder="（必填）" v-model="PlanNewClearingTime">
+						  <input type="text" class="form-control" placeholder="（必填）" v-model="PlanNewAirTime">
 					  </div>
 					</div>
 					<div class="form-group">
 					  <label class="control-label">自新空地时间</label>
 					  <div class="input-wrap">
-						  <input type="text" class="form-control" placeholder="（必填）" v-model="PlanNewAirTime">
+						  <input type="text" class="form-control" placeholder="（必填）" v-model="PlanNewClearingTime">
 					  </div>
 					</div>
 					<div v-if="planetype == 'pa44-180'" class="form-group">
@@ -368,7 +368,7 @@
 				  </div>
 				</div>
 				<div class="box-footer">
-					<button type="button" class="btn btn-default" @click="copy_last_note();">复制最后一次记录</button>
+					<button v-if="type == 1" type="button" class="btn btn-default" @click="copy_last_note();">复制最后一次记录</button>
 					<button type="submit" class="btn btn-info pull-right" @click="edit_dailyRecord($event);">提交</button>
 				</div>
 				<div class="err-msg" v-text="msg"></div>
@@ -392,7 +392,7 @@
 					<div class="input-groups pull-right">
 						<div class="form-group">
 							<select class="form-control" @change="switch_page($event);" v-model="data_type">
-								<option>请选择数据性质</option>
+								<option value="-1">请选择数据性质</option>
 								<option value="1">初值</option>
 								<option value="2">普通</option>
 							</select>
@@ -420,16 +420,17 @@
 						</div>
 						<div class="form-group btns-group">
 							<button type="button" class="btn btn-default" @click="query_data_list($event);">查询</button>
-							<button type="button" class="btn btn-primary" @click="output_excel($event);">导出EXCEL</button>
+							<button type="button" class="btn btn-info" @click="output_excel($event);">导出EXCEL</button>
 						</div>
 					</form>
 				</div>	
 			</section>
-          <div class="box">
+          <div class="box-wrap">
 			<div class="data-null" v-if="total_page < 1">暂无其他数据</div>
             <!-- /.box-header -->
              <div v-if="total_page > 0 && planetype != 'pa44-180'" class="row box-body table-responsive">
 				<table id="example2" class="table table-bordered table-hover table2excel">
+				<thead>
 					<tr>
 						<th colspan="6">逐日输入数据</th>
 						<th colspan="2">表修正</th>
@@ -439,38 +440,40 @@
 						<th rowspan="3" width="100">数据性质</th>
 						<th rowspan="3" width="80">备注</th>
 					</tr>
-			<tr>
-				<td rowspan="2" width="40">日期</td>
-				<td rowspan="2" width="85">飞机机号</td>
-				<td rowspan="2" width="100">空地时间（表）</td>
-				<td rowspan="2" width="80">当日总</br>起落数</td>
-				<td rowspan="2" width="80">空中时间<br/>（表）</td>
-				<td rowspan="2" width="100">维护开车<br/>空地时间</td>
-				<td rowspan="2" width="100">空地时间<br/>（表）修正</td>
-				<td rowspan="2" width="100">空中时间<br/>（表）修正</td>
-				<td rowspan="2" width="80">自新<br/>空中时间</td>
-				<td rowspan="2" width="80">自新<br/>空地时间</td>
-				<td rowspan="2" width="80">自新<br/>起落数</td>
-				<td rowspan="2" width="80">当日空<br/>地时间</td>
-				<td rowspan="2" width="80">当日空<br/>中时间</td>
-				<td rowspan="2" width="80">当日地<br/>面时间</td>
-				<td colspan="3">
-					<table>
-						<tr>
-							<td colspan="3">型号：10-360-L2A</td>
-						</tr>
-						<tr>
-							<td width="100">发动机序号</td>
-							<td width="100">修后时间</td>
-							<td width="100">自新时间</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
+				<tr>
+					<td rowspan="2" width="40">日期</td>
+					<td rowspan="2" width="85">飞机机号</td>
+					<td rowspan="2" width="100">空地时间（表）</td>
+					<td rowspan="2" width="80">当日总</br>起落数</td>
+					<td rowspan="2" width="80">空中时间<br/>（表）</td>
+					<td rowspan="2" width="100">维护开车<br/>空地时间</td>
+					<td rowspan="2" width="100">空地时间<br/>（表）修正</td>
+					<td rowspan="2" width="100">空中时间<br/>（表）修正</td>
+					<td rowspan="2" width="80">自新<br/>空中时间</td>
+					<td rowspan="2" width="80">自新<br/>空地时间</td>
+					<td rowspan="2" width="80">自新<br/>起落数</td>
+					<td rowspan="2" width="80">当日空<br/>地时间</td>
+					<td rowspan="2" width="80">当日空<br/>中时间</td>
+					<td rowspan="2" width="80">当日地<br/>面时间</td>
+					<td colspan="3">
+						<table>
+							<tr>
+								<td colspan="3">型号：10-360-L2A</td>
+							</tr>
+							<tr>
+								<td width="100">发动机序号</td>
+								<td width="100">修后时间</td>
+								<td width="100">自新时间</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
 			<tr class="noExl"></tr>
 			<tr :class="{'checked':cur_index == index}" v-for="(item,index) in data_list" :key="index" @click="checked_row_content(item.ID,index);">
 				<td v-text="item.InputDate"></td>
-				<td v-text="item.PlanID"></td>
+				<td v-text="item.PlaneNo"></td>
 				<td v-text="item.DayClearingTime"></td>
 				<td v-text="item.DayRiseAndFallNum"></td>
 				<td v-text="item.DayAirTime"></td>
@@ -490,10 +493,12 @@
 				<td v-text="item.Type"></td>
 				<td v-text="item.Memo"></td>
 			</tr>
+			</tbody>
 		</table>   
             </div>
 			<div v-if="total_page > 0 && planetype == 'pa44-180'" class="row box-body table-responsive">
 				<table id="example2" class="table table-bordered table2excel">
+					<thead>
 					<tr>
 						<th colspan="7">逐日输入数据</th>
 						<th colspan="3">表修正</th>
@@ -504,52 +509,54 @@
 						<th rowspan="3" width="100">数据性质</th>
 						<th rowspan="3" width="80">备注</th>
 					</tr>
-			<tr>
-				<td rowspan="2" width="40">日期</td>
-				<td rowspan="2" width="85">飞机机号</td>
-				<td rowspan="2" width="100">空地时间<br/>（表）</td>
-				<td rowspan="2" width="80">当日总</br>起落数</td>
-				<td rowspan="2" width="80">空中时间<br/>（表）</td>
-				<td rowspan="2" width="100">加温机时间<br/>（表）</td>
-				<td rowspan="2" width="100">维护开车<br/>空地时间</td>
-				<td rowspan="2" width="100">空地时间<br/>（表）修正</td>
-				<td rowspan="2" width="100">空中时间<br/>（表）修正</td>
-				<td rowspan="2" width="100">加温机时间<br/>（表）修正</td>
-				<td rowspan="2" width="80">自新<br/>空中时间</td>
-				<td rowspan="2" width="80">自新<br/>空地时间</td>
-				<td rowspan="2" width="80">自新<br/>起落数</td>
-				<td rowspan="2" width="80">自新<br/>加温机时间</td>
-				<td rowspan="2" width="80">当日空<br/>地时间</td>
-				<td rowspan="2" width="80">当日空<br/>中时间</td>
-				<td rowspan="2" width="80">当日地<br/>面时间</td>
-				<td colspan="6" style="padding: 0;">
-					<table>
-						<tr>
-							<td colspan="3">左发</td>
-							<td colspan="3">右发</td>
-						</tr>
-						<tr>
-							<td colspan="3">型号：O-360-A1H6</td>
-							<td colspan="3">型号：O-360-A1H6</td>
-						</tr>
-						<tr>
-							<td width="100">发动机序号</td>
-							<td width="100">修后时间TSO</td>
-							<td width="100">自新时间TSN</td>
-							<td width="100">发动机序号</td>
-							<td width="100">修后时间TSO</td>
-							<td width="100">自新时间TSN</td>
-						</tr>
-					</table>
-				</td>
-				<td rowspan="2" width="80">当日<br/>时间</td>
-				<td rowspan="2" width="80">修后时间<br/>TSO</td>
-				<td rowspan="2" width="80">自新时间<br/>TSN</td>
-			</tr>
+				<tr>
+					<td rowspan="2" width="40">日期</td>
+					<td rowspan="2" width="85">飞机机号</td>
+					<td rowspan="2" width="100">空地时间<br/>（表）</td>
+					<td rowspan="2" width="80">当日总</br>起落数</td>
+					<td rowspan="2" width="80">空中时间<br/>（表）</td>
+					<td rowspan="2" width="100">加温机时间<br/>（表）</td>
+					<td rowspan="2" width="100">维护开车<br/>空地时间</td>
+					<td rowspan="2" width="100">空地时间<br/>（表）修正</td>
+					<td rowspan="2" width="100">空中时间<br/>（表）修正</td>
+					<td rowspan="2" width="100">加温机时间<br/>（表）修正</td>
+					<td rowspan="2" width="80">自新<br/>空中时间</td>
+					<td rowspan="2" width="80">自新<br/>空地时间</td>
+					<td rowspan="2" width="80">自新<br/>起落数</td>
+					<td rowspan="2" width="80">自新<br/>加温机时间</td>
+					<td rowspan="2" width="80">当日空<br/>地时间</td>
+					<td rowspan="2" width="80">当日空<br/>中时间</td>
+					<td rowspan="2" width="80">当日地<br/>面时间</td>
+					<td colspan="6" style="padding: 0;">
+						<table>
+							<tr>
+								<td colspan="3">左发</td>
+								<td colspan="3">右发</td>
+							</tr>
+							<tr>
+								<td colspan="3">型号：O-360-A1H6</td>
+								<td colspan="3">型号：O-360-A1H6</td>
+							</tr>
+							<tr>
+								<td width="100">发动机序号</td>
+								<td width="100">修后时间TSO</td>
+								<td width="100">自新时间TSN</td>
+								<td width="100">发动机序号</td>
+								<td width="100">修后时间TSO</td>
+								<td width="100">自新时间TSN</td>
+							</tr>
+						</table>
+					</td>
+					<td rowspan="2" width="80">当日<br/>时间</td>
+					<td rowspan="2" width="80">修后时间<br/>TSO</td>
+					<td rowspan="2" width="80">自新时间<br/>TSN</td>
+				</tr>
+			</thead>
+			<tbody>
 			<tr class="noExl"></tr>
 			<tr :class="{'checked':cur_index == index}" v-for="(item,index) in data_list" :key="index" @click="checked_row_content(item.ID,index);">
 				<td v-text="item.InputDate"></td>
-				<td v-text="item.PlanID"></td>
+				<td v-text="item.PlaneNo"></td>
 				<td v-text="item.DayClearingTime"></td>
 				<td v-text="item.DayRiseAndFallNum"></td>
 				<td v-text="item.DayAirTime"></td>
@@ -581,6 +588,7 @@
 				<td v-text="item.Type"></td>
 				<td v-text="item.Memo"></td>
 			</tr>
+			</tbody>
 		</table>
 			</div>
 			<nav aria-label="Page navigation" style="display: none;">
@@ -668,7 +676,8 @@
 <!--common.js-->
 <script src="../JS/common.js"></script>
 <!--tableExcel-->
-<script src="../../Web/Admin/bower_components/tableExcel/excel.min.js"></script>
+<script src="../../Web/Admin/bower_components/tableExcel/FileSaver.min.js"></script>
+<script src="../../Web/Admin/bower_components/tableExcel/tableExport.js"></script>
 </body>
 <script>
 	var loginContext = {'ticket':''};
@@ -755,15 +764,82 @@
 				var res_id = url_param_arr[1].substr((seprate_index+1));
 				return res_id;
 			},
+			switch_table:function(evt){
+				var self = this;
+				this.data_list = [];
+				$.ajax({
+					type: "get",
+					url: "../../api/dailyRecord/"+self.planetype+"/getlist",
+					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"type":self.data_type,"planID":self.planid,"startDate":self.startDate,"endDate":self.endDate},
+					beforeSend: function (XHR) {
+                    //发送ajax请求之前向http的head里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						//console.log(data);
+						self.total_page = data.Total;
+						setTimeout(function(){
+							data.ResultData.forEach(function(m,n){
+								if(n >= data.ResultData.length-3 && n<= data.ResultData.length){
+									self.data_list.push({
+										 "Type":m.Type == '2' ? '普通': '初值',
+										 "CreateTime":m.CreateTime,
+										 "PlanID": m.PlanID,
+										 "PlaneNo": m.PlaneNo,
+										 "InputDate": m.InputDate,
+										 "DayClearingTime": m.DayClearingTime,
+										 "DayRiseAndFallNum": m.DayRiseAndFallNum,
+										 "DayAirTime": m.DayAirTime,
+										 "DayHeatingMachineTime":m.DayHeatingMachineTime,
+										 "DayMaintenaceTime": m.DayMaintenaceTime,
+										 "CorrectClearingTime": m.CorrectClearingTime,
+										 "CorrectAirTime": m.CorrectAirTime,
+										 "CorrectHeatingMachineTime":m.CorrectHeatingMachineTime,
+										 "PlanNewClearingTime": m.PlanNewClearingTime,
+										 "PlanNewAirTime": m.PlanNewAirTime,
+										 "PlanNewHeatingMachineTime":m.PlanNewHeatingMachineTime,
+										 "PlanNewRiseAndFallNum": m.PlanNewRiseAndFallNum,
+										 "PlanDayClearingTime": m.PlanDayClearingTime,
+										 "PlanDayAirTime": m.PlanDayAirTime,
+										 "PlanDayGroundTime": m.PlanDayGroundTime,
+										 "EngineType": m.EngineType,
+										 "EngineNo":m.EngineNo,
+										 "EngineCorrectTSO": m.EngineCorrectTSO,
+										 "EngineNewTSN": m.EngineNewTSN,
+										 "ExecUnit": m.ExecUnit,
+										 "Memo": m.Memo,
+										 "LeftEngineType":m.LeftEngineType,
+										 "LeftEngineNo":m.LeftEngineNo,
+										 "LeftEngineCorrectTSO":m.LeftEngineCorrectTSO,
+										 "LeftEngineNewTSN":m.LeftEngineNewTSN,
+										 "RightEngineType":m.RightEngineType,
+										 "RightEngineNo":m.RightEngineNo,
+										 "RightEngineCorrectTSO":m.RightEngineCorrectTSO,
+										 "RightEngineNewTSN":m.RightEngineNewTSN,
+										 "HeatingMachineDayTime":m.HeatingMachineDayTime,
+										 "HeatingMachineCorrectTSO":m.HeatingMachineCorrectTSO,
+										 "HeatingMachineNewTSN":m.HeatingMachineNewTSN,
+										 "ID":m.ID
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
+			},
 			output_excel:function(evt){
 				var self = this;
-				$(".table2excel").table2excel({
-					exclude: ".noExl",
-					name: "逐日登记记录表",
-					filename: self.planetype+"逐日登记记录"+new Date().getTime()+'.xls',
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
+				$(".table2excel").tableExport({
+					type:'excel',
+					fileName:self.planetype+'逐日登记记录'+Date.parse(new Date()),
+					excelstyles:['text-align']
 				});
 			},
 			get_menus:function(){
@@ -844,7 +920,8 @@
 						
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						
@@ -878,7 +955,8 @@
 						},0);
 					},
 					error: function (e) {
-						//location.href="login.html?auth=error";
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -900,11 +978,12 @@
 						self.total_page = data.Total;
 						setTimeout(function(){
 							data.ResultData.forEach(function(m,n){
-								if(n <= data.ResultData.length){
+								if(n >= data.ResultData.length-3 && n<= data.ResultData.length){
 									self.data_list.push({
 										 "Type":m.Type == '2' ? '普通': '初值',
 										 "CreateTime":m.CreateTime,
 										 "PlanID": m.PlanID,
+										 "PlaneNo": m.PlaneNo,
 										 "InputDate": m.InputDate,
 										 "DayClearingTime": m.DayClearingTime,
 										 "DayRiseAndFallNum": m.DayRiseAndFallNum,
@@ -945,7 +1024,8 @@
 						},0);
 					},
 					error: function (e) {
-						//location.href="login.html?auth=error";
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -984,6 +1064,115 @@
 			},
 			edit_dailyRecord:function(evt){
 				var self = this;
+				if(self.DayClearingTime == ''){
+					Common.msg('请完成空地时间表');
+					return;
+				}
+				if(self.DayRiseAndFallNum == ''){
+					Common.msg('请完成当日起落数');
+					return;
+				}
+				if(self.DayAirTime == ''){
+					Common.msg('请完成空中时间表');
+					return;
+				}
+				if(self.DayHeatingMachineTime == ''){
+					Common.msg('请完成加温机时间');
+					return;
+				}
+				if(self.DayMaintenaceTime == ''){
+					Common.msg('请完成维护开车空地时间');
+					return;
+				}
+				//初值判断
+				if(self.type == 1){
+					if(self.PlanNewAirTime == ''){
+						Common.msg('请完成自新空中时间');
+						return;
+					}
+					if(self.PlanNewClearingTime == ''){
+						Common.msg('请完成自新空地时间');
+						return;
+					}
+					if(self.PlanNewRiseAndFallNum == ''){
+						Common.msg('请完成自新起落数');
+						return;
+					}
+					if(self.PlanDayClearingTime == ''){
+						Common.msg('请完成当日空地时间');
+						return;
+					}
+					if(self.PlanDayAirTime == ''){
+						Common.msg('请完成当日空中时间');
+						return;
+					}
+					if(self.PlanDayGroundTime == ''){
+						Common.msg('请完成当日地面时间');
+						return;
+					}
+					
+					if(self.planetype == 'cessna172r'){
+						if(self.EngineType == ''){
+							Common.msg('请完成发动机型号');
+							return;
+						}
+						if(self.EngineNo == ''){
+							Common.msg('请完成发动机序号');
+							return;
+						}
+						if(self.EngineCorrectTSO == ''){
+							Common.msg('请完成修后时间（TSO）');
+							return;
+						}
+						if(self.EngineNewTSN== ''){
+							Common.msg('请完成自新时间（TSO）');
+							return;
+						}
+					}
+				}
+				//pa44-180机型初值判断
+				if(self.type == 1 && self.planetype == 'pa44-180'){
+					if(self.DayHeatingMachineTime == ''){
+						Common.msg('请完成加温机时间表');
+						return;
+					}
+					if(self.PlanNewHeatingMachineTime == ''){
+						Common.msg('请完成自新加温机时间表');
+						return;
+					}
+					if(self.LeftEngineType == ''){
+						Common.msg('请完成左发发动机型号');
+						return;
+					}
+					if(self.LeftEngineNo == ''){
+						Common.msg('请完成左发发动机序号');
+						return;
+					}
+					if(self.LeftEngineCorrectTSO == ''){
+						Common.msg('请完成左修后时间（TSO）');
+						return;
+					}
+					if(self.LeftEngineNewTSN== ''){
+						Common.msg('请完成左自新时间（TSO）');
+						return;
+					}
+					if(self.RightEngineType == ''){
+						Common.msg('请完成右发发动机型号');
+						return;
+					}
+					if(self.RightEngineNo == ''){
+						Common.msg('请完成右发发动机序号');
+						return;
+					}
+					if(self.RightEngineCorrectTSO == ''){
+						Common.msg('请完成右发修后时间（TSO）');
+						return;
+					}
+					if(self.RightEngineNewTSN== ''){
+						Common.msg('请完成右发自新时间（TSO）');
+						return;
+					}
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/dailyRecord/'+self.planetype+'/edit',
@@ -1035,13 +1224,15 @@
 							setTimeout(function(){
 								self.data_list = [];
 								self.get_daily_list();
+								
+								$(document).scrollTop(0);
 							},15);
 						}else{
 							self.msg="提交失败,请完成必填项填写";
 						}
 					},
 					error: function (e) {
-						self.msg ='操作失败，请稍后再试~~';
+						self.msg ='请求失败，请稍后再试~~';
 						location.href="login.html?author=error";
 					},
 					complete: function () {

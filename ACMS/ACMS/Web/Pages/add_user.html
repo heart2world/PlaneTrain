@@ -254,6 +254,7 @@
 						},0);
 					},
 					error: function (e) {
+						self.msg="请求失败";
 						location.href="login.html?auth=error";
 					},
 					complete: function () {
@@ -266,6 +267,10 @@
 			},
 			add_user:function(evt){
 				var self = this;
+				if(self.uname == ''){
+					Common.msg("请完成用户名");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/user/add',

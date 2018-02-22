@@ -164,10 +164,10 @@
 					<input type="text" id="datepicker2" class="form-control pull-right" value="2018-01-04" v-model="endDate"></div>
 			</div>
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="query_data_list($event);">查询</button>
-				<button type="button" class="btn btn-default" @click="output_excel($event);">导出EXCEL</button>
-				<button type="button" class="btn btn-default" @click="jump_to_url('edit_dailyRecord.html?type=edit_dailyRecord&paramId='+checked_data_id,2,'pa44-180');">修改</button>
-			</div>
+				<button type="button" class="btn btn-primary" @click="query_data_list($event);">查询</button>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('edit_dailyRecord.html?type=edit_dailyRecord&paramId='+checked_data_id,2,'pa44-180');">修改</button>
+				<button type="button" class="btn btn-info" @click="output_excel($event);">导出EXCEL</button>
+				</div>
 		</form>
 		</div>	
 	</section>
@@ -237,7 +237,7 @@
 						<tr data-tableexport-display="none" class="noExl"></tr>
 						<tr :class="{'checked':cur_index == index}" v-for="(item,index) in data_list" :key="index" @click="checked_row_content(item.ID,index);" style="text-align: center;">
 							<td v-text="item.InputDate" style="height:28px; text-align: center;"></td>
-							<td v-text="item.PlanID" style="height:28px; text-align: center;"></td>
+							<td v-text="item.PlaneNo" style="height:28px; text-align: center;"></td>
 							<td v-text="item.DayClearingTime" style="height:28px; text-align: center;"></td>
 							<td v-text="item.DayRiseAndFallNum" style="height:28px; text-align: center;"></td>
 							<td v-text="item.DayAirTime" style="height:28px; text-align: center;"></td>
@@ -437,7 +437,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -465,6 +466,7 @@
 										 "Type":m.Type == '2' ? '普通': '初值',
 										 "CreateTime":m.CreateTime,
 										 "PlanID": m.PlanID,
+										 "PlaneNo": m.PlaneNo,
 										 "InputDate": m.InputDate,
 										 "DayClearingTime": m.DayClearingTime,
 										 "DayRiseAndFallNum": m.DayRiseAndFallNum,
@@ -505,6 +507,7 @@
 						},0);
 					},
 					error: function (e) {
+						Common.tips("请求失败");
 						location.href="login.html?auth=error";
 					},
 					complete: function () {

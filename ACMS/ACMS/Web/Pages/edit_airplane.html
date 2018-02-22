@@ -261,7 +261,7 @@
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/planes/getlist",
+					url: "../../api/planetype/getlist",
 					data: {"pageSize":100,"pageNo":1,"keyWord":''},
 					beforeSend:function(XHR){
 						//发送ajax请求之前向http的header里面加入验证信息
@@ -271,19 +271,19 @@
 						//console.log(data);
 						self.total_page = data.Total;
 						setTimeout(function(){
-							self.plane_data = data.ResultData;
-							data.ResultData.forEach(function(m,n){
+							data.ResultData.forEach(function(n,m){
 								if(m <= data.ResultData.length){
 									self.plane_data.push({
 										'ID': n.ID,
-										'PlaneNo':n.PlaneNo
+										'PlaneNo':n.TypeName
 									});
 								}
 							});
 						},0);
 					},
 					error: function (e) {
-						//location.href="login.html?auth=error";
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -308,7 +308,7 @@
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
-						//console.log(data);
+						console.log(data);
 						self.plane_code = data.PlaneTypeID;
 						self.plane_num = data.PlaneNo,
 						self.product_date = data.PlaneFacDate;
@@ -316,7 +316,8 @@
 						self.memo = data.Memo;
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						
@@ -326,6 +327,18 @@
 			},	
 			edit_airplane:function(evt){
 				var self = this;
+				if(self.plane_code == ''){
+					Common.msg("请完成机型选择");
+					return;
+				}
+				if(self.plane_num == ''){
+					Common.msg("请完成机号");
+					return;
+				}
+				if(self.order_code == ''){
+					Common.msg("请完成飞机序号");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/planes/edit',
@@ -352,7 +365,8 @@
 						}
 					},
 					error: function (e) {
-						self.msg ='操作失败，请稍后再试~~';
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						

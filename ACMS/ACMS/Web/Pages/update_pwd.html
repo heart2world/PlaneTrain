@@ -105,7 +105,7 @@
 	<form class="form-content" action="#" method="post" onsubmit="return false;">
 		<div class="form-group">
 		  <label>账户名</label>
-		  <input type="text" class="form-control" placeholder="输入账户名（必填）" v-model="uname">
+		  <input type="text" class="form-control" placeholder="输入账户名（必填）" v-model="uname" disabled>
 		</div>
 		<div class="form-group">
 		  <label>登录密码</label>
@@ -178,7 +178,7 @@
 	var mvvm = new Vue({
 		el:'#app',
 		data:{
-			uname:'',
+			uname:JSON.parse(Common.getStorage("user_info")).username,
 			pwd:'',
 			msg:'',
 			menus:[]
@@ -211,12 +211,16 @@
 			},
 			update_pwd:function(evt){
 				var self = this;
+				if(self.pwd == ''){
+					Common.msg("请完成登录密码");
+					return;
+				}
 				$.ajax({
-					type:'post',
-					url:'../../api/role/add',
+					type:'get',
+					url:'../../api/user/editPwd',
 					data:{
-					"RoleName": self.uname,
-					"RoleDesc": self.desc
+					"pwd": self.pwd,
+					"operationUserID": loginContext.ticket
 					},
 					beforeSend: function (XHR) {
 					//发送ajax请求之前向http的head里面加入验证信息
@@ -225,12 +229,12 @@
 					success:function(data){
 						//console.log(data);
 						if(data.Result){
-							Common.tips('新增角色成功，1500s后跳转！');
+							Common.tips('修改成功，即将跳转！');
 							setTimeout(function(){
-								location.href="role_list.html?reload=true"
+								location.href="index.html?reload=true"
 							},1500);
 						}else{
-							self.msg="提交失败,"+data.ResultMsg;
+							self.msg="提交失败,请完成重置密码";
 						}
 					},
 					error:function(){

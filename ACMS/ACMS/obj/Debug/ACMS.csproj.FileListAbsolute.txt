@@ -137,6 +137,6 @@ C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\bin\zh-Hans\System.Web.Ra
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\bin\zh-Hans\System.Web.WebPages.resources.dll
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
-C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.csprojResolveAssemblyReference.cache
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.dll
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.pdb
+C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.csprojResolveAssemblyReference.cache

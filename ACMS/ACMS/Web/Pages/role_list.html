@@ -138,11 +138,11 @@
 				<input class="form-control" type="text" placeholder="请输入姓名" v-model="uname" @keyup.enter="query_role_list($event);" />
 			</div>
 			<div class="form-group btns-group">
-				<button class="btn btn-default" @click="query_role_list($event);">查询</button>
-				<button class="btn btn-default" @click="jump_to_url('add_role.html?type=add_role',1);">新增</button>
-				<button class="btn btn-default" @click="jump_to_url('edit_permission.html?type=edit_permission&roleId='+checked_role_id,2);">权限</button>
-				<button class="btn btn-default" @click="jump_to_url('edit_role.html?type=edit_role&roleId='+checked_role_id,2);">编辑</button>
-				<button class="btn btn-default" @click="pop_alert();">删除</button>
+				<button class="btn btn-primary" @click="query_role_list($event);">查询</button>
+				<button class="btn btn-primary" @click="jump_to_url('add_role.html?type=add_role',1);">新增</button>
+				<button class="btn btn-warning" @click="jump_to_url('edit_permission.html?type=edit_permission&roleId='+checked_role_id,2);">权限</button>
+				<button class="btn btn-primary" @click="jump_to_url('edit_role.html?type=edit_role&roleId='+checked_role_id,2);">编辑</button>
+				<button class="btn btn-danger" @click="pop_alert();">删除</button>
 			</div>
 		</div>	
 	</section>
@@ -331,7 +331,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -378,7 +379,7 @@
 							XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 						},
 						success: function (data, status) {
-							console.log(data);
+							//console.log(data);
 							if(data.Result){
 								//删除成功 刷新数据
 								console.log(index);
@@ -390,7 +391,8 @@
 							}
 						},
 						error: function (e) {
-							
+							Common.tips("请求失败");
+							location.href="login.html?auth=error";
 						},
 						complete: function () {
 

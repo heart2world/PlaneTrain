@@ -138,10 +138,10 @@
 				<input class="form-control" type="text" placeholder="请输入机型名称" v-model="uname" @keyup.enter="query_role_list($event);" />
 			</div>
 			<div class="form-group btns-group">
-				<button class="btn btn-default" @click="query_role_list($event);">查询</button>
-				<button class="btn btn-default" @click="jump_to_url('add_planetype.html?type=add_planetype',1);">新增</button>
-				<button class="btn btn-default" @click="jump_to_url('edit_planetype.html?type=edit_planetype&paramId='+checked_planetype_id,2);">编辑</button>
-				<button class="btn btn-default" @click="pop_alert();">删除</button>
+				<button class="btn btn-primary" @click="query_role_list($event);">查询</button>
+				<button class="btn btn-primary" @click="jump_to_url('add_planetype.html?type=add_planetype',1);">新增</button>
+				<button class="btn btn-primary" @click="jump_to_url('edit_planetype.html?type=edit_planetype&paramId='+checked_planetype_id,2);">编辑</button>
+				<button class="btn btn-danger" @click="pop_alert();">删除</button>
 			</div>
 		</div>	
 	</section>
@@ -301,7 +301,8 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -359,7 +360,8 @@
 							}
 						},
 						error: function (e) {
-							Common.tips("操作错误");
+							Common.tips("请求失败");
+							location.href="login.html?auth=error";
 						},
 						complete: function () {
 

@@ -268,6 +268,7 @@
 						},0);
 					},
 					error: function (e) {
+						Common.tips("请求失败");
 						location.href="login.html?auth=error";
 					},
 					complete: function () {
@@ -297,7 +298,8 @@
 						
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -307,6 +309,10 @@
 			},	
 			edit_user:function(evt){
 				var self = this;
+				if(self.uname == ''){
+					Common.msg("请完成用户名");
+					return;
+				}
 				$.ajax({
 					type:'post',
 					url:'../../api/user/edit',
@@ -334,7 +340,7 @@
 						}
 					},
 					error: function (e) {
-						self.msg ='操作失败，请稍后再试~~';
+						self.msg ='请求失败，请稍后再试~~';
 						location.href="login.html?author-error";
 					},
 					complete: function () {

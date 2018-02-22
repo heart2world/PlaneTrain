@@ -185,6 +185,7 @@
 			this.$nextTick(function(){
 				loginContext.ticket = Common.getStorage("ticket_code");
 				Common.initAdminAcoout();
+				this.role_id = this.get_url_param();
 				this.get_asidemenus();
 				this.get_menus();
 				this.get_permission_data();
@@ -232,7 +233,8 @@
 						
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						
@@ -251,11 +253,12 @@
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
-						console.log(data);
+						//console.log(data);
 						self.permission_data = data;
 					},
 					error: function (e) {
-						//location.href="login.html?author=error";
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						
@@ -280,18 +283,19 @@
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
-						console.log(data);
+						//console.log(data);
 						if(data.Result){
-							Common.tips('权限选择成功，1500s后跳转！');
+							Common.tips('权限选择成功，即将跳转！');
 							setTimeout(function(){
 								location.href="role_list.html?reload=true"
 							},1500);
 						}else{
-							self.msg="提交失败";
+							self.msg="提交失败，请完成必填项";
 						}
 					},
 					error: function (e) {
-						self.msg ='操作失败，请稍后再试~~';
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 						

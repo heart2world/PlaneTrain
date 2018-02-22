@@ -120,7 +120,7 @@
 	</div>
     <!-- Content Header (Page header) -->
     <section class="content-header ctr-dete-hd">
-      <h1>时控项目检测  <span>当前系统日期是: <i>2018-01-02 16:00<i></span></h1>
+      <h1>时控项目检测  <span>当前系统日期是: <i v-text="timestr"></i></span></h1>
 	  <p>提醒：时控检测前需要核对“预警提前量设置”已正确设置，时控检测的参考值是预警提前量,否则检测结果可能不符合你的需要。</p>
     </section>
 	<section class="header-fn">
@@ -140,32 +140,33 @@
 		<div class="input-groups pull-right ctr-form-input">
 			<div class="form-group">
 				<label>天数</label>
-				<input type="text" class="form-control" placeholder="" />
+				<input type="text" class="form-control" placeholder="" v-model="Days" />
 			</div>
 			<div class="form-group">
 				<label>自新空中时间</label>
-				<input type="text" class="form-control" placeholder="" />
+				<input type="text" class="form-control" placeholder="" v-model="ReNewAirTime" />
 			</div>
 			<div class="form-group">
 				<label>自新加温机时间</label>
-				<input type="text" class="form-control" placeholder="" />
+				<input type="text" class="form-control" placeholder="" v-model="ReNewUpTempTime" />
 			</div>
 			<div class="form-group">
 				<label>起落次数</label>
-				<input type="text" class="form-control" placeholder="" />
+				<input type="text" class="form-control" placeholder="" v-model="ReNewOnOffTime" />
 			</div>
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="query_data_list($event);">检测</button>
+				<button type="button" class="btn btn-info" @click="query_data_list($event);">检测</button>
 			</div>
 			<div class="form-group">
-				<select class="form-control" @change="switch_page($event);" v-model="planid">
-					<option value="-1">未打印</option>
-					<option v-for="prop in plane_data" :value="prop.ID" v-text="prop.PlaneNo">
+				<select class="form-control" @change="switch_page($event);" v-model="isprint">
+					<option value="0">未打印</option>
+					<option value="1">打印</option>
+					<!--<option value="全部">全部</option>-->
 				</select> 
 			</div>
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="query_data_list($event);">打印预览</button>
-				<button type="button" class="btn btn-default" @click="output_excel($event);">打印</button>
+				<button type="button" class="btn btn-info" @click="query_data_list($event);">打印预览</button>
+				<button type="button" class="btn btn-info" @click="print_table($event);">打印</button>
 				</div>
 		</form>
 		</div>	
@@ -207,99 +208,52 @@
 						<th style="text-align: center; height: 28px;">备注</th>
 					</thead>
 					<tbody>
-						<tr>
+						<tr :class="{'checked':cur_index == index}" v-for="(prop,index) in data_list" :key="index" @click="checked_row_content(prop.ID,index);">
 							<td>
-								<input type="checkbox" class="input-control" />
+								<input type="checkbox" />
 							</td>
-							<td>8765</td>
-							<td>B-9306</td>
-							<td>控制一组</td>
-							<td>是</td>
-							<td>发动机</td>
-							<td>111</td>
-							<td>003</td>
-							<td>120.00</td>
-							<td>120.00</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td v-text="prop.ID" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.ItemID" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.ProSource" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.IsCtrl" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.MainTainName" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.JianNO" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.SerialNO" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.TSN" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.TSO" style="text-align: center; height: 28px;"></td>
+							<td style="text-align: center; height: 28px; padding: 0;">
+								<p v-if="prop.FCheckDate">日期:<span v-text="prop.FCheckDate"></span></p>
+								<p v-if="prop.FAirTime">自新空中时间:<span v-text="prop.FAirTime"></span></p>
+								<p v-if="prop.FOnOffTime">起落次数:<span v-text="prop.FOnOffTime"></span></p>
+								<p v-if="prop.FUpTemprTime">加温机修后时间TSO:<span v-text="prop.FUpTemprTime"></span></p>
 							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.FCheckDate2">日期:<span v-text="prop.FCheckDate2"></span></p>
+								<p v-if="prop.FAirTime2">自新空中时间:<span v-text="prop.FAirTime2"></span></p>
+								<p v-if="prop.FOnOffTime2">起落次数:<span v-text="prop.FOnOffTime2"></span></p>
+								<p v-if="prop.FUpTemprTime2">加温机修后时间TSO:<span v-text="prop.FUpTemprTime2"></span></p>
 							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.RCheckDate2">日期:<span v-text="prop.RCheckDate2"></span></p>
+								<p v-if="prop.RAirTime2">自新空中时间:<span v-text="prop.RAirTime2"></span></p>
+								<p v-if="prop.ROnOffTime2">起落次数:<span v-text="prop.ROnOffTime2"></span></p>
+								<p v-if="prop.RUpTemprTime2">加温机修后时间TSO:<span v-text="prop.RUpTemprTime2"></span></p>
 							</td>
-							<td>5</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td v-text="prop.Capacity" style="text-align: center; height: 28px;"></td>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.RCheckDate">日期:<span v-text="prop.RCheckDate"></span></p>
+								<p v-if="prop.RAirTime">自新空中时间:<span v-text="prop.RAirTime"></span></p>
+								<p v-if="prop.ROnOffTime">起落次数:<span v-text="prop.ROnOffTime"></span></p>
+								<p v-if="prop.RUpTemprTime">加温机修后时间TSO:<span v-text="prop.RUpTemprTime"></span></p>
 							</td>
-							<td>未打印</td>
-							<td>
-								<p>日期</p>
-								<p>自新空中时间</p>
-								<p>起落次数</p>
-								<p>加温机修后时间TSO</p>
+							<td style="text-align: center; height: 28px;" v-text="prop.IsPrinted"></td>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.IsWatDate">日期</p>
+								<p v-if="prop.IsWatAirTime">自新空中时间</p>
+								<p v-if="prop.IsWatOnOffTime">起落次数</p>
+								<p v-if="prop.IsWatUpTemprTime">加温机修后时间TSO</p>
 							</td>
-							<td>示例</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="checkbox" class="input-control" />
-							</td>
-							<td>8765</td>
-							<td>B-9306</td>
-							<td>控制一组</td>
-							<td>是</td>
-							<td>发动机</td>
-							<td>111</td>
-							<td>003</td>
-							<td>120.00</td>
-							<td>120.00</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>5</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>未打印</td>
-							<td>
-								<p>日期</p>
-								<p>自新空中时间</p>
-								<p>起落次数</p>
-								<p>加温机修后时间TSO</p>
-							</td>
-							<td>示例</td>
+							<td v-text="prop.Memo" style="text-align: center; height: 28px;"></td>
 						</tr>
 					</tbody>
 				</table>   
@@ -397,9 +351,10 @@
 	var mvvm = new Vue({
 		el:'#app',
 		data:{
+			timestr:'',
 			note_num:20,
 			data_type:'1',
-			planid:'-1',
+			isprint:'0',
 			startDate:'2018-01-01',
 			endDate:'2018-01-30',
 			total_page:1,
@@ -409,83 +364,98 @@
 			checked_data_id:'',
 			checked_index:'',
 			cur_index:-1,
+			ID:'',
+			Days:'',
+			ReNewAirTime:'',
+			ReNewOnOffTime:'',
+			ReNewUpTempTime:'',
 			menus:[]
 		},
 		mounted:function(){
 			this.$nextTick(function(){
+				var self = this;
 				//初始化信息
 				loginContext.ticket = Common.getStorage("ticket_code");
-				console.log(loginContext.ticket);
+				//console.log(loginContext.ticket);
+				this.showDateTime();
 				this.get_menus();
-				this.getAirplaneOptions();
-				this.get_daily_list();
+				this.get_alarm_data();
+				this.getlist();
 			});
 		},
 		methods:{
 			switch_page:function(evt){
 				this.data_list = [];
-				this.get_daily_list();
+				this.getlist();
+			},
+			showDateTime(){
+				var self = this;
+				self.timestr = Common.showSysDateTime()
+				setTimeout(function(){
+					self.showDateTime();
+				},1000);
 			},
 			query_data_list:function(evt){
 				this.data_list = [];
-				this.get_daily_list();
+				this.getlist();
 			},
 			get_menus:function(){
 				var self = this;
 				$.getJSON("../Res/menu.json",function(data){
-					console.log(data);
+					//console.log(data);
 					self.menus = data.data;
 				});
 			},
-			output_excel:function(evt){
-				$(".table2excel").table2excel({
-					exclude: ".noExl",
-					name: "逐日登记记录表",
-					filename: "pa44-180逐日登记记录"+new Date().getTime()+'.xls',
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
-				});
-			},
-			getAirplaneOptions:function(){
+			get_alarm_data:function(){
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/planes/getlist",
-					data: {"pageSize":100,"pageNo":1,"keyWord":''},
+					url: "../../api/air_time_alarm_set/get",
+					data: {},
 					beforeSend:function(XHR){
 						//发送ajax请求之前向http的header里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
 						//console.log(data);
-						self.total_page = data.Total;
-						setTimeout(function(){
-							self.plane_data = data.ResultData;
-							data.ResultData.forEach(function(m,n){
-								if(m <= data.ResultData.length){
-									self.plane_data.push({
-										'ID': n.ID,
-										'PlaneNo':n.PlaneNo
-									});
-								}
-							});
-						},0);
+						self.ID = data.ID;
+						self.Days = data.Days;
+						self.ReNewAirTime = data.ReNewAirTime;
+						self.ReNewOnOffTime = data.ReNewOnOffTime;
+						self.ReNewUpTempTime = data.ReNewUpTempTime;
+						//判断是否初次时控监测量设置
+						if(self.ReNewAirTime == '' || self.ReNewOnOffTime == '' || self.ReNewUpTempTime == '' || self.Days == ''){
+							//跳转设置
+							location.href="preset_var.html?type=set";
+						}
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
 					}
 				});
 			},
-			get_daily_list:function(){
+			print_table:function(evt){
+				//执行打印
+				window.print();
+			},
+			getlist:function(){
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/dailyRecord/pa44-180/getlist",
-					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"type":self.data_type,"planID":self.planid,"startDate":self.startDate,"endDate":self.endDate},
+					url: "../../api/V_PlanesTCtrlItem_Check/getlist",
+					data: {
+						"pageSize":self.note_num,
+						"pageNo":self.cur_page,
+						"isPrinted":self.isprint,
+						"days":self.Days,
+						"airTime":self.ReNewAirTime,
+						"upTemprTime":self.ReNewUpTempTime,
+						"onOffTime":self.ReNewOnOffTime
+						},
 					beforeSend: function (XHR) {
                     //发送ajax请求之前向http的head里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
@@ -496,52 +466,54 @@
 						setTimeout(function(){
 							//self.data_list = data.ResultData;
 							data.ResultData.forEach(function(m,n){
+								console.log(m);
 								if(n <= data.ResultData.length){
 									self.data_list.push({
-										 "Type":m.Type == '2' ? '普通': '初值',
-										 "CreateTime":m.CreateTime,
-										 "PlanID": m.PlanID,
-										 "InputDate": m.InputDate,
-										 "DayClearingTime": m.DayClearingTime,
-										 "DayRiseAndFallNum": m.DayRiseAndFallNum,
-										 "DayAirTime": m.DayAirTime,
-										 "DayHeatingMachineTime":m.DayHeatingMachineTime,
-										 "DayMaintenaceTime": m.DayMaintenaceTime,
-										 "CorrectClearingTime": m.CorrectClearingTime,
-										 "CorrectAirTime": m.CorrectAirTime,
-										 "CorrectHeatingMachineTime":m.CorrectHeatingMachineTime,
-										 "PlanNewClearingTime": m.PlanNewClearingTime,
-										 "PlanNewAirTime": m.PlanNewAirTime,
-										 "PlanNewHeatingMachineTime":m.PlanNewHeatingMachineTime,
-										 "PlanNewRiseAndFallNum": m.PlanNewRiseAndFallNum,
-										 "PlanDayClearingTime": m.PlanDayClearingTime,
-										 "PlanDayAirTime": m.PlanDayAirTime,
-										 "PlanDayGroundTime": m.PlanDayGroundTime,
-										 "EngineType": m.EngineType,
-										 "EngineNo":m.EngineNo,
-										 "EngineCorrectTSO": m.EngineCorrectTSO,
-										 "EngineNewTSN": m.EngineNewTSN,
-										 "ExecUnit": m.ExecUnit,
-										 "Memo": m.Memo,
-										 "LeftEngineType":m.LeftEngineType,
-										 "LeftEngineNo":m.LeftEngineNo,
-										 "LeftEngineCorrectTSO":m.LeftEngineCorrectTSO,
-										 "LeftEngineNewTSN":m.LeftEngineNewTSN,
-										 "RightEngineType":m.RightEngineType,
-										 "RightEngineNo":m.RightEngineNo,
-										 "RightEngineCorrectTSO":m.RightEngineCorrectTSO,
-										 "RightEngineNewTSN":m.RightEngineNewTSN,
-										 "HeatingMachineDayTime":m.HeatingMachineDayTime,
-										 "HeatingMachineCorrectTSO":m.HeatingMachineCorrectTSO,
-										 "HeatingMachineNewTSN":m.HeatingMachineNewTSN,
-										 "ID":m.ID
+										 ItemID:m.PlTypeTCtrl,
+										 ID:m.ID,
+										 PlaneTypeID:m.PlaneTypeID,
+										 TypeName:m.TypeName,
+										 PlaneNo:m.PlaneNo,
+										 PlaneNoName:m.PlaneNoName,
+										 ProSource:m.ProSource,
+										 IsCtrl:m.IsCtrl ? "是" : "否",
+										 IsPrinted:m.IsPrinted == 0 ? '未打印' : '打印',
+										 JianNO:m.JianNO,
+										 SerialNO:m.SerialNO,
+										 TSN:m.TSN,
+										 TSO:m.TSO,
+										 IsWatDate:m.IsWatDate,
+										 IsWatAirTime:m.IsWatAirTime,
+										 IsWatOnOffTime:m.IsWatOnOffTime,
+										 IsWatUpTemprTime:m.IsWatUpTemprTime,
+										 FCheckDate:m.FCheckDate,
+										 FAirTime:m.FAirTime,
+										 FOnOffTime:m.FOnOffTime,
+										 FUpTemprTime:m.FUpTemprTime,
+										 FCheckDate2:m.FCheckDate2,
+										 FAirTime2:m.FAirTime2,
+										 FOnOffTime2:m.FOnOffTime2,
+										 FUpTemprTime2:m.FUpTemprTime2,
+										 RCheckDate:m.RCheckDate,
+										 RAirTime:m.RAirTime,
+										 ROnOffTime:m.ROnOffTime,
+										 RUpTemprTime:m.RUpTemprTime,
+										 RCheckDate:m.RCheckDate,
+										 RCheckDate2:m.RCheckDate2,
+										 RAirTime2:m.RAirTime2,
+										 ROnOffTime2:m.ROnOffTime2,
+										 RUpTemprTime2:m.RUpTemprTime2,
+										 MainTainName:m.MainTainName,
+										 Capacity:m.Capacity,
+										 ExeCapacity:m.ExeCapacity,
+										 Memo:m.Memo
 									});
 								}
 							});
 						},0);
 					},
 					error: function (e) {
-						location.href="login.html?auth=error";
+						//location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -562,7 +534,7 @@
 					if(typeof url == 'string'){
 						if(typeid == 2 && this.checked_data_id == ''){
 							//判断是否勾选行内容
-							console.log(this.checked_index);
+							//console.log(this.checked_index);
 							Common.tips("请选择操作行");
 							return;
 						}

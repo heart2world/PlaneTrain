@@ -98,26 +98,6 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="app-content">
-	<div class="modal fade in" id="modal-default" style="">
-	  <div class="modal-dialog">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			  <span aria-hidden="true">×</span></button>
-			<h4 class="modal-title">操作提示</h4>
-		  </div>
-		  <div class="modal-body">
-			<p>点击确认按钮删除</p>
-		  </div>
-		  <div class="modal-footer">
-			<button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
-			<button type="button" class="btn btn-primary" @click="del_role(checked_role_id,checked_index);">确认</button>
-		  </div>
-		</div>
-		<!-- /.modal-content -->
-	  </div>
-	  <!-- /.modal-dialog -->
-	</div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>飞行数据统计</h1>
@@ -150,10 +130,10 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<select class="form-control" @change="switch_page($event);">
-					<option>请选择执机单位</option>
-					<option value="all">遂宁学院</option>
-					<option value="notall">XX学院</option>
+				<select class="form-control" v-model="excUnit" @change="switch_page($event);">
+					<option value="">请选择执机单位</option>
+					<option value="遂宁飞行学院">遂宁飞行学院</option>
+					<!--<option value="notall">XX学院</option>-->
 				</select>
 			</div>
 			<div class="form-group">
@@ -161,7 +141,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</div> 
-					<input type="text" id="datepicker" class="form-control pull-right" value="2018-01-04" v-model="startDate">
+					<input type="text" id="datepicker" class="form-control pull-right" value="" v-model="startDate">
 				</div>
 			</div>
 			<div class="form-group">
@@ -169,10 +149,10 @@
 					<div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</div>
-					<input type="text" id="datepicker2" class="form-control pull-right" value="2018-01-04" v-model="endDate"></div>
+					<input type="text" id="datepicker2" class="form-control pull-right" value="" v-model="endDate"></div>
 			</div>
 			<div class="form-group btns-group">
-				<button class="btn btn-default" @click="query_role_list($event);">查询</button>
+				<button  type="button" class="btn btn-info" @click="query_data_list($event);">查询</button>
 			</div>
 		</form>
 		</div>	
@@ -197,47 +177,42 @@
 				  <th>当日地面时间</th>
 				  <th>当日总起落数</th>
 				  <th>维护开车空地时间</th>
-				  <th>家文集当日时间</th>
+				  <th>加温机当日时间</th>
 				  <th>飞行天数</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in role_data" :key="index" @click="checked_row_content(prop.ID,index);">
-                  <td>A00{{index}}</td>
-                  <td>2017/12/10-2018/12/12</td>
-                  <td>ABCSN</td>
-                  <td>B-3609</td>
-                  <td>遂宁学院</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
+                <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in reportData" :key="index" @click="checked_row_content(prop.ID,index);">
+                  <td v-text="index"></td>
+                  <td v-text="prop.Time"></td>
+                  <td v-text="prop.TypeName"></td>
+                  <td v-text="prop.PlaneNo"></td>
+                  <td v-text="prop.ExecUnit"></td>
+				  <td v-text="prop.PlanDayClearingTime" class="clearTime"></td>
+				  <td v-text="prop.PlanDayAirTime" class="airTime"></td>
+				  <td v-text="prop.PlanDayGroundTime" class="groundTime"></td>
+				  <td v-text="prop.DayRiseAndFallNum" class="fallTime"></td>
+				  <td v-text="prop.DayMaintenaceTime" class="mTime"></td>
+				  <td v-text="prop.HeatingMachineDayTime" class="hTime"></td>
+				  <td v-text="prop.FlyNum" class="flyTime"></td>
                 </tr>
+				<tr>
+				  <td>合计</td>
+				  <td></td>
+				  <td></td>
+				  <td></td>
+				  <td></td>
+				  <td  cloak>{{clearTime || clearTimeCount}}</td>
+				  <td  cloak>{{airTime || airTimeCount}}</td>
+				  <td  cloak>{{groundTime || groundTimeCount}}</td>
+				  <td  cloak>{{riseTime || riseTimeCount}}</td>
+				  <td  cloak>{{mTime || mTimeCount}}</td>
+				  <td  cloak>{{hTime || hTimeCount}}</td>
+				  <td  cloak>{{allTime || allTimeCount}}</td>
+				</tr>
                 </tbody>
               </table>
             </div>
-			<nav aria-label="Page navigation">
-			  <ul class="pagination">
-				<li>
-				  <a href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				  </a>
-				</li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li>
-				  <a href="#" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				  </a>
-				</li>
-			  </ul>
-</nav>
             <!-- /.box-body -->
           </div>
         </div>
@@ -313,9 +288,16 @@
 			PlaneTypeID:'',
 			PlaneID:'',
 			cartype:'',
-			uname:'',
+			excUnit:'',
 			account:'',
 			total_page:1,
+			clearTime:0,
+			airTime:0,
+			groundTime:0,
+			riseTime:0,
+			mTime:0,
+			hTime:0,
+			allTime:0,
 			cur_page:1,
 			role_data:[],
 			startDate:Common.getToMorrowDate(),
@@ -325,6 +307,7 @@
 			cur_index:-1,
 			planetype_data:[],
 			plane_data:[],
+			reportData:[],
 			menus:[]
 		},
 		mounted:function(){
@@ -335,18 +318,69 @@
 				//console.log(loginContext.ticket);
 				this.getAirplaneOptions();
 				this.getPlaneOptions();
-				this.getRoleList();
+				this.getReportList();
 				this.get_menus();
 			});
 		},
+		computed:{
+			clearTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.PlanDayClearingTime;
+				})
+				return num.toFixed(1);
+			},
+			airTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.PlanDayAirTime;
+				})
+				return num.toFixed(1);
+			},
+			groundTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.PlanDayGroundTime;
+				})
+				return num.toFixed(1);
+			},
+			riseTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.DayRiseAndFallNum;
+				})
+				return num;
+			},
+			mTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.DayMaintenaceTime;
+				})
+				return num.toFixed(1);
+			},
+			hTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.HeatingMachineDayTime;
+				})
+				return num.toFixed(1);
+			},
+			allTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.FlyNum;
+				})
+				return num;
+			}
+		},
 		methods:{
 			switch_page:function(evt){
-				this.role_data = [];
-				this.getRoleList();
+				this.reportData = [];
+				this.getReportList();
 			},
-			query_role_list:function(evt){
-				this.role_data = [];
-				this.getRoleList();
+			query_data_list:function(evt){
+				this.reportData = [];
+				this.getReportList();
 			},
 			get_menus:function(){
 				var self = this;
@@ -380,7 +414,7 @@
 						},0);
 					},
 					error: function (e) {
-						
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -413,19 +447,25 @@
 						},0);
 					},
 					error: function (e) {
-						
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
 					}
 				});
 			},
-			getRoleList:function(){
+			getReportList:function(){
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/role/getlist",
-					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"keyWord":self.uname},
+					url: "../../api/dailyRecord/getreportlist",
+					data: {
+						"planTypeID":self.PlaneTypeID,
+						"planID":self.PlaneID,
+						"ExecUnit":self.excUnit,
+						"startDate":self.startDate,
+						"endDate":self.endDate
+						},
 					beforeSend: function (XHR) {
                     //发送ajax请求之前向http的head里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
@@ -434,14 +474,23 @@
 						console.log(data);
 						self.total_page = data.Total;
 						setTimeout(function(){
-							self.role_data = data.ResultData;
-							data.ResultData.forEach(function(m,n){
-								if(m <= data.ResultData.length){
-									self.role_data.push({
-										'ID': n.ID,
-										'RoleName':n.RoleName,
-										'CreateTime':n.CreateTime,
-										'RoleDesc':n.RoleDesc
+							data.ResultData && data.ResultData.forEach(function(n,m){
+								if(m < data.ResultData.length){
+									self.reportData.push({
+										ID:'缺字段',
+										Time:self.startDate+'~'+self.endDate,
+										PlaneTypeID:n.PlaneTypeID,
+										TypeName:n.TypeName,
+										PlanID:n.PlanID,
+										PlaneNo:n.PlaneNo,
+										DayMaintenaceTime:n.DayMaintenaceTime,
+										DayRiseAndFallNum:n.DayRiseAndFallNum,
+										ExecUnit:n.ExecUnit,
+										HeatingMachineDayTime:n.HeatingMachineDayTime,
+										PlanDayAirTime:n.PlanDayAirTime,
+										PlanDayClearingTime:n.PlanDayClearingTime,
+										PlanDayGroundTime:n.PlanDayGroundTime,
+										FlyNum:Math.floor(Math.random()*9999)
 									});
 								}
 							});
@@ -456,10 +505,7 @@
 				});
 			},
 			checked_row_content:function(rid,index){
-				var self = this;
-				self.checked_role_id = rid;
-				self.checked_index = index;
-				self.cur_index = index;
+				return;
 			},
 			jump_to_url:function(url,typeid){
 				//跳转至角色添加
@@ -472,60 +518,21 @@
 					}
 					location.href = url;
 				}
-			},
-			pop_alert:function(){
-				if(this.checked_role_id == ''){
-					//判断是否勾选行内容
-					Common.tips("请选择操作行");
-					return;
-				}
-				$("#modal-default").modal();
-				return false;
-			},
-			del_role:function(rid,index){
-				var self = this;
-				//删除角色
-				if(!!rid){
-					$.ajax({
-						type: "get",
-						url: "../../api/role/delete",
-						data: { "ID": rid},
-						beforeSend: function (XHR) {
-						//发送ajax请求之前向http的head里面加入验证信息
-							XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
-						},
-						success: function (data, status) {
-							console.log(data);
-							if(data.Result){
-								//删除成功 刷新数据
-								console.log(index);
-								self.role_data.splice(index,1);
-								self.cur_index = '';
-								
-								$("#modal-default").modal('hide');
-							}
-						},
-						error: function (e) {
-							
-						},
-						complete: function () {
-
-						}
-					});
-				}
 			}
 		}
 	});
 	$(function(){
 		//开始时间
-		$('#startdate').datepicker({
+		$('#datepicker').datepicker({
 		  format: 'yyyy-mm-dd',
 		  language:  "zh-CN",
 		  autoclose: true,
 		  startView: 0,
           clearBtn:true,  
           todayBtn:true
-		})
+		}).on('changeDate', function(ev){    
+			mvvm.startDate = $(ev.target).val();
+		  })
 		
 		//结束时间
 		$('#datepicker2').datepicker({
@@ -535,7 +542,9 @@
 		  startView: 0,
           clearBtn:true,  
           todayBtn:true
-		})
+		}).on('changeDate', function(ev){    
+			mvvm.endDate = $(ev.target).val();
+		  })
 	})
 </script>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>飞行学院管理系统-新增监控清单</title>
+  <title>飞行学院管理系统-编辑监控清单</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -98,29 +98,9 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="app-content">
-	<div class="modal fade in" id="modal-default" style="">
-	  <div class="modal-dialog">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			  <span aria-hidden="true">×</span></button>
-			<h4 class="modal-title">操作提示</h4>
-		  </div>
-		  <div class="modal-body">
-			<p>点击确认按钮删除</p>
-		  </div>
-		  <div class="modal-footer">
-			<button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
-			<button type="button" class="btn btn-primary" @click="del_role(checked_role_id,checked_index);">确认</button>
-		  </div>
-		</div>
-		<!-- /.modal-content -->
-	  </div>
-	  <!-- /.modal-dialog -->
-	</div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>新增监控清单</h1>
+      <h1>编辑监控清单</h1>
     </section>
 	<section class="content" style="overflow: hidden;">
 		 <form class="form-content col-md-5 col-xs-12" action="#" method="post" onsubmit="return false;">
@@ -128,7 +108,7 @@
 			  <label class="control-label">机型</label>
 			  <div class="input-wrap">
 				  <select class="form-control" v-model="planetype" @change="getlistbyplanetype($event);">
-					  <option value="-1" disabled>请选择机型（必选）</option>
+					  <option value="" disabled>请选择机型（必选）</option>
 					  <option v-for="prop in planetype_data" :value="prop.ID" v-text="prop.TypeName">
 				 </select>
 			  </div>
@@ -193,7 +173,7 @@
 			<div class="form-group">
 			  <label class="control-label">监控参数</label>
 			  <div class="input-wrap">
-				  <label><input type="checkbox" value="1" v-model="iswatdate" @change="initdatepicker();" />日期</label>
+				  <label><input type="checkbox" value="1" v-model="iswatdate" @change="initdatepicker();"/>日期</label>
 				  <label><input type="checkbox" value="1" v-model="iswatairtime" />自新空中时间</label>
 				  <label><input type="checkbox" value="1" v-model="iszx"/>自新起落数</label>
 				  <label><input type="checkbox" value="1" v-model="zxjwj"/>自新加温机时间</label>
@@ -252,16 +232,16 @@
 			  <textarea class="form-control" rows="3" placeholder="选填" v-model="memo"></textarea>
 			</div>
 			<div class="box-footer">
-				<button type="button" class="btn btn-default" @click="cancel_ctrtime_plus();">取消</button>
-				<button type="submit" class="btn btn-info pull-right" @click="add_ctrtime($event);">提交</button>
+				<button type="button" class="btn btn-default" @click="cancel_ctrtime_edit();">取消</button>
+				<button type="submit" class="btn btn-info pull-right" @click="edit_ctrtime($event);">提交</button>
 			</div>
 			<div class="err-msg" v-text="msg"></div>
 		</form>
-		<div class="calculator col-md-7 col-xs-12" style="display: none;">
+		<div class="calculator col-md-7 col-xs-12">
 			<div class="form-group">
 				<label class="control-label" style="display: block;">参考数据计算器</label>
 				<div class="input-group" style="width:100%">
-				 <select class="form-control" v-model="calcu_type">
+				 <select class="form-control" v-model="calcu_type" @change="switch_type($event);">
 					 <option value="1">时间</option>
 					 <option value="2">日期</option>
 					 <option value="3">起落</option>
@@ -270,31 +250,38 @@
 				</div>
 			</div>
 			<div class="box-content" style="overflow: hidden;">
-				<div class="form-group pull-left">
-				  <input type="text" class="form-control" placeholder="输入相关参数">
+				<div v-if="calcu_type != 2" class="form-group pull-left">
+				  <input type="text" class="form-control" placeholder="输入相关参数" v-model="relation_val">
 				</div>
-				<button type="submit" class="btn btn-info pull-right" @click="add_ctrtime($event);">提交</button>
-			</div>
+				<div :class="{'collapsed':calcu_type != 2}" class="form-group pull-left">
+					<div class="input-group date">
+					  <div class="input-group-addon">
+						<i class="fa fa-calendar"></i>
+					  </div>
+					  <input type="text" class="form-control pull-right" id="datepicker3" v-model="relation_val">
+					</div>
+				</div>
+				<button type="submit" class="btn btn-info pull-right" @click="calcu($event);">提交</button>
 			<!--时间-->
-			<div v-cloak>
-				<div v-if="calcu_type == 1" class="calcu-content">
-					<div class="box-plane">累计装机时间: 2100</div>
-					<div class="box-plane">拆下件TSN: 12</div>
-					<div class="box-plane">拆下件FSO: 10</div>
+			<div v-cloak style="clear:both;">
+				<div v-if="calcu_type == 1 && zjtime" class="calcu-content">
+					<div class="box-plane">累计装机时间: {{zjtime}}</div>
+					<div class="box-plane">拆下件TSN: {{tsn2}}</div>
+					<div class="box-plane">拆下件TSO: {{tso2}}</div>
 				</div>
 				<!--日期-->
-				<div v-if="calcu_type == 2" class="calcu-content">
-					<div class="box-plane">累计装机时间: 2100</div>
+				<div v-if="calcu_type == 2 && zjtime" class="calcu-content">
+					<div class="box-plane">累计装机时间: {{zjtime}}</div>
 				</div>
 				<!--累计起落次数-->
-				<div v-if="calcu_type == 3" class="calcu-content">
-					<div class="box-plane">累计起落次数: 2100</div>
+				<div v-if="calcu_type == 3 && onofftime" class="calcu-content">
+					<div class="box-plane">累计起落次数:{{onofftime}}</div>
 				</div>
 				<!--加温机-->
-				<div v-if="calcu_type == 4" class="calcu-content">
-					<div class="box-plane">累计加温机时间: 2100</div>
-					<div class="box-plane">拆下件加温机TSN: 2100</div>
-					<div class="box-plane">拆下件加温机TSO: 2100</div>
+				<div v-if="calcu_type == 4 && uptemptime" class="calcu-content">
+					<div class="box-plane">累计加温机时间: {{uptemptime}}</div>
+					<div class="box-plane">拆下件加温机TSN: {{tsn2}}</div>
+					<div class="box-plane">拆下件加温机TSO: {{tso2}}</div>
 				</div>
 			</div>
 		</div>
@@ -363,11 +350,10 @@
 	var mvvm = new Vue({
 		el:'#app',
 		data:{
-			planetype:'-1',
-			planeno:'-1',
-			listid:'-1',
-			isContrl:1,
-			excapacity:'',
+			planetype:'',
+			planeno:'',
+			listid:'',
+			isContrl:'1',
 			jianno:'',
 			serialno:'',
 			tsn:'',
@@ -383,6 +369,7 @@
 			rdate:Common.getNowDate(),
 			rairtime:'',
 			ronofftime:'',
+			excapacity:'',
 			rjwj:'',
 			plane_data:[],
 			planetype_data:[],
@@ -390,43 +377,62 @@
 			memo:'',
 			calcu_type:'1',
 			msg:'',
-			resid:[],
-			menus:[]
+			cid:'',
+			relation_val:'',
+			menus:[],
+			zjtime:'',
+			tsn2:'',
+			tso2:'',
+			onofftime:'',
+			uptemptime:'',
+			resid:[]
 		},
 		mounted:function(){
 			this.$nextTick(function(){
 				//初始化信息
+				var self = this;
 				loginContext.ticket = Common.getStorage("ticket_code");
+				this.cid = this.get_url_param();
 				//console.log(loginContext.ticket);
 				this.get_menus();
 				this.getAirplaneOptions();
 				this.getPlaneOptions();
+				this.get_ctrtime_info();
+				
+				$('#datepicker3').datepicker({
+				  format: 'yyyy-mm-dd',
+				  language:  "zh-CN",
+				  autoclose: true,
+				  startView: 0,
+				  clearBtn:true,  
+				  todayBtn:false
+				}).on('changeDate', function(ev){    
+					mvvm.relation_val = $(ev.target).val();
+				  }) 
 			});
 		},
 		methods:{
-			cancel_ctrtime_plus:function(){
-				window.history.go(-1);
-			},
-			get_menus:function(){
-				var self = this;
-				$.getJSON("../Res/menu.json",function(data){
-					console.log(data);
-					self.menus = data.data;
-				});
+			get_url_param:function(){
+				var url_query = location.search;
+				var url_param_arr = url_query.split('&');
+				var url_param_arr = url_query.split('&');
+				var url_param_arr = url_query.split('&');
+				//console.log(url_param_arr[1]);
+				var seprate_index = url_param_arr[1].indexOf('=');
+				//console.log(seprate_index);
+				var res_id = url_param_arr[1].substr((seprate_index+1));
+				return res_id;
 			},
 			select_project:function(evt){
 				this.resid.pop();
 				this.resid.push(this.listid);
 				console.log(this.resid);
 			},
-			output_excel:function(evt){
-				$(".table2excel").table2excel({
-					exclude: ".noExl",
-					name: "飞机时控项目",
-					filename: "飞机时控项目"+new Date().getTime(),
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
+			get_menus:function(){
+				var self = this;
+				$.getJSON("../Res/menu.json",function(data){
+					console.log(data);
+					self.menus = data.data;
 				});
 			},
 			initdatepicker:function(){
@@ -437,7 +443,7 @@
 				  autoclose: true,
 				  startView: 0,
 				  clearBtn:true,  
-				  todayBtn:true
+				  todayBtn:false
 				}).on('changeDate', function(ev){    
 					mvvm.fdate = $(ev.target).val();
 				  })
@@ -449,10 +455,23 @@
 				  autoclose: true,
 				  startView: 0,
 				  clearBtn:true,  
-				  todayBtn:true
+				  todayBtn:false
 				}).on('changeDate', function(ev){    
 					mvvm.rdate = $(ev.target).val();
 				  })
+			},
+			cancel_ctrtime_edit:function(){
+				window.history.go(-1);
+			},
+			output_excel:function(evt){
+				$(".table2excel").table2excel({
+					exclude: ".noExl",
+					name: "飞机时控项目",
+					filename: "飞机时控项目"+new Date().getTime(),
+					exclude_img: true,
+					exclude_links: true,
+					exclude_inputs: true
+				});
 			},
 			getlistbyplanetype:function(evt){
 				var self = this;
@@ -584,33 +603,63 @@
 					}
 				});
 			},
-			add_ctrtime:function(){
+			get_ctrtime_info:function(){
 				var self = this;
-				var data2 = {
-				      PlaneTypeID:self.planetype,
-					  PlaneNo:self.planeno,
-					  IsCtrl:self.isContrl == '1' ? true : false,
-					  ExeCapacity:self.excapacity,
-					  JianNO:self.jianno,
-					  SerialNO:self.serialno,
-					  TSN:self.tsn,
-					  TSO:self.tso,
-					  IsWatDate:self.iswatdate,
-					  IsWatAirTime:self.iswatairtime,
-					  IsWatOnOffTime:self.iszx,
-					  IsWatUpTemprTime:self.zxjwj,
-					  FCheckDate:self.fdate,
-					  FAirTime:self.fairtime,
-					  FOnOffTime:self.fonofftime,
-					  FUpTemprTime:self.fjwj,
-					  RCheckDate:self.rdate,
-					  RAirTime:self.rairtime,
-					  ROnOffTime:self.ronofftime,
-					  RUpTemprTime:self.rjwj,
-					  Memo:self.memo,
-					  ReList:self.resid
-					};
-				//console.log(data2);
+				$.ajax({
+					type: "get",
+					url: "../../api/PlanesTCtrlItem/get",
+					data: {
+						"ID":self.cid
+					},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						console.log(data);
+						self.planetype = data.PlaneTypeID;
+						self.planeno = data.PlaneNo;
+						self.list_data =  data.ReList;
+						self.isContrl = data.IsCtrl ? "1" : "0";
+						self.excapacity = data.ExeCapacity,
+						self.jianno = data.JianNO;
+						self.serialno = data.SerialNO;
+						self.tsn = data.TSN;
+						self.tso = data.TSO;
+						self.iswatdate = data.IsWatDate;
+						self.iswatairtime = data.IsWatAirTime;
+						self.iszx = data.IsWatOnOffTime;
+						self.zxjwj = data.IsWatUpTemprTime;
+						self.fdate = data.FCheckDate;
+						self.fairtime = data.FAirTime;
+						self.fonofftime = data.FOnOffTime;
+						self.fjwj = data.FUpTemprTime;
+						self.rdate = data.RCheckDate;
+						self.rairtime = data.RAirTime;
+						self.ronofftime = data.ROnOffTime;
+						self.rjwj = data.RUpTemprTime;
+						self.memo = data.Memo;
+						self.listid = data.ReList[0],
+						self.plane_data = [];
+						
+						self.getlistbyplanetype();
+						self.getlistbyplanetype2();
+						setTimeout(function(){
+							self.initdatepicker();
+						},10);
+						
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
+			},
+			edit_ctrtime:function(){
+				var self = this;
 				if(self.planetype == '-1'){
 					Common.msg("请完成机型选择");
 					return;
@@ -717,13 +766,12 @@
 						return;
 					}
 				}
-				
 				$.ajax({
 					type:'post',
-					url:'../../api/PlanesTCtrlItem/add',
-					datatype:'json',
-					traditional:true,
+					url:'../../api/PlanesTCtrlItem/edit',
+					traditional:true,//传统序列化
 					data:{
+					  ID:self.cid,
 				      PlaneTypeID:self.planetype,
 					  PlaneNo:self.planeno,
 					  IsCtrl:self.isContrl == '1' ? true : false,
@@ -754,7 +802,7 @@
 					success:function(data){
 						console.log(data);
 						if(data.Result){
-							Common.tips('新增成功，即将跳转！');
+							Common.tips('编辑成功，即将跳转！');
 							setTimeout(function(){
 								location.href="plan_ctrtime_menu.html?reload=true";
 							},1500);
@@ -770,6 +818,59 @@
 						
 					}
 				});
+			},
+			switch_type:function(evt){
+				//重置初始值
+				var self = this;
+				self.relation_val = self.calcu_type == 2 ? Common.getNowDate() : '';
+				self.zjtime = '';
+				self.tsn2 = '';
+				self.tso2 = '';
+				self.uptemptime = '';
+			},
+			calcu:function(evt){
+				var self = this;
+				if(!self.relation_val){
+					Common.tips("请输入参数值");
+					return;
+				}
+				
+				if(self.calcu_type == 1){
+					/**
+					@param 时间算法
+					1.累计装机时间=输入参数-控制起点
+					2.拆下件TSN=飞机现在的空中时间-控制起点+装机时TSN
+					3.拆下件TSO=输入参数-控制起点+装机时TSO
+					**/
+					self.zjtime = Math.abs(parseFloat(self.relation_val) - parseFloat(self.fairtime));
+					self.tsn2 = Math.abs(parseFloat(self.relation_val) - parseFloat(self.fairtime) +parseFloat(self.tsn));
+					self.tso2 = Math.abs(parseFloat(self.relation_val) - parseFloat(self.fairtime) +parseFloat(self.tso));
+				}
+				if(self.calcu_type == 2){
+					/**
+					日期算法
+					累计装机时间=输入参数-控制起点   （计算出天数）
+					*/
+					self.zjtime = Common.getMuchDay(self.relation_val,self.fdate)+'天';
+				}
+				if(self.calcu_type == 3){
+					/**
+					起落算法
+					累计装机时间=输入参数-控制起点 
+					*/
+					self.onofftime = parseFloat(self.relation_val) - parseFloat(self.fonofftime);
+				}
+				if(self.calcu_type == 4){
+					/**
+					加温机算法
+					1.累计装机时间=输入参数-控制起点
+					2.拆下件TSN=飞机现在的空中时间-控制起点+装机时TSN
+					3.拆下件TSO=输入参数-控制起点+装机时TSO	
+					*/
+					self.uptemptime = parseFloat(self.relation_val) - parseFloat(self.fjwj);
+					self.tsn2 = parseFloat(self.relation_val) - parseFloat(self.fjwj) +parseFloat(self.tsn);
+					self.tso2 = parseFloat(self.relation_val) - parseFloat(self.fjwj) +parseFloat(self.tso);
+				}
 			}
 		}
 	});

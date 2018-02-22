@@ -108,7 +108,7 @@ var mvvm = new Vue({
 				"LoginAccount": self.uname,
 				"Password": self.pwd
 			}).success(function (data) {
-				console.log(data);
+				//console.log(data);
 				if (data.LoginResult) {
 					loginContext.ticket = data.Ticket;
 					//储存所需值

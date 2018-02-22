@@ -84,7 +84,7 @@
 		  <a v-if="!item.child" :href="item.menu_url">
 		  <span v-html="item.icon"></span> <span v-text="item.menu_name"></span>
 			<span class="pull-right-container">
-			  <i class="fa fa-angle-left pull-right"></i>
+			  <i class="fa fa-angle-left pull-left"></i>
 			</span>
 		  </a>
 		   <ul v-if="item.child" class="treeview-menu">
@@ -110,7 +110,7 @@
 		  </label>
 		</div>
 		<div class="box-footer">
-			<button type="submit" class="btn btn-info pull-right" @click="choose_fill_type($event);">确定</button>
+			<button type="submit" class="btn btn-info pull-left" @click="choose_fill_type($event);">确定</button>
 		</div>
 		<div class="err-msg" v-text="msg"></div>
 	</form>

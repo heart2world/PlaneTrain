@@ -111,7 +111,7 @@
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
-			<button type="button" class="btn btn-primary" @click="del_role(checked_role_id,checked_index);">确认</button>
+			<button type="button" class="btn btn-primary" @click="del_ctrtime(checked_data_id,checked_index);">确认</button>
 		  </div>
 		</div>
 		<!-- /.modal-content -->
@@ -122,7 +122,7 @@
     <section class="content-header">
       <h1>飞机时控项目</h1>
     </section>
-	<section class="header-fn">
+	<section class="header-fn ctrtime-hd">
 		<form class="form-inline">
 		  <div class="choose-page pull-left" style="padding: 0;">
 			<div class="form-group">
@@ -138,33 +138,43 @@
 		</div>
 		<div class="input-groups pull-right">
 			<div class="form-group">
-				<select class="form-control" @change="switch_page($event);" v-model="planid">
-					<option value="-1">请选择机型</option>
-					<option v-for="prop in plane_data" :value="prop.ID" v-text="prop.PlaneNo">
-				</select>
+			  <div class="input-wrap">
+				  <select class="form-control" v-model="planetype" @change="getlistbyplanetype($event);">
+					  <option value="" disabled>请选择机型（必选）</option>
+					  <option v-for="prop in planetype_data" :value="prop.ID" v-text="prop.PlaneNo">
+				 </select>
+			  </div>
 			</div>
 			<div class="form-group">
-				<select class="form-control" @change="switch_page($event);" v-model="planid">
-					<option value="-1">请选择机号</option>
-					<option v-for="prop in plane_data" :value="prop.ID" v-text="prop.PlaneNo">
-				</select> 
+			  <div class="input-wrap">
+				 <select class="form-control" v-model="planeno" @change="getlistbyplanetype2($event);">
+					  <option value="" disabled>请选择机号（必选）</option>
+					  <option v-for="prop in plane_data" :value="prop.ID" v-text="prop.PlaneNo">
+				 </select>
+			  </div>
 			</div>
 			<div class="form-group">
-				<select class="form-control" @change="switch_page($event);" v-model="planid">
-					<option value="-1">请选择项目名称</option>
-					<option v-for="prop in plane_data" :value="prop.ID" v-text="prop.PlaneNo">
-				</select> 
+			  <div class="input-wrap">
+				  <select class="form-control" v-model="listid">
+					  <option value="" disabled>请选择监控项目（必选）</option>
+					  <option v-for="prop in list_data" :value="prop.ID" v-text="prop.MainTainName">
+				 </select>
+			  </div>
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="请输入称件号\序号" v-model="keyword"/>
 			</div>
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="query_data_list($event);">查询</button>
+				<button type="button" class="btn btn-info" @click="query_data_list($event);">查询</button>
 			</div>
+			<p></p>
 			<div class="form-group btns-group">
-				<button type="button" class="btn btn-default" @click="query_data_list($event);">变更记录</button>
-				<button type="button" class="btn btn-default" @click="query_data_list($event);">新增</button>
-				<button type="button" class="btn btn-default" @click="jump_to_url('edit_dailyRecord.html?type=edit_dailyRecord&paramId='+checked_data_id,2,'pa44-180');">编辑</button>
-				<button type="button" class="btn btn-default" @click="jump_to_url('edit_dailyRecord.html?type=edit_dailyRecord&paramId='+checked_data_id,2,'pa44-180');">删除</button>
-				<button type="button" class="btn btn-primary" @click="output_excel($event);">导出EXCEL</button>
-				</div>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('plan_ctrtime_log.html?type=plan_ctrtime_log&paramId='+checked_data_id,2);">变更记录</button>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('plan_ctrtime_plus.html?type=plan_ctrtime_plus',1);">新增</button>
+				<button type="button" class="btn btn-primary" @click="jump_to_url('edit_ctrtime_menu.html?type=edit_dctrtimemenu&paramId='+checked_data_id,2,'');">编辑</button>
+				<button type="button" class="btn btn-danger" @click="pop_alert();">删除</button>
+				<button type="button" class="btn btn-info" @click="output_excel($event);">导出EXCEL</button>
+			</div>
 		</form>
 		</div>	
 	</section>
@@ -186,6 +196,7 @@
 						<th style="text-align: center; height: 28px;">维修项目<br/>名称</th>
 						<th style="text-align: center; height: 28px;">件号</th>
 						<th style="text-align: center; height: 28px;">序号</th>
+						<th style="text-align: center; height: 28px;">装机时TSN</th>
 						<th style="text-align: center; height: 28px;">装机时TSO</th>
 						<th style="text-align: center; height: 28px;">
 							控制起点<br/>(装机或上次完工的飞机<br/>时间/日期/起落等)
@@ -197,6 +208,7 @@
 							重复检查周期<br/>（时间/日期/起落等）
 						</th>
 						<th style="text-align: center; height: 28px;">容限</th>
+						<th style="text-align: center; height: 28px;">执行容限</th>
 						<th style="text-align: center; height: 28px;">
 							控制计划<br/>(装机或上次完工的飞机时间<br/>/日期/起落等)
 						</th>
@@ -204,93 +216,51 @@
 						<th style="text-align: center; height: 28px;">备注</th>
 					</thead>
 					<tbody>
-						<tr>
-							<td>A001</td>
-							<td>8765</td>
-							<td>CESSNA172R</td>
-							<td>B-9306</td>
-							<td>控制一组</td>
-							<td>是</td>
-							<td>发动机</td>
-							<td>111</td>
-							<td>003</td>
-							<td>120.00</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+						 <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in ctrlist_data" :key="index" @click="checked_row_content(prop.ID,index);">
+							<td v-text="prop.ID" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.ItemID" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.TypeName" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.PlaneNoName" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.ProSource" style="text-align: center; height: 28px;" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.IsCtrl" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.MainTainName" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.JianNO" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.SerialNO" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.TSN" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.TSO" style="text-align: center; height: 28px;"></td>
+							<td style="text-align: center; height: 28px; padding: 0;">
+								<p v-if="prop.FCheckDate">日期:<span v-text="prop.FCheckDate"></span></p>
+								<p v-if="prop.FAirTime">自新空中时间:<span v-text="prop.FAirTime"></span></p>
+								<p v-if="prop.FOnOffTime">起落次数:<span v-text="prop.FOnOffTime"></span></p>
+								<p v-if="prop.FUpTemprTime">加温机修后时间TSO:<span v-text="prop.FUpTemprTime"></span></p>
 							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.FCheckDate2">日期:<span v-text="prop.FCheckDate2"></span></p>
+								<p v-if="prop.FAirTime2">自新空中时间:<span v-text="prop.FAirTime2"></span></p>
+								<p v-if="prop.FOnOffTime2">起落次数:<span v-text="prop.FOnOffTime2"></span></p>
+								<p v-if="prop.FUpTemprTime2">加温机修后时间TSO:<span v-text="prop.FUpTemprTime2"></span></p>
 							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.RCheckDate2">日期:<span v-text="prop.RCheckDate2"></span></p>
+								<p v-if="prop.RAirTime2">自新空中时间:<span v-text="prop.RAirTime2"></span></p>
+								<p v-if="prop.ROnOffTime2">起落次数:<span v-text="prop.ROnOffTime2"></span></p>
+								<p v-if="prop.RUpTemprTime2">加温机修后时间TSO:<span v-text="prop.RUpTemprTime2"></span></p>
 							</td>
-							<td>5</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
+							<td v-text="prop.Capacity" style="text-align: center; height: 28px;"></td>
+							<td v-text="prop.ExeCapacity" style="text-align: center; height: 28px;"></td>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.RCheckDate">日期:<span v-text="prop.RCheckDate"></span></p>
+								<p v-if="prop.RAirTime">自新空中时间:<span v-text="prop.RAirTime"></span></p>
+								<p v-if="prop.ROnOffTime">起落次数:<span v-text="prop.ROnOffTime"></span></p>
+								<p v-if="prop.RUpTemprTime">加温机修后时间TSO:<span v-text="prop.RUpTemprTime"></span></p>
 							</td>
-							<td>
-								<p>日期</p>
-								<p>自新空中时间</p>
-								<p>起落次数</p>
-								<p>加温机修后时间TSO</p>
+							<td style="text-align: center; height: 28px;">
+								<p v-if="prop.IsWatDate">日期</p>
+								<p v-if="prop.IsWatAirTime">自新空中时间</p>
+								<p v-if="prop.IsWatOnOffTime">起落次数</p>
+								<p v-if="prop.IsWatUpTemprTime">加温机修后时间TSO</p>
 							</td>
-							<td>示例</td>
-						</tr>
-						<tr>
-							<td>A001</td>
-							<td>8765</td>
-							<td>CESSNA172R</td>
-							<td>B-9306</td>
-							<td>控制一组</td>
-							<td>是</td>
-							<td>发动机</td>
-							<td>111</td>
-							<td>003</td>
-							<td>120.00</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>5</td>
-							<td>
-								<p>日期:2017/12/12</p>
-								<p>自新空中时间:56.00</p>
-								<p>起落次数:85</p>
-								<p>加温机修后时间TSO:60.00</p>
-							</td>
-							<td>
-								<p>日期</p>
-								<p>自新空中时间</p>
-								<p>起落次数</p>
-								<p>加温机修后时间TSO</p>
-							</td>
-							<td>示例</td>
+							<td v-text="prop.Memo" style="text-align: center; height: 28px;"></td>
 						</tr>
 					</tbody>
 				</table>   
@@ -380,7 +350,8 @@
 <!--common.js-->
 <script src="../JS/common.js"></script>
 <!--tableExcel-->
-<script src="../../Web/Admin/bower_components/tableExcel/excel.min.js"></script>
+<script src="../../Web/Admin/bower_components/tableExcel/FileSaver.min.js"></script>
+<script src="../../Web/Admin/bower_components/tableExcel/tableExport.js"></script>
 </body>
 <script>
 	var loginContext = {'ticket':''};
@@ -389,36 +360,41 @@
 		data:{
 			note_num:20,
 			data_type:'1',
-			planid:'-1',
-			startDate:'2018-01-01',
-			endDate:'2018-01-30',
+			planetype:'',
+			planeno:'',
+			listid:'',
+			keyword:'',
 			total_page:1,
 			cur_page:1,
 			plane_data:[],
+			planetype_data:[],
 			data_list:[],
 			checked_data_id:'',
 			checked_index:'',
 			cur_index:-1,
+			ctrlist_data:[],
+			list_data:[],
 			menus:[]
 		},
 		mounted:function(){
 			this.$nextTick(function(){
 				//初始化信息
 				loginContext.ticket = Common.getStorage("ticket_code");
-				console.log(loginContext.ticket);
+				//console.log(loginContext.ticket);
 				this.get_menus();
 				this.getAirplaneOptions();
-				this.get_daily_list();
+				this.getPlaneOptions();
+				this.get_ctrtime_list();
 			});
 		},
 		methods:{
 			switch_page:function(evt){
-				this.data_list = [];
-				this.get_daily_list();
+				this.ctrlist_data = [];
+				this.get_ctrtime_list();
 			},
 			query_data_list:function(evt){
-				this.data_list = [];
-				this.get_daily_list();
+				this.ctrlist_data = [];
+				this.get_ctrtime_list();
 			},
 			get_menus:function(){
 				var self = this;
@@ -428,31 +404,27 @@
 				});
 			},
 			output_excel:function(evt){
-				$(".table2excel").table2excel({
-					exclude: ".noExl",
-					name: "飞机时控项目",
-					filename: "飞机时控项目"+new Date().getTime(),
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
+				$(".table2excel").tableExport({
+					type:'excel',
+					fileName:'飞机时控项目'+Date.parse(new Date()),
+					excelstyles:['text-align','height','padding']
 				});
 			},
-			getAirplaneOptions:function(){
+			getlistbyplanetype:function(evt){
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/planes/getlist",
-					data: {"pageSize":100,"pageNo":1,"keyWord":''},
+					url: "../../api/planes/getlistbyplanetype",
+					data: {"pageSize":100,"pageNo":1,"planeTypeID":self.planetype},
 					beforeSend:function(XHR){
 						//发送ajax请求之前向http的header里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
-						//console.log(data);
-						self.total_page = data.Total;
+						console.log(data);
 						setTimeout(function(){
-							self.plane_data = data.ResultData;
-							data.ResultData.forEach(function(m,n){
+							self.plane_data = [];
+							data.ResultData.forEach(function(n,m){
 								if(m <= data.ResultData.length){
 									self.plane_data.push({
 										'ID': n.ID,
@@ -463,19 +435,119 @@
 						},0);
 					},
 					error: function (e) {
-						
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
 					}
 				});
 			},
-			get_daily_list:function(){
+			getlistbyplanetype2:function(evt){
 				var self = this;
 				$.ajax({
 					type: "get",
-					url: "../../api/dailyRecord/pa44-180/getlist",
-					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"type":self.data_type,"planID":self.planid,"startDate":self.startDate,"endDate":self.endDate},
+					url: "../../api/PlTypeTCtrlList/getlistbyplanetype",
+					data: {"pageSize":100,"pageNo":1,"planeTypeID":self.planetype},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						console.log(data);
+						setTimeout(function(){
+							self.list_data = [];
+							data.ResultData.forEach(function(n,m){
+								if(m <= data.ResultData.length){
+									self.list_data.push({
+										'ID': n.ID,
+										'MainTainName':n.MainTainName
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
+			},
+			getAirplaneOptions:function(){
+				var self = this;
+				$.ajax({
+					type: "get",
+					url: "../../api/planetype/getlist",
+					data: {"pageSize":100,"pageNo":1,"keyWord":''},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						console.log(data);
+						self.total_page = data.Total;
+						setTimeout(function(){
+							data.ResultData.forEach(function(n,m){
+								if(m <= data.ResultData.length){
+									self.planetype_data.push({
+										'ID': n.ID,
+										'PlaneNo':n.TypeName
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
+			},
+			getPlaneOptions:function(){
+				var self = this;
+				$.ajax({
+					type: "get",
+					url: "../../api/planes/getlist",
+					data: {"pageSize":100,"pageNo":1,"keyWord":''},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						console.log(data);
+						self.total_page = data.Total;
+						setTimeout(function(){
+							data.ResultData.forEach(function(n,m){
+								if(m <= data.ResultData.length){
+									self.plane_data.push({
+										'ID': n.PlaneTypeID,
+										'PlaneNo':n.PlaneNo
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
+			},
+			get_ctrtime_list:function(){
+				var self = this;
+				$.ajax({
+					type: "get",
+					url: "../../api/PlanesTCtrlItem/getlist",
+					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"planeTypeID":self.planetype,"planeNo":self.planeno,"listID":self.listid,'keyWord':self.keyword},
 					beforeSend: function (XHR) {
                     //发送ajax请求之前向http的head里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
@@ -484,53 +556,53 @@
 						console.log(data);
 						self.total_page = data.Total;
 						setTimeout(function(){
-							//self.data_list = data.ResultData;
 							data.ResultData.forEach(function(m,n){
 								if(n <= data.ResultData.length){
-									self.data_list.push({
-										 "Type":m.Type == '2' ? '普通': '初值',
-										 "CreateTime":m.CreateTime,
-										 "PlanID": m.PlanID,
-										 "InputDate": m.InputDate,
-										 "DayClearingTime": m.DayClearingTime,
-										 "DayRiseAndFallNum": m.DayRiseAndFallNum,
-										 "DayAirTime": m.DayAirTime,
-										 "DayHeatingMachineTime":m.DayHeatingMachineTime,
-										 "DayMaintenaceTime": m.DayMaintenaceTime,
-										 "CorrectClearingTime": m.CorrectClearingTime,
-										 "CorrectAirTime": m.CorrectAirTime,
-										 "CorrectHeatingMachineTime":m.CorrectHeatingMachineTime,
-										 "PlanNewClearingTime": m.PlanNewClearingTime,
-										 "PlanNewAirTime": m.PlanNewAirTime,
-										 "PlanNewHeatingMachineTime":m.PlanNewHeatingMachineTime,
-										 "PlanNewRiseAndFallNum": m.PlanNewRiseAndFallNum,
-										 "PlanDayClearingTime": m.PlanDayClearingTime,
-										 "PlanDayAirTime": m.PlanDayAirTime,
-										 "PlanDayGroundTime": m.PlanDayGroundTime,
-										 "EngineType": m.EngineType,
-										 "EngineNo":m.EngineNo,
-										 "EngineCorrectTSO": m.EngineCorrectTSO,
-										 "EngineNewTSN": m.EngineNewTSN,
-										 "ExecUnit": m.ExecUnit,
-										 "Memo": m.Memo,
-										 "LeftEngineType":m.LeftEngineType,
-										 "LeftEngineNo":m.LeftEngineNo,
-										 "LeftEngineCorrectTSO":m.LeftEngineCorrectTSO,
-										 "LeftEngineNewTSN":m.LeftEngineNewTSN,
-										 "RightEngineType":m.RightEngineType,
-										 "RightEngineNo":m.RightEngineNo,
-										 "RightEngineCorrectTSO":m.RightEngineCorrectTSO,
-										 "RightEngineNewTSN":m.RightEngineNewTSN,
-										 "HeatingMachineDayTime":m.HeatingMachineDayTime,
-										 "HeatingMachineCorrectTSO":m.HeatingMachineCorrectTSO,
-										 "HeatingMachineNewTSN":m.HeatingMachineNewTSN,
-										 "ID":m.ID
+									self.ctrlist_data.push({
+										 ItemID:m.PlTypeTCtrl,
+										 ID:m.ID,
+										 PlaneTypeID:m.PlaneTypeID,
+										 TypeName:m.TypeName,
+										 PlaneNo:m.PlaneNo,
+										 PlaneNoName:m.PlaneNoName,
+										 ProSource:m.ProSource,
+										 IsCtrl:m.IsCtrl ? "是" : "否",
+										 JianNO:m.JianNO,
+										 SerialNO:m.SerialNO,
+										 TSN:m.TSN,
+										 TSO:m.TSO,
+										 IsWatDate:m.IsWatDate,
+										 IsWatAirTime:m.IsWatAirTime,
+										 IsWatOnOffTime:m.IsWatOnOffTime,
+										 IsWatUpTemprTime:m.IsWatUpTemprTime,
+										 FCheckDate:m.FCheckDate,
+										 FAirTime:m.FAirTime,
+										 FOnOffTime:m.FOnOffTime,
+										 FUpTemprTime:m.FUpTemprTime,
+										 FCheckDate2:m.FCheckDate2,
+										 FAirTime2:m.FAirTime2,
+										 FOnOffTime2:m.FOnOffTime2,
+										 FUpTemprTime2:m.FUpTemprTime2,
+										 RCheckDate:m.RCheckDate,
+										 RAirTime:m.RAirTime,
+										 ROnOffTime:m.ROnOffTime,
+										 RUpTemprTime:m.RUpTemprTime,
+										 RCheckDate:m.RCheckDate,
+										 RCheckDate2:m.RCheckDate2,
+										 RAirTime2:m.RAirTime2,
+										 ROnOffTime2:m.ROnOffTime2,
+										 RUpTemprTime2:m.RUpTemprTime2,
+										 MainTainName:m.MainTainName,
+										 Capacity:m.Capacity,
+										 ExeCapacity:m.ExeCapacity,
+										 Memo:m.Memo
 									});
 								}
 							});
 						},0);
 					},
 					error: function (e) {
+						Common.tips("请求失败");
 						location.href="login.html?auth=error";
 					},
 					complete: function () {
@@ -572,6 +644,40 @@
 				}
 				$("#modal-default").modal();
 				return false;
+			},
+			del_ctrtime:function(cid,index){
+				var self = this;
+				//删除飞机时控项目
+				if(!!cid){
+					$.ajax({
+						type: "get",
+						url: "../../api/PlanesTCtrlItem/delete",
+						data: { "ID": cid},
+						beforeSend: function (XHR) {
+							//发送ajax请求之前向http的head里面加入验证信息
+							XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+						},
+						success: function (data, status) {
+							console.log(data);
+							if(data.Result){
+								//删除成功 刷新数据
+								console.log(index);
+								self.ctrlist_data.splice(index,1);
+								self.checked_data_id = '';
+								self.cur_index = -1;
+								$("#modal-default").modal('hide');
+							}
+						},
+						error: function (e) {
+							Common.tips("请求失败");
+							location.href="login.html?auth=error";
+						},
+						complete: function () {
+
+						}
+
+					});
+				}
 			}
 		}
 	});
