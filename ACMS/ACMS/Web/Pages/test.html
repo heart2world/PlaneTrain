@@ -17,6 +17,7 @@
     <button onclick="login('test','111111')">登录2</button>
 
     <button onclick="add()">添加机型</button>
+    <button onclick="addList()">添加列表</button>
     <script type="text/javascript">
         var loginContext = { "ticket": "" };
 
@@ -151,6 +152,47 @@
 
                 }
 
+            });
+        };
+
+        var addList = function () {
+            $.ajax({
+                type: "post",
+                url: '../../api/WatchPrintList/addList',
+                data: {
+                    'list': [
+                      {
+                          "ID": "sample string 1",
+                          "CtrlItem": "sample string 33",
+                          "PlaneID": "sample string 223",
+                          "IsActive": true,
+                          "CreateTime": "sample string 5",
+                          "Creator": "sample string 6",
+                          "UpdateTime": "sample string 7",
+                          "Updator": "sample string 8"
+                      },
+                      {
+                          "ID": "sample string 1",
+                          "CtrlItem": "sample string 2",
+                          "PlaneID": "sample string 3",
+                          "IsActive": true,
+                          "CreateTime": "sample string 5",
+                          "Creator": "sample string 6",
+                          "UpdateTime": "sample string 7",
+                          "Updator": "sample string 8"
+                      },
+  {
+      "ID": "sample string 1",
+      "CtrlItem": "sample string 2",
+      "PlaneID": "sample string 3",
+      "IsActive": true,
+      "CreateTime": "sample string 5",
+      "Creator": "sample string 6",
+      "UpdateTime": "sample string 7",
+      "Updator": "sample string 8"
+  }
+                    ]
+                }
             });
         };
     </script>

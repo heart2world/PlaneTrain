@@ -82,5 +82,34 @@ namespace ACMS.Applications.Impl
             }
 
         }
+
+        /// <summary>
+        /// 新增批量打印
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public OperationResult AddList(List<WatchPrintList> list, string userID)
+        {
+            try
+            {
+                foreach (var item in list)
+                {
+                    Add(item, userID);
+                }
+                return new OperationResult()
+                {
+                    Result = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult()
+                {
+                    Result = false,
+                    ResultMsg = ex.Message
+                };
+            }
+        }
     }
 }

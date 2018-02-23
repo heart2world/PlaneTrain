@@ -29,5 +29,16 @@ namespace ACMS.Controllers
         {
             return Ok(_service.Add(item, base.CurrentUserId));
         }
+
+        [HttpPost, Route("addList")]
+        public IHttpActionResult AddList(Params param)//List<WatchPrintList> list)
+        {
+            return Ok(_service.AddList(param.list, base.CurrentUserId));
+        }
+    }
+
+    public class Params
+    {
+        public List<WatchPrintList> list { get; set; }
     }
 }
