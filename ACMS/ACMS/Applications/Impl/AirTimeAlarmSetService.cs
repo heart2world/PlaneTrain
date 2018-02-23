@@ -52,7 +52,7 @@ namespace ACMS.Applications.Impl
                     editModel.ReNewOnOffTime = item.ReNewOnOffTime;
                     editModel.ReNewUpTempTime = item.ReNewUpTempTime;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 

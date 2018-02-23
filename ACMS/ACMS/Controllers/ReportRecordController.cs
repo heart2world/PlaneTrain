@@ -30,7 +30,18 @@ namespace ACMS.Controllers
             return Ok(_dailyRecordService.PlaneReportDtoList(startDate, endDate));
         }
 
-        
+        [HttpGet, Route("getEngineReport")]
+        public IHttpActionResult GetEngineReport(string startDate, string endDate)
+        {
+            return Ok(_dailyRecordService.EngineReportDtoList(startDate, endDate));
+        }
+
+        [HttpGet, Route("getEngineMonthReport")]
+        public IHttpActionResult GetMonthEngineReport(string startDate, string endDate)
+        {
+            return Ok(_dailyRecordService.EngineMonthReportDtoList(startDate, endDate));
+        }
+
         [HttpGet, Route("getlist")]
         public IHttpActionResult GetList(int pageSize, int pageNo, string reportType, string keyWord, string startDate, string endDate)
         {

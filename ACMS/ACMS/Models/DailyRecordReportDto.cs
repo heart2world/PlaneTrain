@@ -20,7 +20,7 @@ namespace ACMS.Models
         public string PlaneTypeID { get; set; }
         public string TypeName { get; set; }
 
-        //public int FlightDays { get; set; }
+        public int FlightDays { get; set; }
     }
 
     /// <summary>
@@ -93,5 +93,47 @@ namespace ACMS.Models
         /// </summary>
         public string TypeName { get; set; }
 
+    }
+
+    public class EngineReportDto
+    {
+        public string ID { get; set; }
+        /// <summary>
+        /// 飞机ID
+        /// </summary>
+        public string PlanID { get; set; }
+        /// <summary>
+        /// 飞机机型名称
+        /// </summary>
+        public string PlaneTypeName { get; set; }
+        /// <summary>
+        /// 发动机状态
+        /// </summary>
+        public string EngineStatus { get; set; }
+        /// <summary>
+        /// 发动机型号
+        /// </summary>
+        public string EngineType { get; set; }
+        /// <summary>
+        /// 发动机序号
+        /// </summary>
+        public string EngineNo { get; set; }
+        /// <summary>
+        /// TSO
+        /// </summary>
+        public Nullable<decimal> EngineCorrectTSO { get; set; }
+        public Nullable<decimal> EngineNewTSN { get; set; }
+        /// <summary>
+        /// 发动机位置
+        /// </summary>
+        public string Position { get; set; }
+        /// <summary>
+        /// 飞机机号
+        /// </summary>
+        public string PlaneNo { get; set; }
+        /// <summary>
+        /// 空中时间
+        /// </summary>
+        public Nullable<decimal> PlanDayAirTime { get; set; }
     }
 }

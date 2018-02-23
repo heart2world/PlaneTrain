@@ -49,5 +49,6 @@ namespace ACMS.EF
         public virtual DbSet<V_DailyRecordReport> V_DailyRecordReport { get; set; }
         public virtual DbSet<ReportRecord> ReportRecord { get; set; }
         public virtual DbSet<V_RecordMonthReport> V_RecordMonthReport { get; set; }
+        public virtual DbSet<V_EngineReport> V_EngineReport { get; set; }
     }
 }

@@ -345,6 +345,30 @@
           <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_EngineReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="V_EngineReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="PlanID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="InputDate" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="EngineType" Type="nvarchar" MaxLength="50" />
+          <Property Name="EngineNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="EngineCorrectTSO" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EngineNewTSN" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Position" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="PlaneNo" Type="varchar" MaxLength="50" />
+          <Property Name="PlanDayAirTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_Planes”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_Planes">
           <Key>
@@ -608,6 +632,17 @@
         <EntityType Name="V_RecordMonthReport">
           <Key>
             <PropertyRef Name="ID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
@@ -710,6 +745,27 @@
     [V_DailyRecordReport].[TypeName] AS [TypeName], 
     [V_DailyRecordReport].[PlaneTypeID] AS [PlaneTypeID]
     FROM [dbo].[V_DailyRecordReport] AS [V_DailyRecordReport]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_EngineReport" EntityType="Self.V_EngineReport" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_EngineReport].[ID] AS [ID], 
+    [V_EngineReport].[Type] AS [Type], 
+    [V_EngineReport].[PlanID] AS [PlanID], 
+    [V_EngineReport].[InputDate] AS [InputDate], 
+    [V_EngineReport].[EngineType] AS [EngineType], 
+    [V_EngineReport].[EngineNo] AS [EngineNo], 
+    [V_EngineReport].[EngineCorrectTSO] AS [EngineCorrectTSO], 
+    [V_EngineReport].[EngineNewTSN] AS [EngineNewTSN], 
+    [V_EngineReport].[IsActive] AS [IsActive], 
+    [V_EngineReport].[CreateTime] AS [CreateTime], 
+    [V_EngineReport].[Creator] AS [Creator], 
+    [V_EngineReport].[UpdateTime] AS [UpdateTime], 
+    [V_EngineReport].[Updator] AS [Updator], 
+    [V_EngineReport].[Position] AS [Position], 
+    [V_EngineReport].[PlaneNo] AS [PlaneNo], 
+    [V_EngineReport].[PlanDayAirTime] AS [PlanDayAirTime], 
+    [V_EngineReport].[TypeName] AS [TypeName]
+    FROM [dbo].[V_EngineReport] AS [V_EngineReport]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="V_Planes" EntityType="Self.V_Planes" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -975,6 +1031,7 @@
           <EntitySet Name="V_DailyRecordReport" EntityType="ACMSModel.V_DailyRecordReport" />
           <EntitySet Name="ReportRecord" EntityType="ACMSModel.ReportRecord" />
           <EntitySet Name="V_RecordMonthReport" EntityType="ACMSModel.V_RecordMonthReport" />
+          <EntitySet Name="V_EngineReport" EntityType="ACMSModel.V_EngineReport" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1555,6 +1612,28 @@
           <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
           <Property Name="PlanNewHeatingMachineTime" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="V_EngineReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EngineCorrectTSO" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Position" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2145,6 +2224,29 @@
                 <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
                 <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
                 <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_EngineReport">
+            <EntityTypeMapping TypeName="ACMSModel.V_EngineReport">
+              <MappingFragment StoreEntitySet="V_EngineReport">
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+                <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EngineNewTSN" ColumnName="EngineNewTSN" />
+                <ScalarProperty Name="EngineCorrectTSO" ColumnName="EngineCorrectTSO" />
+                <ScalarProperty Name="EngineNo" ColumnName="EngineNo" />
+                <ScalarProperty Name="EngineType" ColumnName="EngineType" />
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />

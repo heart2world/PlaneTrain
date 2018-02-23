@@ -252,6 +252,9 @@
     <Compile Include="EF\V_DailyRecordReport.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\V_EngineReport.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\V_Planes.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>

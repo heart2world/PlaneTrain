@@ -77,7 +77,7 @@ namespace ACMS.Applications.Impl
             try
             {
                 item.ID = Guid.NewGuid().ToString();
-                item.CreateTime = item.UpdateTime = DateTime.Now.ToString();
+                item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
                 _dbContext.Set<PlaneType>().Add(item);
@@ -115,7 +115,7 @@ namespace ACMS.Applications.Impl
                     editModel.TypeName = item.TypeName;
                     editModel.Memo = item.Memo;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 
@@ -161,7 +161,7 @@ namespace ACMS.Applications.Impl
                     //修改信息
                     editModel.IsActive = false;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 

@@ -29,6 +29,21 @@ namespace ACMS.Applications
         PageResult<PlaneReportDto> PlaneReportDtoList(string startDate, string endDate);
 
         /// <summary>
+        /// 发动机报表
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        PageResult<EngineReportDto> EngineReportDtoList(string startDate, string endDate);
+
+        /// <summary>
+        /// 发动机月度报表
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        PageResult<EngineReportDto> EngineMonthReportDtoList(string startDate, string endDate);
+        /// <summary>
         /// 飞行数据统计
         /// </summary>
         /// <param name="planTypeID"></param>

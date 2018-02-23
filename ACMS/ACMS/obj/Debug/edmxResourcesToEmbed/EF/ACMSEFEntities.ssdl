@@ -329,6 +329,30 @@
     <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
   </EntityType>
   <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_EngineReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="V_EngineReport">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="PlanID" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="InputDate" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="EngineType" Type="nvarchar" MaxLength="50" />
+    <Property Name="EngineNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="EngineCorrectTSO" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="EngineNewTSN" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="Position" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="PlaneNo" Type="varchar" MaxLength="50" />
+    <Property Name="PlanDayAirTime" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_Planes”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
   <EntityType Name="V_Planes">
     <Key>
@@ -635,6 +659,27 @@
     [V_DailyRecordReport].[TypeName] AS [TypeName], 
     [V_DailyRecordReport].[PlaneTypeID] AS [PlaneTypeID]
     FROM [dbo].[V_DailyRecordReport] AS [V_DailyRecordReport]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="V_EngineReport" EntityType="Self.V_EngineReport" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [V_EngineReport].[ID] AS [ID], 
+    [V_EngineReport].[Type] AS [Type], 
+    [V_EngineReport].[PlanID] AS [PlanID], 
+    [V_EngineReport].[InputDate] AS [InputDate], 
+    [V_EngineReport].[EngineType] AS [EngineType], 
+    [V_EngineReport].[EngineNo] AS [EngineNo], 
+    [V_EngineReport].[EngineCorrectTSO] AS [EngineCorrectTSO], 
+    [V_EngineReport].[EngineNewTSN] AS [EngineNewTSN], 
+    [V_EngineReport].[IsActive] AS [IsActive], 
+    [V_EngineReport].[CreateTime] AS [CreateTime], 
+    [V_EngineReport].[Creator] AS [Creator], 
+    [V_EngineReport].[UpdateTime] AS [UpdateTime], 
+    [V_EngineReport].[Updator] AS [Updator], 
+    [V_EngineReport].[Position] AS [Position], 
+    [V_EngineReport].[PlaneNo] AS [PlaneNo], 
+    [V_EngineReport].[PlanDayAirTime] AS [PlanDayAirTime], 
+    [V_EngineReport].[TypeName] AS [TypeName]
+    FROM [dbo].[V_EngineReport] AS [V_EngineReport]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="V_Planes" EntityType="Self.V_Planes" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 

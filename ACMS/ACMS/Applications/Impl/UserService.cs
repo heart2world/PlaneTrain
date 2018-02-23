@@ -133,7 +133,7 @@ namespace ACMS.Services.Impl
                     addModel.IsActive = true;
                     //todo 需要做加密处理
                     addModel.Password = "123456";
-                    addModel.CreateTime = addModel.UpdateTime = DateTime.Now.ToString();
+                    addModel.CreateTime = addModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     addModel.Creator = addModel.Updator = userID;
 
                     var roleModelList = new List<UserRole>();
@@ -147,7 +147,7 @@ namespace ACMS.Services.Impl
                             roleModel.UserID = addModel.ID;
                             roleModel.RoleID = roleID;
                             roleModel.IsActive = true;
-                            roleModel.CreateTime = DateTime.Now.ToString();
+                            roleModel.CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                             roleModel.Creator = userID;
 
                             roleModelList.Add(roleModel);
@@ -203,7 +203,7 @@ namespace ACMS.Services.Impl
                     editModel.UserName = item.UserName;
                     editModel.DeptName = item.DeptName;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
 
                     //修改人员角色信息
@@ -228,7 +228,7 @@ namespace ACMS.Services.Impl
                             roleModel.UserID = item.ID;
                             roleModel.RoleID = roleID;
                             roleModel.IsActive = true;
-                            roleModel.CreateTime = DateTime.Now.ToString();
+                            roleModel.CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                             roleModel.Creator = userID;
 
                             roleModelList.Add(roleModel);
@@ -280,7 +280,7 @@ namespace ACMS.Services.Impl
                 {
                     editModel.Password = pwd;
                     editModel.Updator = operationUserID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     _dbContext.SaveChanges();
 
                     return new OperationResult()
@@ -321,7 +321,7 @@ namespace ACMS.Services.Impl
                 {
                     deleteModel.IsActive = false;
                     deleteModel.Updator = operationUserID;
-                    deleteModel.UpdateTime = DateTime.Now.ToString();
+                    deleteModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     _dbContext.SaveChanges();
 
                     return new OperationResult()

@@ -116,14 +116,14 @@ namespace ACMS.Applications.Impl
                              PlaneNo = g.Key.PlaneNo,
                              TypeName = g.Key.TypeName
                          }).ToList();
-            if (!string.IsNullOrEmpty(startDate))
+            /*if (!string.IsNullOrEmpty(startDate))
             {
                 result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
             }
             if (!string.IsNullOrEmpty(endDate))
             {
                 result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
-            }
+            }*/
 
             #region 用于计算飞机自新数据
             if (list.ResultData != null && list.ResultData.Count > 0)
@@ -148,6 +148,133 @@ namespace ACMS.Applications.Impl
         }
 
         /// <summary>
+        /// 发动机报表
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public PageResult<EngineReportDto> EngineReportDtoList(string startDate, string endDate)
+        {
+            PageResult<EngineReportDto> list = new PageResult<EngineReportDto>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
+            && string.Compare(a.InputDate, endDate) <= 0 && a.Type == 2);
+            list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position })
+                         .Select(g => new EngineReportDto()
+                         {
+                             EngineCorrectTSO = g.Sum(i => i.EngineCorrectTSO),
+                             EngineNewTSN = g.Sum(i => i.EngineNewTSN),
+                             PlaneNo = g.Key.PlaneNo,
+                             Position = g.Key.Position,
+                             EngineNo = g.Key.EngineNo
+                         }).ToList();
+            //剔除 新增发动机首月不统计 
+            if (list.ResultData != null && list.ResultData.Count > 0)
+            {
+                var tempList = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
+                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+                ).ToList();
+                List<EngineReportDto> tempList2 = new List<EngineReportDto>();
+                foreach (var item in list.ResultData)
+                {//复制列表至临时表中
+                    tempList2.Add(item);
+                }
+                foreach (var item in tempList2)
+                {//剔除 数据
+                    var tempResult = tempList.Where(a => string.Compare(a.EngineNo, item.EngineNo, true) == 0
+                    && string.Compare(a.PlaneNo, item.PlaneNo) == 0 && string.Compare(a.Position, item.Position) == 0).ToList();
+                    if (tempResult != null && tempResult.Count() > 0)
+                    {
+                        list.ResultData.Remove(item);
+                    }
+
+                }
+            }
+            //查询飞机本月空中时间
+            if (list.ResultData != null && list.ResultData.Count > 0)
+            {
+                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 2 &&
+                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+                ).ToList();
+                foreach (var item in list.ResultData)
+                {
+                    var tempResult = result2.Where(a => a.EngineNo == item.EngineNo && a.PlaneNo == item.PlaneNo).ToList();
+                    item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+                }
+            }
+            list.Total = list.ResultData.Count();
+            return list;
+        }
+
+        /// <summary>
+        /// 发动机月报表
+        /// </summary>
+        /// <param name="startDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public PageResult<EngineReportDto> EngineMonthReportDtoList(string startDate, string endDate)
+        {
+            PageResult<EngineReportDto> list = new PageResult<EngineReportDto>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
+            && string.Compare(a.InputDate, endDate) <= 0 && a.Type == 2);
+            list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName })
+                         .Select(g => new EngineReportDto()
+                         {
+                             EngineCorrectTSO = g.Sum(i => i.EngineCorrectTSO),
+                             EngineNewTSN = g.Sum(i => i.EngineNewTSN),
+                             PlaneNo = g.Key.PlaneNo,
+                             Position = g.Key.Position,
+                             EngineNo = g.Key.EngineNo,
+                             PlaneTypeName = g.Key.TypeName
+                         }).ToList();
+
+            //查询飞机本月空中时间
+            if (list.ResultData != null && list.ResultData.Count > 0)
+            {
+                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 2 &&
+                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+                ).ToList();
+                foreach (var item in list.ResultData)
+                {
+                    var tempResult = result2.Where(a => a.EngineNo == item.EngineNo && a.PlaneNo == item.PlaneNo).ToList();
+                    item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+                }
+            }
+
+            //查询发动机本月状态
+            if (list.ResultData != null && list.ResultData.Count > 0)
+            {
+                var result3 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
+                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+                ).ToList();
+                foreach (var item in list.ResultData)
+                {
+                    var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).ToList();
+                    if (temp != null && temp.Count > 0 && temp.Where(m => string.Compare(m.EngineNo, item.EngineNo, true) == 0).Count() == 0)
+                    {//如果在初值中有设置过 飞机的发动机  则之前的发动机表示为：拆卸了的
+                        item.EngineStatus = "拆卸";
+                    }
+                    else
+                    {
+                        item.EngineStatus = "装机";
+                    }
+                }
+            }
+
+            list.Total = list.ResultData.Count();
+            return list;
+        }
+
+        /// <summary>
         /// 飞机数据统计
         /// </summary>
         /// <param name="planTypeID"></param>
@@ -164,14 +291,14 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive && a.Type == 2);//初值不统计
             if (!string.IsNullOrEmpty(startDate))
             {
-                result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+                result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
             }
             if (!string.IsNullOrEmpty(endDate))
             {
-                result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+                result = result.Where(x => string.Compare(x.InputDate, endDate) <= 0);
             }
             list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlanID, a.PlaneNo, a.PlaneTypeID })
                          .Select(g => new DailyRecordReportDto()
@@ -218,29 +345,34 @@ namespace ACMS.Applications.Impl
                 }
 
             }
-            //if (list != null && list.ResultData.Count > 0)
-            //{
-            //    //飞行天数查询
-            //    var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
-            //    if (!string.IsNullOrEmpty(startDate))
-            //    {
-            //        result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
-            //    }
-            //    if (!string.IsNullOrEmpty(endDate))
-            //    {
-            //        result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
-            //    }
-            //    var result3 =from item in result2
-            //    group item by { item.PlaneNo,} into stgrp
-            //    select stgrp;
-            //    result.GroupBy(a => new { a.PlaneNo, a.InputDate })
-            //             .Select(g => new { PlaneNo } ()
-            //             {
+            if (list != null && list.ResultData.Count > 0)
+            {
+                //飞行天数查询
+                var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+                if (!string.IsNullOrEmpty(startDate))
+                {
+                    result2 = result2.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+                }
+                if (!string.IsNullOrEmpty(endDate))
+                {
+                    result2 = result2.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+                }
 
-            //                  g.Key.PlaneNo,
-            //                 PlanID = g.Key.InputDate
-            //             })
-            //}
+                //汇总每日每个飞机的登记数据
+                var result3 = (from item in result2
+                               group item by new { item.PlaneNo, item.InputDate }
+                                into temp
+                               select new
+                               {
+                                   InputDate = temp.Key.InputDate,
+                                   PlaneNo = temp.Key.PlaneNo,
+                                   Count = temp.Count()
+                               }).ToList();
+                foreach (var item in list.ResultData)
+                {
+                    item.FlightDays = result3.Where(m => m.PlaneNo == item.PlaneNo).Count();
+                }
+            }
 
             list.Total = list.ResultData.Count();
             return list;
@@ -348,7 +480,7 @@ namespace ACMS.Applications.Impl
             try
             {
                 item.ID = Guid.NewGuid().ToString();
-                item.CreateTime = item.UpdateTime = DateTime.Now.ToString();
+                item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
                 _dbContext.Set<CESSNA172RDailyRecord>().Add(item);
@@ -405,7 +537,7 @@ namespace ACMS.Applications.Impl
                     editModel.ExecUnit = item.ExecUnit;
                     editModel.Memo = item.Memo;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 
@@ -450,7 +582,7 @@ namespace ACMS.Applications.Impl
                     //修改信息
                     editModel.IsActive = false;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 
@@ -617,7 +749,7 @@ namespace ACMS.Applications.Impl
             try
             {
                 item.ID = Guid.NewGuid().ToString();
-                item.CreateTime = item.UpdateTime = DateTime.Now.ToString();
+                item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
                 _dbContext.Set<PA44_180DailyRecord>().Add(item);
@@ -690,7 +822,7 @@ namespace ACMS.Applications.Impl
                     editModel.ExecUnit = item.ExecUnit;
                     editModel.Memo = item.Memo;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 
@@ -735,7 +867,7 @@ namespace ACMS.Applications.Impl
                     //修改信息
                     editModel.IsActive = false;
                     editModel.Updator = userID;
-                    editModel.UpdateTime = DateTime.Now.ToString();
+                    editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     _dbContext.SaveChanges();
 

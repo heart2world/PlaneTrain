@@ -139,3 +139,4 @@ C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\bin\zh-Hans\System.Web.We
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.dll
 C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.pdb
+C:\Users\dell-pc\Documents\GitHub\PlaneTrain\ACMS\ACMS\obj\Debug\ACMS.csprojResolveAssemblyReference.cache

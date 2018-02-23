@@ -25,6 +25,7 @@
     <EntitySet Name="V_DailyRecordReport" EntityType="ACMSModel.V_DailyRecordReport" />
     <EntitySet Name="ReportRecord" EntityType="ACMSModel.ReportRecord" />
     <EntitySet Name="V_RecordMonthReport" EntityType="ACMSModel.V_RecordMonthReport" />
+    <EntitySet Name="V_EngineReport" EntityType="ACMSModel.V_EngineReport" />
   </EntityContainer>
   <EntityType Name="Role">
     <Key>
@@ -605,5 +606,27 @@
     <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
     <Property Name="PlanNewHeatingMachineTime" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="V_EngineReport">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EngineCorrectTSO" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="EngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Position" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="PlaneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>
