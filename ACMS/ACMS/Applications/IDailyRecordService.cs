@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace ACMS.Applications
 {
@@ -113,6 +114,8 @@ namespace ACMS.Applications
         /// </summary>
         /// <returns></returns>
         CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord();
+
+        HttpResponseMessage GetDownloadFileStream(string type, string planeID, string startDate, string endDate);
 
         #endregion
 

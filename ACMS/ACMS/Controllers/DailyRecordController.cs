@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+
 namespace ACMS.Controllers
 {
     [RoutePrefix("api/dailyRecord")]
@@ -94,6 +95,13 @@ namespace ACMS.Controllers
         public IHttpActionResult GetLatestCESSNA172RDailyRecord()
         {
             return this.Ok(_dailyRecordService.GetLatestCESSNA172RDailyRecord());
+        }
+
+
+        [HttpGet, Route("cessna172r/download/{type}/{planeID}/{startDate}/{endDate}")]
+        public HttpResponseMessage DownloadCESSNA172RDailyRecord(string type, string planeID, string startDate, string endDate)
+        {
+            return _dailyRecordService.GetDownloadFileStream(type, planeID, startDate, endDate);
         }
 
         #endregion
