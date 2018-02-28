@@ -1030,16 +1030,10 @@ namespace ACMS.Applications.Impl
 
             }
 
-            //设置单元格的宽度
-            for (var i = 0; i < 20; i++)
-            {
-                sheet.AutoSizeColumn(i);
-            }
-
             #endregion
 
 
-            var fileName = "逐日登记" + DateTime.Now.ToString("yyyyMMddhhmmssfff");
+            var fileName = "CESSNA172R逐日登记" + DateTime.Now.ToString("yyyyMMddhhmmssfff");
 
             string tempFolder = System.Web.HttpContext.Current.Server.MapPath("~/Temp/");
 
