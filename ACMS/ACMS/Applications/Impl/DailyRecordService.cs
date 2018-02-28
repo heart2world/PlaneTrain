@@ -369,13 +369,13 @@ namespace ACMS.Applications.Impl
                 //汇总每日每个飞机的登记数据
                 var result3 = (from item in result2
                                group item by new { item.PlaneNo, item.InputDate }
-                                into temp
-                               select new
-                               {
-                                   InputDate = temp.Key.InputDate,
-                                   PlaneNo = temp.Key.PlaneNo,
-                                   Count = temp.Count()
-                               }).ToList();
+                                   into temp
+                                   select new
+                                   {
+                                       InputDate = temp.Key.InputDate,
+                                       PlaneNo = temp.Key.PlaneNo,
+                                       Count = temp.Count()
+                                   }).ToList();
                 foreach (var item in list.ResultData)
                 {
                     item.FlightDays = result3.Where(m => m.PlaneNo == item.PlaneNo).Count();
@@ -475,6 +475,15 @@ namespace ACMS.Applications.Impl
             return query;
         }
 
+        /// <summary>
+        /// 获取上一条记录（不分数据类型）
+        /// </summary>
+        /// <returns></returns>
+        private CESSNA172RDailyRecord GetLastCESSNA172RDailyRecord()
+        {
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
 
         /// <summary>
         /// 新增
@@ -484,6 +493,8 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Add(CESSNA172RDailyRecord item, string userID)
         {
+            //获取上一条记录
+            var lastRecord = GetLastCESSNA172RDailyRecord();
 
             try
             {
@@ -491,6 +502,29 @@ namespace ACMS.Applications.Impl
                 item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
+                //如果数据是普通逐日，则需要将部分字段根据页面上录入的值自动计算并做保存；如果数据是初值，则不需要自动计算步骤，因为所有字段均为手工录入
+                if (item.Type == 2)
+                {
+                    //自新空中时间=空中时间（表）+空中时间（表）修正；
+                    item.PlanNewAirTime = item.DayAirTime + item.CorrectAirTime;
+                    //自新空地时间=空地时间（表）+空地时间（表）修正；
+                    item.PlanNewClearingTime = item.DayClearingTime + item.CorrectClearingTime;
+                    //自新起落次数=本日起落+自新起落（上一条的记录）
+                    item.PlanNewRiseAndFallNum = item.DayRiseAndFallNum + (lastRecord == null ? 0 : lastRecord.PlanNewRiseAndFallNum);
+                    //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
+                    item.PlanDayClearingTime = item.PlanNewClearingTime - (lastRecord == null ? 0 : lastRecord.PlanNewClearingTime);
+                    //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
+                    item.PlanDayAirTime = item.PlanNewAirTime - (lastRecord == null ? 0 : lastRecord.PlanNewAirTime);
+                    //当日地面时间=自新空中时间-自新空地时间；
+                    item.PlanDayGroundTime = item.PlanNewAirTime - item.PlanNewClearingTime;
+
+
+                    //修后时间=当日空中时间+上一条修后时间
+                    item.EngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineCorrectTSO);
+                    //自新时间=当日空中时间+上一条自新时间
+                    item.EngineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineNewTSN);
+                }
+
                 _dbContext.Set<CESSNA172RDailyRecord>().Add(item);
                 _dbContext.SaveChanges();
                 return new OperationResult()
@@ -522,6 +556,11 @@ namespace ACMS.Applications.Impl
             {
                 try
                 {
+                    //如果修改的数据是普通数据，则需要将下一条初值之前的所有普通数据都做一次修改。
+                    if (item.Type == 2)
+                    {
+
+                    }
                     //修改信息
                     editModel.Type = item.Type;
                     editModel.PlanID = item.PlanID;
@@ -652,6 +691,7 @@ namespace ACMS.Applications.Impl
             var result = from a in _dbContext.Set<CESSNA172RDailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
+                         orderby a.InputDate
                          select new CESSNA172RDailyRecordDto()
                          {
                              ID = a.ID,
@@ -713,6 +753,7 @@ namespace ACMS.Applications.Impl
             ISheet sheet = workbook.CreateSheet();
 
             //第一行
+            #region 第一行
             //在工作表中：建立行，参数为行号，从0计
             IRow row1 = sheet.CreateRow(0);
             //在行中：建立单元格，参数为列号，从0计
@@ -738,6 +779,7 @@ namespace ACMS.Applications.Impl
             var cellMain7 = row1.CreateCell(19);
             cellMain7.SetCellValue("备注");
 
+            #endregion
 
             //第二行
             #region 第二行
@@ -856,7 +898,7 @@ namespace ACMS.Applications.Impl
             {
                 sheet.AutoSizeColumn(i);
             }
-            sheet.AutoSizeColumn(0);
+            //sheet.AutoSizeColumn(0);
 
             //设置一个合并单元格区域，使用上下左右定义CellRangeAddress区域
             //CellRangeAddress四个参数为：起始行，结束行，起始列，结束列
@@ -891,71 +933,107 @@ namespace ACMS.Applications.Impl
 
             int startRowNumber = 3;
 
+            ICellStyle contentStyle = workbook.CreateCellStyle();
+            //设置单元格的样式：水平对齐居中
+            contentStyle.Alignment = HorizontalAlignment.Center;
+            contentStyle.VerticalAlignment = VerticalAlignment.Center;
+
             for (var m = 0; m < xlsDataSource.Count; m++)
             {
                 var row = sheet.CreateRow(startRowNumber + m);
+
+                //设置数据行高度
+                row.Height = 30 * 20;
+
                 //在行中：建立单元格，参数为列号，从0计
                 var column0 = row.CreateCell(0);
                 //设置单元格内容
                 column0.SetCellValue(xlsDataSource[m].InputDate);
+                column0.CellStyle = contentStyle;
+
                 //飞机机号
                 var column1 = row.CreateCell(1);
                 column1.SetCellValue(xlsDataSource[m].PlaneNo);
+                column1.CellStyle = contentStyle;
                 //空地时间（表）
                 var column2 = row.CreateCell(2);
                 column2.SetCellValue(xlsDataSource[m].DayClearingTime.ToString());
+                column2.CellStyle = contentStyle;
                 //当日总起落数
                 var column3 = row.CreateCell(3);
                 column3.SetCellValue(xlsDataSource[m].DayRiseAndFallNum);
+                column3.CellStyle = contentStyle;
                 //空中时间（表）
                 var column4 = row.CreateCell(4);
                 column4.SetCellValue(xlsDataSource[m].DayAirTime.ToString());
+                column4.CellStyle = contentStyle;
                 //维护开车空地时间
                 var column5 = row.CreateCell(5);
                 column5.SetCellValue(xlsDataSource[m].DayMaintenaceTime.ToString());
+                column5.CellStyle = contentStyle;
                 //空地时间（表）修正
                 var column6 = row.CreateCell(6);
                 column6.SetCellValue(xlsDataSource[m].CorrectClearingTime.ToString());
+                column6.CellStyle = contentStyle;
                 //空中时间（表）修正
                 var column7 = row.CreateCell(7);
                 column7.SetCellValue(xlsDataSource[m].CorrectAirTime.ToString());
+                column7.CellStyle = contentStyle;
                 //自新空地时间
                 var column8 = row.CreateCell(8);
                 column8.SetCellValue(xlsDataSource[m].PlanNewClearingTime.ToString());
+                column8.CellStyle = contentStyle;
                 //自新空中时间
                 var column9 = row.CreateCell(9);
                 column9.SetCellValue(xlsDataSource[m].PlanNewAirTime.ToString());
+                column9.CellStyle = contentStyle;
                 //自新起落数
                 var column10 = row.CreateCell(10);
                 column10.SetCellValue(xlsDataSource[m].PlanNewRiseAndFallNum.ToString());
+                column10.CellStyle = contentStyle;
                 //当日空地时间
                 var column11 = row.CreateCell(11);
                 column11.SetCellValue(xlsDataSource[m].PlanDayClearingTime.ToString());
+                column11.CellStyle = contentStyle;
                 //当日空中时间
                 var column12 = row.CreateCell(12);
                 column12.SetCellValue(xlsDataSource[m].PlanDayAirTime.ToString());
+                column12.CellStyle = contentStyle;
                 //当日地面时间
                 var column13 = row.CreateCell(13);
                 column13.SetCellValue(xlsDataSource[m].PlanDayGroundTime.ToString());
+                column13.CellStyle = contentStyle;
                 //发动机序号
                 var column14 = row.CreateCell(14);
                 column14.SetCellValue(xlsDataSource[m].EngineNo);
+                column14.CellStyle = contentStyle;
                 //修后时间
                 var column15 = row.CreateCell(15);
                 column15.SetCellValue(xlsDataSource[m].EngineCorrectTSO.ToString());
+                column15.CellStyle = contentStyle;
                 //自新时间
                 var column16 = row.CreateCell(16);
                 column16.SetCellValue(xlsDataSource[m].EngineNewTSN.ToString());
+                column16.CellStyle = contentStyle;
                 //执机单位
                 var column17 = row.CreateCell(17);
                 column17.SetCellValue(xlsDataSource[m].ExecUnit);
+                column17.CellStyle = contentStyle;
                 //数据性质
                 var column18 = row.CreateCell(18);
-                column18.SetCellValue(xlsDataSource[m].Type == 1 ? "初始" : "普通");
+                column18.SetCellValue(xlsDataSource[m].Type == 1 ? "初值" : "普通");
+                column18.CellStyle = contentStyle;
                 //备注
                 var column19 = row.CreateCell(19);
                 column19.SetCellValue(xlsDataSource[m].Memo);
+                column19.CellStyle = contentStyle;
 
+            }
+
+            //设置单元格的宽度
+            for (var i = 0; i < 20; i++)
+            {
+                sheet.AutoSizeColumn(i);
             }
 
             #endregion
@@ -1093,6 +1171,16 @@ namespace ACMS.Applications.Impl
         }
 
         /// <summary>
+        /// 获取上一条记录（不分数据类型）
+        /// </summary>
+        /// <returns></returns>
+        private PA44_180DailyRecord GetLastPA44_180DailyRecord()
+        {
+            var query = _dbContext.Set<PA44_180DailyRecord>().OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
+
+        /// <summary>
         /// 新增
         /// </summary>
         /// <param name="item">新增实体</param>
@@ -1101,14 +1189,52 @@ namespace ACMS.Applications.Impl
         public OperationResult Add(PA44_180DailyRecord item, string userID)
         {
 
+            //获取上一条记录
+            var lastRecord = GetLastPA44_180DailyRecord();
+
             try
             {
                 item.ID = Guid.NewGuid().ToString();
                 item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
+
+                //如果数据是普通逐日，则需要将部分字段根据页面上录入的值自动计算并做保存；如果数据是初值，则不需要自动计算步骤，因为所有字段均为手工录入
+                if (item.Type == 2)
+                {
+                    //自新空中时间=空中时间（表）+空中时间（表）修正；
+                    item.PlanNewAirTime = item.DayAirTime + item.CorrectAirTime;
+                    //自新空地时间=空地时间（表）+空地时间（表）修正；
+                    item.PlanNewClearingTime = item.DayClearingTime + item.CorrectClearingTime;
+                    //自新起落次数=本日起落+自新起落（上一条的记录）
+                    item.PlanNewRiseAndFallNum = item.DayRiseAndFallNum + (lastRecord == null ? 0 : lastRecord.PlanNewRiseAndFallNum);
+                    //自新加温机时间==加温机时间（表）+加温机时间（表）修正
+                    item.PlanNewHeatingMachineTime = item.DayHeatingMachineTime + item.CorrectHeatingMachineTime;
+                    //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
+                    item.PlanDayClearingTime = item.PlanNewClearingTime - (lastRecord == null ? 0 : lastRecord.PlanNewClearingTime);
+                    //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
+                    item.PlanDayAirTime = item.PlanNewAirTime - (lastRecord == null ? 0 : lastRecord.PlanNewAirTime);
+                    //当日地面时间=自新空中时间-自新空地时间；
+                    item.PlanDayGroundTime = item.PlanNewAirTime - item.PlanNewClearingTime;
+
+
+                    //修后时间TSO=当日空中时间+上一条修后时间
+                    item.HeatingMachineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO);
+                    //自新时间TSN=当日空中时间+上一条自新时间
+                    item.HeatingMachineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.HeatingMachineNewTSN);
+
+
+                    //当日时间=加温机时间（表）+加温机时间（表）修正-上一条当日时间
+                    item.HeatingMachineDayTime = item.DayHeatingMachineTime + item.CorrectHeatingMachineTime - (lastRecord == null ? 0 : lastRecord.HeatingMachineDayTime);
+                    //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
+                    item.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + item.HeatingMachineDayTime;
+                    //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
+                    item.HeatingMachineNewTSN = (lastRecord == null ? 0 : lastRecord.HeatingMachineNewTSN) + item.HeatingMachineDayTime;
+                }
+
                 _dbContext.Set<PA44_180DailyRecord>().Add(item);
                 _dbContext.SaveChanges();
+
                 return new OperationResult()
                 {
                     Result = true
@@ -1273,7 +1399,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public PA44_180DailyRecord GetLatestPA44_180DailyRecord()
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.IsActive).OrderByDescending(o => o.InputDate).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.IsActive).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
