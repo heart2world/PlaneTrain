@@ -101,7 +101,7 @@ namespace ACMS.Controllers
         [HttpGet, Route("cessna172r/download/{type}/{planeID}/{startDate}/{endDate}")]
         public HttpResponseMessage DownloadCESSNA172RDailyRecord(string type, string planeID, string startDate, string endDate)
         {
-            return _dailyRecordService.GetDownloadFileStream(type, planeID, startDate, endDate);
+            return _dailyRecordService.GetCESSNA172RDownloadFileStream(type, planeID, startDate, endDate);
         }
 
         #endregion
@@ -173,6 +173,13 @@ namespace ACMS.Controllers
         public IHttpActionResult GetLatestPA44_180DailyRecord()
         {
             return this.Ok(_dailyRecordService.GetLatestPA44_180DailyRecord());
+        }
+
+
+        [HttpGet, Route("pa44-180/download/{type}/{planeID}/{startDate}/{endDate}")]
+        public HttpResponseMessage DownloadPA44_180DailyRecord(string type, string planeID, string startDate, string endDate)
+        {
+            return _dailyRecordService.GetPA44_180DownloadFileStream(type, planeID, startDate, endDate);
         }
 
         #endregion

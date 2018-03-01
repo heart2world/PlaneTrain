@@ -115,7 +115,7 @@ namespace ACMS.Applications
         /// <returns></returns>
         CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord();
 
-        HttpResponseMessage GetDownloadFileStream(string type, string planeID, string startDate, string endDate);
+        HttpResponseMessage GetCESSNA172RDownloadFileStream(string type, string planeID, string startDate, string endDate);
 
         #endregion
 
@@ -179,6 +179,9 @@ namespace ACMS.Applications
         /// </summary>
         /// <returns></returns>
         PA44_180DailyRecord GetLatestPA44_180DailyRecord();
+
+
+        HttpResponseMessage GetPA44_180DownloadFileStream(string type, string planeID, string startDate, string endDate);
 
         #endregion
     }
