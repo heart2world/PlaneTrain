@@ -88,6 +88,17 @@ namespace ACMS.Controllers
         }
 
         /// <summary>
+        /// 根据飞机号判断该机是否是第一次登记
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("cessna172r/checkHaveRecordByPlaneID")]
+        public IHttpActionResult CheckCESSNA172RDailyRecordHaveRecord(string planeID)
+        {
+            return this.Ok(_dailyRecordService.CheckCESSNA172RDailyRecordHaveRecord(planeID));
+        }
+
+
+        /// <summary>
         /// 获取CESSNA172R型号初始设置的最后一次记录
         /// </summary>
         /// <returns></returns>
@@ -164,6 +175,13 @@ namespace ACMS.Controllers
             return this.Ok(_dailyRecordService.CheckPA44_180DailyRecordHaveRecord());
         }
 
+
+        [HttpGet, Route("pa44-180/checkHaveRecordByPlaneID")]
+        public IHttpActionResult CheckPA44_180DailyRecordHaveRecord(string planeID)
+        {
+            return this.Ok(_dailyRecordService.CheckPA44_180DailyRecordHaveRecord(planeID));
+        }
+        
 
         /// <summary>
         /// 获取PA44_180型号初始设置的最后一次记录

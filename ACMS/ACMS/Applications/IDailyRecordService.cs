@@ -109,6 +109,13 @@ namespace ACMS.Applications
         /// <returns></returns>
         bool CheckCESSNA172RDailyRecordHaveRecord();
 
+
+        /// <summary>
+        /// 根据飞机号判断该机是否是第一次登记
+        /// </summary>
+        /// <returns></returns>
+        bool CheckCESSNA172RDailyRecordHaveRecord(string planeID);
+
         /// <summary>
         /// 获取CESSNA172R型号初始设置的最后一次记录
         /// </summary>
@@ -173,6 +180,13 @@ namespace ACMS.Applications
         /// </summary>
         /// <returns></returns>
         bool CheckPA44_180DailyRecordHaveRecord();
+
+
+        /// <summary>
+        /// 根据飞机号判断该机是否是第一次登记
+        /// </summary>
+        /// <returns></returns>
+        bool CheckPA44_180DailyRecordHaveRecord(string planeID);
 
         /// <summary>
         /// 获取PA44_180型号初始设置的最后一次记录

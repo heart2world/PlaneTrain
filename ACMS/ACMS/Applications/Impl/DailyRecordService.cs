@@ -459,7 +459,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderBy(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -762,6 +762,23 @@ namespace ACMS.Applications.Impl
         }
 
         /// <summary>
+        /// 根据飞机号判断该机是否是第一次登记
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckCESSNA172RDailyRecordHaveRecord(string planeID)
+        {
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID);
+            if (query.Any())
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// 获取CESSNA172R型号初始设置的最后一次记录
         /// </summary>
         /// <returns></returns>
@@ -980,7 +997,7 @@ namespace ACMS.Applications.Impl
             //设置单元格的高度
             row1.Height = 30 * 20;
 
-            
+
             //sheet.AutoSizeColumn(0);
 
             //设置一个合并单元格区域，使用上下左右定义CellRangeAddress区域
@@ -1113,13 +1130,13 @@ namespace ACMS.Applications.Impl
 
             }
 
-			
-			//设置单元格的宽度
+
+            //设置单元格的宽度
             for (var i = 0; i < 20; i++)
             {
                 sheet.AutoSizeColumn(i);
             }
-			
+
             #endregion
 
 
@@ -1238,7 +1255,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderBy(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -1583,6 +1600,24 @@ namespace ACMS.Applications.Impl
             }
         }
 
+
+        /// <summary>
+        /// 根据飞机号判断该机是否是第一次登记
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckPA44_180DailyRecordHaveRecord(string planeID)
+        {
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID);
+            if (query.Any())
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// 获取PA44_180型号初始设置的最后一次记录
         /// </summary>
@@ -1885,7 +1920,7 @@ namespace ACMS.Applications.Impl
             row1.Height = 30 * 20;
             row4.Height = 30 * 20;
 
-            
+
 
             //设置一个合并单元格区域，使用上下左右定义CellRangeAddress区域
             //CellRangeAddress四个参数为：起始行，结束行，起始列，结束列
@@ -2054,9 +2089,9 @@ namespace ACMS.Applications.Impl
                 column28.CellStyle = contentStyle;
 
             }
-			
-			
-			//设置单元格的宽度
+
+
+            //设置单元格的宽度
             for (var i = 0; i < 29; i++)
             {
                 sheet.AutoSizeColumn(i);
