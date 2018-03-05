@@ -934,7 +934,7 @@ namespace ACMS.Applications.Impl
             row2Cell13.SetCellValue("当日地面时间");
 
             var row2Cell14 = row2.CreateCell(14);
-            row2Cell14.SetCellValue("型号：10-360-L2A");
+            row2Cell14.SetCellValue("型号：IO360-L2A");
 
             #endregion
 
