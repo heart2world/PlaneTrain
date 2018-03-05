@@ -750,7 +750,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public bool CheckCESSNA172RDailyRecordHaveRecord()
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1);
             if (query.Any())
             {
                 return false;
@@ -767,7 +767,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord()
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.InputDate).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -980,11 +980,7 @@ namespace ACMS.Applications.Impl
             //设置单元格的高度
             row1.Height = 30 * 20;
 
-            //设置单元格的宽度
-            for (var i = 0; i < 20; i++)
-            {
-                sheet.AutoSizeColumn(i);
-            }
+            
             //sheet.AutoSizeColumn(0);
 
             //设置一个合并单元格区域，使用上下左右定义CellRangeAddress区域
@@ -1117,6 +1113,13 @@ namespace ACMS.Applications.Impl
 
             }
 
+			
+			//设置单元格的宽度
+            for (var i = 0; i < 20; i++)
+            {
+                sheet.AutoSizeColumn(i);
+            }
+			
             #endregion
 
 
@@ -1569,7 +1572,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public bool CheckPA44_180DailyRecordHaveRecord()
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1);
             if (query.Any())
             {
                 return false;
@@ -1882,11 +1885,7 @@ namespace ACMS.Applications.Impl
             row1.Height = 30 * 20;
             row4.Height = 30 * 20;
 
-            //设置单元格的宽度
-            for (var i = 0; i < 29; i++)
-            {
-                sheet.AutoSizeColumn(i);
-            }
+            
 
             //设置一个合并单元格区域，使用上下左右定义CellRangeAddress区域
             //CellRangeAddress四个参数为：起始行，结束行，起始列，结束列
@@ -2054,6 +2053,13 @@ namespace ACMS.Applications.Impl
                 column28.SetCellValue(xlsDataSource[m].Memo);
                 column28.CellStyle = contentStyle;
 
+            }
+			
+			
+			//设置单元格的宽度
+            for (var i = 0; i < 29; i++)
+            {
+                sheet.AutoSizeColumn(i);
             }
 
             #endregion
