@@ -31,6 +31,17 @@ namespace ACMS.Controllers
 
         }
 
+
+        // <summary>
+        /// 根据机型名称获取列表(只针对逐日登记的2种类型)
+        /// </summary>
+        /// <returns>列表信息</returns>
+        [HttpGet, Route("getlistbyplanetypename")]
+        public IHttpActionResult GetListByPlaneType(string SpecialPlaneType)
+        {
+            return Ok(_service.GetListByPlaneType(SpecialPlaneType));
+        }
+
         [HttpPost, Route("add")]
         public IHttpActionResult Add(Planes item)
         {

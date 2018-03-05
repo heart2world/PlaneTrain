@@ -22,6 +22,13 @@ namespace ACMS.Applications
         /// <returns>列表信息</returns>
         PageResult<Planes> GetListByPlaneType(int pageSize, int pageNo, string PlaneTypeID);
 
+
+        /// <summary>
+        /// 根据机型名称获取列表(只针对逐日登记的2种类型)
+        /// </summary>
+        /// <returns>列表信息</returns>
+        List<Planes> GetListByPlaneType(string SpecialPlaneType);
+
         /// <summary>
         /// /// 根据ID获取信息
         /// </summary>

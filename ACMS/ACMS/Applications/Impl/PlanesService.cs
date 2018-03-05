@@ -66,6 +66,26 @@ namespace ACMS.Applications.Impl
         }
 
         /// <summary>
+        /// 根据机型名称获取列表(只针对逐日登记的2种类型)
+        /// </summary>
+        /// <returns>列表信息</returns>
+        public List<Planes> GetListByPlaneType(string SpecialPlaneType)
+        {
+            List<Planes> list = new List<Planes>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = (from a in _dbContext.Set<Planes>()
+                          join b in _dbContext.Set<PlaneType>() on a.PlaneTypeID equals b.ID
+                          where a.IsActive && b.TypeName == SpecialPlaneType
+                          select a).ToList();
+
+            return result;
+        }
+
+        /// <summary>
         /// 根据主键获取数据
         /// </summary>
         /// <param name="ID">主键</param>
