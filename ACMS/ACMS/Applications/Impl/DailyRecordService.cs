@@ -404,7 +404,10 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = from a in _dbContext.Set<CESSNA172RDailyRecord>()//.Where(a => a.IsActive);
+
+            var recordList = _dbContext.Set<CESSNA172RDailyRecord>().ToList();
+
+            var result = from a in recordList
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
                          select new CESSNA172RDailyRecordDto()
@@ -459,8 +462,17 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
+
+            list.ResultData.ForEach(a =>
+            {
+                if (string.IsNullOrEmpty(a.EngineNo))
+                {
+                    var lastInitData = recordList.Where(x => string.Compare(x.CreateTime, a.CreateTime, StringComparison.Ordinal) < 0 && x.Type == 1).OrderBy(o => o.CreateTime).FirstOrDefault();
+                    a.EngineNo = lastInitData == null ? "" : lastInitData.EngineNo;
+                }
+            });
             return list;
         }
 
@@ -795,7 +807,7 @@ namespace ACMS.Applications.Impl
             var result = from a in _dbContext.Set<CESSNA172RDailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
-                         orderby a.InputDate descending
+                         orderby a.InputDate descending, a.CreateTime descending
                          select new CESSNA172RDailyRecordDto()
                          {
                              ID = a.ID,
@@ -1192,7 +1204,9 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = from a in _dbContext.Set<PA44_180DailyRecord>()//.Where(a => a.IsActive);
+            var recordList = _dbContext.Set<PA44_180DailyRecord>().ToList();
+
+            var result = from a in recordList
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
                          select new PA44_180DailyRecordDto()
@@ -1255,8 +1269,24 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
+
+            list.ResultData.ForEach(a =>
+            {
+                if (string.IsNullOrEmpty(a.LeftEngineNo))
+                {
+                    var lastInitData = recordList.Where(x => string.Compare(x.CreateTime, a.CreateTime, StringComparison.Ordinal) < 0 && x.Type == 1).OrderBy(o => o.CreateTime).FirstOrDefault();
+                    a.LeftEngineNo = lastInitData == null ? "" : lastInitData.LeftEngineNo;
+                }
+
+                if (string.IsNullOrEmpty(a.RightEngineNo))
+                {
+                    var lastInitData = recordList.Where(x => string.Compare(x.CreateTime, a.CreateTime, StringComparison.Ordinal) < 0 && x.Type == 1).OrderBy(o => o.CreateTime).FirstOrDefault();
+                    a.RightEngineNo = lastInitData == null ? "" : lastInitData.RightEngineNo;
+                }
+            });
+
             return list;
         }
 
@@ -1643,7 +1673,7 @@ namespace ACMS.Applications.Impl
             var result = from a in _dbContext.Set<PA44_180DailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
-                         orderby a.InputDate descending
+                         orderby a.InputDate descending, a.CreateTime descending
                          select new PA44_180DailyRecordDto()
                          {
                              ID = a.ID,
@@ -1739,7 +1769,7 @@ namespace ACMS.Applications.Impl
             cellMain2.CellStyle = style;
 
             var cellMain3 = row1.CreateCell(10);
-            cellMain3.SetCellValue("飞行数据");
+            cellMain3.SetCellValue("飞机数据");
             cellMain3.CellStyle = style;
 
             var cellMain4 = row1.CreateCell(17);
