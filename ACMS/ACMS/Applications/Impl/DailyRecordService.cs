@@ -405,9 +405,7 @@ namespace ACMS.Applications.Impl
                 _dbContext = base.CreateDbContext();
             }
 
-            var recordList = _dbContext.Set<CESSNA172RDailyRecord>().ToList();
-
-            var result = from a in recordList
+            var result = from a in _dbContext.Set<CESSNA172RDailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
                          select new CESSNA172RDailyRecordDto()
@@ -465,14 +463,6 @@ namespace ACMS.Applications.Impl
             result = result.OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
 
-            list.ResultData.ForEach(a =>
-            {
-                if (string.IsNullOrEmpty(a.EngineNo))
-                {
-                    var lastInitData = recordList.Where(x => string.Compare(x.CreateTime, a.CreateTime, StringComparison.Ordinal) < 0 && x.Type == 1).OrderBy(o => o.CreateTime).FirstOrDefault();
-                    a.EngineNo = lastInitData == null ? "" : lastInitData.EngineNo;
-                }
-            });
             return list;
         }
 
@@ -491,9 +481,19 @@ namespace ACMS.Applications.Impl
         /// 获取上一条记录（不分数据类型）
         /// </summary>
         /// <returns></returns>
-        private CESSNA172RDailyRecord GetLastCESSNA172RDailyRecord()
+        private CESSNA172RDailyRecord GetLastCESSNA172RDailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
+
+        /// <summary>
+        /// 获取上一条初值
+        /// </summary>
+        /// <returns></returns>
+        private CESSNA172RDailyRecord GetLastInitCESSNA172RDailyRecordByPlaneID(string planeID)
+        {
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -506,7 +506,9 @@ namespace ACMS.Applications.Impl
         public OperationResult Add(CESSNA172RDailyRecord item, string userID)
         {
             //获取上一条记录
-            var lastRecord = GetLastCESSNA172RDailyRecord();
+            var lastRecord = GetLastCESSNA172RDailyRecordByPlaneID(item.PlanID);
+            //获取上一条初值
+            var lastInitRecord = GetLastInitCESSNA172RDailyRecordByPlaneID(item.PlanID);
 
             try
             {
@@ -535,6 +537,14 @@ namespace ACMS.Applications.Impl
                     item.EngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineCorrectTSO);
                     //自新时间=当日空中时间+上一条自新时间
                     item.EngineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineNewTSN);
+
+
+
+                    //发动机类型
+                    if (string.IsNullOrEmpty(item.EngineNo))
+                    {
+                        item.EngineNo = (lastInitRecord == null ? "" : lastInitRecord.EngineNo);
+                    }
                 }
 
                 _dbContext.Set<CESSNA172RDailyRecord>().Add(item);
@@ -881,7 +891,7 @@ namespace ACMS.Applications.Impl
             cellMain2.SetCellValue("表修正");
 
             var cellMain3 = row1.CreateCell(8);
-            cellMain3.SetCellValue("飞行数据");
+            cellMain3.SetCellValue("飞机数据");
 
             var cellMain4 = row1.CreateCell(14);
             cellMain4.SetCellValue("发动机数据");
@@ -1204,9 +1214,8 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var recordList = _dbContext.Set<PA44_180DailyRecord>().ToList();
 
-            var result = from a in recordList
+            var result = from a in _dbContext.Set<PA44_180DailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
                          select new PA44_180DailyRecordDto()
@@ -1272,21 +1281,6 @@ namespace ACMS.Applications.Impl
             result = result.OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
 
-            list.ResultData.ForEach(a =>
-            {
-                if (string.IsNullOrEmpty(a.LeftEngineNo))
-                {
-                    var lastInitData = recordList.Where(x => string.Compare(x.CreateTime, a.CreateTime, StringComparison.Ordinal) < 0 && x.Type == 1).OrderBy(o => o.CreateTime).FirstOrDefault();
-                    a.LeftEngineNo = lastInitData == null ? "" : lastInitData.LeftEngineNo;
-                }
-
-                if (string.IsNullOrEmpty(a.RightEngineNo))
-                {
-                    var lastInitData = recordList.Where(x => string.Compare(x.CreateTime, a.CreateTime, StringComparison.Ordinal) < 0 && x.Type == 1).OrderBy(o => o.CreateTime).FirstOrDefault();
-                    a.RightEngineNo = lastInitData == null ? "" : lastInitData.RightEngineNo;
-                }
-            });
-
             return list;
         }
 
@@ -1305,9 +1299,19 @@ namespace ACMS.Applications.Impl
         /// 获取上一条记录（不分数据类型）
         /// </summary>
         /// <returns></returns>
-        private PA44_180DailyRecord GetLastPA44_180DailyRecord()
+        private PA44_180DailyRecord GetLastPA44_180DailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
+
+        /// <summary>
+        /// 获取上一条初值
+        /// </summary>
+        /// <returns></returns>
+        private PA44_180DailyRecord GetLastInitPA44_180DailyRecordByPlaneID(string planeID)
+        {
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1321,7 +1325,9 @@ namespace ACMS.Applications.Impl
         {
 
             //获取上一条记录
-            var lastRecord = GetLastPA44_180DailyRecord();
+            var lastRecord = GetLastPA44_180DailyRecordByPlaneID(item.PlanID);
+            //获取上一条初值
+            var lastInitRecord = GetLastInitPA44_180DailyRecordByPlaneID(item.PlanID);
 
             try
             {
@@ -1363,6 +1369,18 @@ namespace ACMS.Applications.Impl
                     item.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + item.HeatingMachineDayTime;
                     //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
                     item.HeatingMachineNewTSN = (lastRecord == null ? 0 : lastRecord.HeatingMachineNewTSN) + item.HeatingMachineDayTime;
+
+                    //获取左发动机型号
+                    if (string.IsNullOrEmpty(item.LeftEngineNo))
+                    {
+                        item.LeftEngineNo = lastInitRecord == null ? "" : lastInitRecord.LeftEngineNo;
+                    }
+
+                    //获取右发动机型号
+                    if (string.IsNullOrEmpty(item.RightEngineNo))
+                    {
+                        item.RightEngineNo = lastInitRecord == null ? "" : lastInitRecord.RightEngineNo;
+                    }
                 }
 
                 _dbContext.Set<PA44_180DailyRecord>().Add(item);
