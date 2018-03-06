@@ -459,7 +459,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderBy(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -795,7 +795,7 @@ namespace ACMS.Applications.Impl
             var result = from a in _dbContext.Set<CESSNA172RDailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
-                         orderby a.InputDate
+                         orderby a.InputDate descending
                          select new CESSNA172RDailyRecordDto()
                          {
                              ID = a.ID,
@@ -1255,7 +1255,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = result.Count();
-            result = result.OrderBy(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.InputDate).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -1643,7 +1643,7 @@ namespace ACMS.Applications.Impl
             var result = from a in _dbContext.Set<PA44_180DailyRecord>()
                          join b in _dbContext.Set<Planes>() on a.PlanID equals b.ID
                          where a.IsActive && b.IsActive
-                         orderby a.InputDate
+                         orderby a.InputDate descending
                          select new PA44_180DailyRecordDto()
                          {
                              ID = a.ID,
