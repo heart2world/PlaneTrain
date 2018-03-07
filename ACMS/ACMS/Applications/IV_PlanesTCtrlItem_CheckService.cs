@@ -20,6 +20,6 @@ namespace ACMS.Applications
         /// <param name="upTemprTime"></param>
         /// <param name="onOffTime"></param>
         /// <returns></returns>
-        PageResult<V_PlanesTCtrlItem_Check> GetList(int pageSize, int pageNo,  int isPrinted, int days,decimal airTime,decimal upTemprTime, int onOffTime);
+        PageResult<V_PlanesTCtrlItem_Check> GetList(int pageSize, int pageNo, int isPrinted, int? days, decimal? airTime, decimal? upTemprTime, int? onOffTime);
     }
 }

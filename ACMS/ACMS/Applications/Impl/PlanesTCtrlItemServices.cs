@@ -184,7 +184,7 @@ namespace ACMS.Applications.Impl
             if (!string.IsNullOrEmpty(itemID))//关键词查询    
                 result = result.Where(a => a.ItemID.Equals(itemID));
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(a => a.UpdateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }

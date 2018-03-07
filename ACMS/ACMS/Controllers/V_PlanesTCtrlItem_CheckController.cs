@@ -17,7 +17,7 @@ namespace ACMS.Controllers
         IV_PlanesTCtrlItem_CheckService _service = new V_PlanesTCtrlItem_CheckService();
 
         [HttpGet, Route("getlist")]
-        public IHttpActionResult GetList(int pageSize, int pageNo, int isPrinted, int days, decimal airTime, decimal upTemprTime, int onOffTime)
+        public IHttpActionResult GetList(int pageSize, int pageNo, int isPrinted, int? days, decimal? airTime, decimal? upTemprTime, int? onOffTime)
         {
             return Ok(_service.GetList(pageSize, pageNo, isPrinted,days,airTime,upTemprTime,onOffTime));
 

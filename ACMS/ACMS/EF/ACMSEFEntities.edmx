@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ACMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ACMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AirTimeAlarmSet">
           <Key>
             <PropertyRef Name="ID" />
@@ -63,6 +63,7 @@
           <Property Name="ParentMenuID" Type="varchar" MaxLength="128" />
           <Property Name="MenuLevel" Type="int" Nullable="false" />
           <Property Name="OrderIndex" Type="int" />
+          <Property Name="MenuIcon" Type="varchar" MaxLength="50" />
           <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
@@ -349,6 +350,15 @@
         <EntityType Name="V_EngineReport">
           <Key>
             <PropertyRef Name="ID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
@@ -547,7 +557,6 @@
             
             
             
-            
           </Key>
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="MainTainName" Type="varchar" MaxLength="200" />
@@ -580,7 +589,6 @@
           <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="PlanesNoName" Type="varchar" MaxLength="50" />
           <Property Name="FCheckDate2" Type="varchar" MaxLength="50" />
           <Property Name="FAirTime2" Type="decimal" Precision="10" Scale="2" />
@@ -590,6 +598,7 @@
           <Property Name="RAirTime2" Type="decimal" Precision="10" Scale="2" />
           <Property Name="ROnOffTime2" Type="int" />
           <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Updator" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“ACMS.dbo.V_PlTypeTCtrlList”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -915,7 +924,6 @@
     [V_PlanesTCtrlItem_Log].[CreateTime] AS [CreateTime], 
     [V_PlanesTCtrlItem_Log].[Creator] AS [Creator], 
     [V_PlanesTCtrlItem_Log].[UpdateTime] AS [UpdateTime], 
-    [V_PlanesTCtrlItem_Log].[Updator] AS [Updator], 
     [V_PlanesTCtrlItem_Log].[PlanesNoName] AS [PlanesNoName], 
     [V_PlanesTCtrlItem_Log].[FCheckDate2] AS [FCheckDate2], 
     [V_PlanesTCtrlItem_Log].[FAirTime2] AS [FAirTime2], 
@@ -924,7 +932,8 @@
     [V_PlanesTCtrlItem_Log].[RCheckDate2] AS [RCheckDate2], 
     [V_PlanesTCtrlItem_Log].[RAirTime2] AS [RAirTime2], 
     [V_PlanesTCtrlItem_Log].[ROnOffTime2] AS [ROnOffTime2], 
-    [V_PlanesTCtrlItem_Log].[RUpTemprTime2] AS [RUpTemprTime2]
+    [V_PlanesTCtrlItem_Log].[RUpTemprTime2] AS [RUpTemprTime2], 
+    [V_PlanesTCtrlItem_Log].[Updator] AS [Updator]
     FROM [dbo].[V_PlanesTCtrlItem_Log] AS [V_PlanesTCtrlItem_Log]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="V_PlTypeTCtrlList" EntityType="Self.V_PlTypeTCtrlList" store:Type="Views" store:Schema="dbo">
@@ -1011,7 +1020,6 @@
           <EntitySet Name="User" EntityType="ACMSModel.User" />
           <EntitySet Name="RoleMenu" EntityType="ACMSModel.RoleMenu" />
           <EntitySet Name="UserRole" EntityType="ACMSModel.UserRole" />
-          <EntitySet Name="Menu" EntityType="ACMSModel.Menu" />
           <EntitySet Name="PlaneType" EntityType="ACMSModel.PlaneType" />
           <EntitySet Name="PlTypeTCtrlList" EntityType="ACMSModel.PlTypeTCtrlList" />
           <EntitySet Name="V_PlTypeTCtrlList" EntityType="ACMSModel.V_PlTypeTCtrlList" />
@@ -1032,6 +1040,7 @@
           <EntitySet Name="ReportRecord" EntityType="ACMSModel.ReportRecord" />
           <EntitySet Name="V_RecordMonthReport" EntityType="ACMSModel.V_RecordMonthReport" />
           <EntitySet Name="V_EngineReport" EntityType="ACMSModel.V_EngineReport" />
+          <EntitySet Name="Menu" EntityType="ACMSModel.Menu" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1082,22 +1091,6 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Menu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MenuURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="ParentMenuID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="MenuLevel" Type="Int32" Nullable="false" />
-          <Property Name="OrderIndex" Type="Int32" />
-          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PlaneType">
           <Key>
@@ -1468,7 +1461,7 @@
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PlanesNoName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FCheckDate2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FAirTime2" Type="Decimal" Precision="10" Scale="2" />
@@ -1635,6 +1628,23 @@
           <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MenuURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="ParentMenuID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="MenuLevel" Type="Int32" Nullable="false" />
+          <Property Name="OrderIndex" Type="Int32" />
+          <Property Name="MenuIcon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1691,23 +1701,6 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Menu">
-            <EntityTypeMapping TypeName="ACMSModel.Menu">
-              <MappingFragment StoreEntitySet="Menu">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
-                <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
-                <ScalarProperty Name="ParentMenuID" ColumnName="ParentMenuID" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="MenuURL" ColumnName="MenuURL" />
-                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2250,6 +2243,24 @@
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Menu">
+            <EntityTypeMapping TypeName="ACMSModel.Menu">
+              <MappingFragment StoreEntitySet="Menu">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="MenuIcon" ColumnName="MenuIcon" />
+                <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
+                <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
+                <ScalarProperty Name="ParentMenuID" ColumnName="ParentMenuID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="MenuURL" ColumnName="MenuURL" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

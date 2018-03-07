@@ -60,6 +60,7 @@ namespace ACMS.Services.Impl
             list.Total = query.Count();
             query = query.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = query.ToList();
+            list.TotalPagesCount = list.Total / pageSize + 1;
 
             list.ResultData.ForEach(p =>
             {
@@ -388,6 +389,78 @@ namespace ACMS.Services.Impl
                 }
             }
             return result;
+        }
+
+
+        /// <summary>
+        /// 根据用户获取角色菜单
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<MenuForDisplayDto> GetPrivilegeMenuByUserID(string userID)
+        {
+            var userRoleMenuQuery = (from a in _dbContext.Set<User>()
+                                     join b in _dbContext.Set<UserRole>() on a.ID equals b.UserID
+                                     join c in _dbContext.Set<RoleMenu>() on b.RoleID equals c.RoleID
+                                     join d in _dbContext.Set<Menu>() on c.MenuID equals d.ID
+                                     where a.ID == userID && b.IsActive && c.IsActive && d.IsActive
+                                     select d).ToList();
+
+            //find rootMenu
+            var rootMenus = userRoleMenuQuery.Where(x => x.ParentMenuID == null).OrderBy(o => o.OrderIndex).ToList();
+
+            var rootMenusForDisplay = new List<MenuForDisplayDto>();
+
+            rootMenus.ForEach(p =>
+            {
+                rootMenusForDisplay.Add(new MenuForDisplayDto()
+                    {
+                        menu_id = p.ID,
+                        menu_name = p.MenuName,
+                        menu_url = p.MenuURL,
+                        parent_menu_id = p.ParentMenuID,
+                        order_index = p.OrderIndex,
+                        icon = p.MenuIcon
+                    });
+            });
+
+            if (rootMenusForDisplay != null)
+            {
+                foreach (var rootMenu in rootMenusForDisplay)
+                {
+                    GetMenuRecursion(rootMenu, userRoleMenuQuery);
+                }
+            }
+            return rootMenusForDisplay;
+        }
+
+        /// <summary>
+        /// 递归查找Menu树
+        /// </summary>
+        /// <param name="menu"></param>
+        /// <param name="menus"></param>
+        private void GetMenuRecursion(MenuForDisplayDto menu, List<Menu> menus)
+        {
+            var subMenus = menus.Where(x => x.ParentMenuID == menu.menu_id).OrderBy(o => o.OrderIndex).ToList();
+            menu.child = new List<MenuForDisplayDto>();
+
+            subMenus.ForEach(p =>
+            {
+                menu.child.Add(new MenuForDisplayDto()
+                {
+                    menu_id = p.ID,
+                    menu_name = p.MenuName,
+                    menu_url = p.MenuURL,
+                    parent_menu_id = p.ParentMenuID,
+                    order_index = p.OrderIndex,
+                    icon = p.MenuIcon
+                });
+            });
+
+            foreach (var subMenu in menu.child)
+            {
+                GetMenuRecursion(subMenu, menus);
+            }
         }
     }
 }

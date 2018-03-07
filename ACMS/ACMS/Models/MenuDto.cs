@@ -15,7 +15,19 @@ namespace ACMS.Models
         public string ParentMenuID { get; set; }
         public int MenuLevel { get; set; }
         public Nullable<int> OrderIndex { get; set; }
+        public string MenuIcon { get; set; }
         public List<MenuDto> ChildMenus { get; set; }
+    }
+
+    public class MenuForDisplayDto
+    {
+        public string menu_id { get; set; }
+        public string menu_name { get; set; }
+        public string menu_url { get; set; }
+        public string icon { get; set; }
+        public Nullable<int> order_index { get; set; }
+        public string parent_menu_id { get; set; }
+        public List<MenuForDisplayDto> child { get; set; }
     }
 
 }

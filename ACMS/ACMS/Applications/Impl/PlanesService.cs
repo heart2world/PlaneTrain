@@ -79,7 +79,7 @@ namespace ACMS.Applications.Impl
             }
             var result = (from a in _dbContext.Set<Planes>()
                           join b in _dbContext.Set<PlaneType>() on a.PlaneTypeID equals b.ID
-                          where a.IsActive && b.TypeName == SpecialPlaneType
+                          where a.IsActive && b.TypeName.ToLower() == SpecialPlaneType.ToLower()
                           select a).ToList();
 
             return result;

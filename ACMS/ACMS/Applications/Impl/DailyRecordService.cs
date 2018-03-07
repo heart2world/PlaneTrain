@@ -144,10 +144,13 @@ namespace ACMS.Applications.Impl
                               ).OrderByDescending(m => m.InputDate);
                 foreach (var item in list.ResultData)
                 {
-                    var tempItem = result2.Where(m => m.PlaneNo == item.PlaneNo).First();
-                    item.PlanNewAirTime = tempItem.PlanNewAirTime;
-                    item.PlanNewClearingTime = tempItem.PlanNewClearingTime;
-                    item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum;
+                    if (result2.Where(m => m.PlaneNo == item.PlaneNo).Count() > 0)
+                    {
+                        var tempItem = result2.Where(m => m.PlaneNo == item.PlaneNo).First();
+                        item.PlanNewAirTime = tempItem.PlanNewAirTime;
+                        item.PlanNewClearingTime = tempItem.PlanNewClearingTime;
+                        item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum;
+                    }
                 }
             }
             #endregion
@@ -295,6 +298,7 @@ namespace ACMS.Applications.Impl
         {
             PageResult<DailyRecordReportDto> list = new PageResult<DailyRecordReportDto>();
 
+
             if (_dbContext == null)
             {
                 _dbContext = base.CreateDbContext();
@@ -328,30 +332,36 @@ namespace ACMS.Applications.Impl
             //机号查询
             if (planID != null && planID.Count > 0)
             {
+                PageResult<DailyRecordReportDto> tempList = new PageResult<DailyRecordReportDto>();//用于临时存放查询结果数据临时列表
+                tempList.ResultData = new List<DailyRecordReportDto>();
                 foreach (string item in planID)
                 {
-                    list.ResultData = list.ResultData.Where(x => x.PlanID == item).ToList();
+                    tempList.ResultData.AddRange(list.ResultData.Where(x => x.PlanID == item).ToList());
                 }
-
+                list.ResultData = tempList.ResultData;
             }
             //机型查询
             if (planTypeID != null && planTypeID.Count > 0)
             {
+                PageResult<DailyRecordReportDto> tempList = new PageResult<DailyRecordReportDto>();//用于临时存放查询结果数据临时列表
+                tempList.ResultData = new List<DailyRecordReportDto>();
                 foreach (string item in planTypeID)
                 {
-                    list.ResultData = list.ResultData.Where(x => x.PlaneTypeID == item).ToList();
+                    tempList.ResultData.AddRange(list.ResultData.Where(x => x.PlaneTypeID == item).ToList());
                 }
-
+                list.ResultData = tempList.ResultData;
             }
 
             //执行单位查询
             if (ExecUnit != null && ExecUnit.Count > 0)
             {
+                PageResult<DailyRecordReportDto> tempList = new PageResult<DailyRecordReportDto>();//用于临时存放查询结果数据临时列表
+                tempList.ResultData = new List<DailyRecordReportDto>();
                 foreach (string item in ExecUnit)
                 {
-                    list.ResultData = list.ResultData.Where(x => x.ExecUnit == item).ToList();
+                    tempList.ResultData.AddRange(list.ResultData.Where(x => x.ExecUnit == item).ToList());
                 }
-
+                list.ResultData = tempList.ResultData;
             }
             if (list != null && list.ResultData.Count > 0)
             {
@@ -462,6 +472,7 @@ namespace ACMS.Applications.Impl
             list.Total = result.Count();
             result = result.OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
+            list.TotalPagesCount = list.Total / pageSize + 1;
 
             return list;
         }
@@ -1280,6 +1291,7 @@ namespace ACMS.Applications.Impl
             list.Total = result.Count();
             result = result.OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
+            list.TotalPagesCount = list.Total / pageSize + 1;
 
             return list;
         }

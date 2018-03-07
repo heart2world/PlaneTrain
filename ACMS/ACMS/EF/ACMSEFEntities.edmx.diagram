@@ -9,7 +9,6 @@
         <EntityTypeShape EntityType="ACMSModel.User" Width="1.5" PointX="3.5" PointY="4.125" />
         <EntityTypeShape EntityType="ACMSModel.RoleMenu" Width="1.5" PointX="3.75" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.UserRole" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="ACMSModel.Menu" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.PlaneType" Width="1.5" PointX="8.75" PointY="4.75" />
         <EntityTypeShape EntityType="ACMSModel.PlTypeTCtrlList" Width="1.5" PointX="9.375" PointY="8.75" />
         <EntityTypeShape EntityType="ACMSModel.V_PlTypeTCtrlList" Width="1.5" PointX="11.375" PointY="0.75" />
@@ -30,6 +29,7 @@
         <EntityTypeShape EntityType="ACMSModel.ReportRecord" Width="1.5" PointX="17.375" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.V_RecordMonthReport" Width="1.5" PointX="17.375" PointY="4.75" />
         <EntityTypeShape EntityType="ACMSModel.V_EngineReport" Width="1.5" PointX="17.375" PointY="10.75" />
+        <EntityTypeShape EntityType="ACMSModel.Menu" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

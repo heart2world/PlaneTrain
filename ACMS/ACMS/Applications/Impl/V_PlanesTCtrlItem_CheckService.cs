@@ -32,7 +32,7 @@ namespace ACMS.Applications.Impl
         /// <param name="upTemprTime"></param>
         /// <param name="onOffTime"></param>
         /// <returns></returns>
-        public PageResult<V_PlanesTCtrlItem_Check> GetList(int pageSize, int pageNo, int isPrinted, int days, decimal airTime, decimal upTemprTime, int onOffTime)
+        public PageResult<V_PlanesTCtrlItem_Check> GetList(int pageSize, int pageNo, int isPrinted, int? days, decimal? airTime, decimal? upTemprTime, int? onOffTime)
         {
             PageResult<V_PlanesTCtrlItem_Check> list = new PageResult<V_PlanesTCtrlItem_Check>();
 
@@ -40,11 +40,12 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_PlanesTCtrlItem_Check>().Where(a => a.IsActive && a.IsPrinted==isPrinted);
-            result = result.Where(a => (a.DateDiffValue <= days && a.IsWatDate.Value) || 
-            (a.IsWatAirTime.Value && a.RAirTime-a.PlanNewAirTime<=airTime)
-            ||(a.IsWatUpTemprTime.Value && a.RUpTemprTime-a.PlanNewHeatingMachineTime<=upTemprTime)
-            ||(a.IsWatOnOffTime.Value && a.ROnOffTime-a.PlanNewRiseAndFallNum<=onOffTime));
+            var result = _dbContext.Set<V_PlanesTCtrlItem_Check>().Where(a => a.IsActive && a.IsPrinted == isPrinted);
+
+            result = result.Where(a => (days != null ? a.DateDiffValue <= days && a.IsWatDate.Value : 1 == 1) ||
+            (airTime != null ? a.IsWatAirTime.Value && a.RAirTime - a.PlanNewAirTime <= airTime : 1 == 1)
+            || (upTemprTime != null ? a.IsWatUpTemprTime.Value && a.RUpTemprTime - a.PlanNewHeatingMachineTime <= upTemprTime : 1 == 1)
+            || (onOffTime != null ? a.IsWatOnOffTime.Value && a.ROnOffTime - a.PlanNewRiseAndFallNum <= onOffTime : 1 == 1));
             list.Total = result.Count();
             result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();

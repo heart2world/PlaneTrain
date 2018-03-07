@@ -62,5 +62,13 @@ namespace ACMS.Services
         /// <param name="loginDto">用户输入的登录信息</param>
         /// <returns>登录成功的用户信息</returns>
         OperationResult<User> Login(UserLoginDto loginDto);
+
+
+        /// <summary>
+        /// 根据用户获取角色菜单
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        List<MenuForDisplayDto> GetPrivilegeMenuByUserID(string userID);
     }
 }

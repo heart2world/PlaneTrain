@@ -84,6 +84,18 @@ namespace ACMS.Controllers
         {
             return Ok(_userService.EditPwd(pwd, operationUserID));
         }
-        
+
+
+        /// <summary>
+        /// 根据用户获取角色菜单
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        [HttpGet, Route("getUserPrivilegeMenu")]
+        public IHttpActionResult GetPrivilegeMenuByUserID(string userID)
+        {
+            return Ok(_userService.GetPrivilegeMenuByUserID(userID));
+        }
+
     }
 }

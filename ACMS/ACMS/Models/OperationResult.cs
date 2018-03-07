@@ -22,5 +22,6 @@ namespace ACMS.Models
     {
         public List<T> ResultData { get; set; }
         public int Total { get; set; }
+        public int TotalPagesCount { get; set; }
     }
 }
