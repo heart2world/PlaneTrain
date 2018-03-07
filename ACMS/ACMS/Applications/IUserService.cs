@@ -61,6 +61,6 @@ namespace ACMS.Services
         /// </summary>
         /// <param name="loginDto">用户输入的登录信息</param>
         /// <returns>登录成功的用户信息</returns>
-        User Login(UserLoginDto loginDto);
+        OperationResult<User> Login(UserLoginDto loginDto);
     }
 }

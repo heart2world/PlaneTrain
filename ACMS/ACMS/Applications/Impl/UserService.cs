@@ -353,10 +353,41 @@ namespace ACMS.Services.Impl
         /// </summary>
         /// <param name="loginDto">用户输入的登录信息</param>
         /// <returns>登录成功的用户信息</returns>
-        public User Login(UserLoginDto loginDto)
+        public OperationResult<User> Login(UserLoginDto loginDto)
         {
-            var userQuery = _dbContext.Set<User>().Where(x => x.LoginAccount.ToLower() == loginDto.LoginAccount.ToLower() && x.Password == loginDto.Password).FirstOrDefault();
-            return userQuery;
+            var result = new OperationResult<User>()
+            {
+                Result = false,
+                ResultData = null,
+                ResultMsg = string.Empty
+            };
+
+            var userList = _dbContext.Set<User>().ToList();
+
+
+            var userNameQuery = _dbContext.Set<User>().Where(x => x.LoginAccount.ToLower() == loginDto.LoginAccount.ToLower()).FirstOrDefault();
+
+            if (userNameQuery == null)
+            {
+                //用户名不存在
+                result.ResultMsg = "用户名不存在！";
+            }
+            else
+            {
+                var userPWDQuery = userList.Where(x => x.LoginAccount.ToLower() == loginDto.LoginAccount.ToLower() && x.Password == loginDto.Password && x.IsActive).FirstOrDefault();
+                if (userPWDQuery == null)
+                {
+                    //密码错误
+                    result.ResultMsg = "登录密码错误！";
+                }
+                else
+                {
+                    result.Result = true;
+                    result.ResultData = userPWDQuery;
+                    result.ResultMsg = "登录成功！";
+                }
+            }
+            return result;
         }
     }
 }

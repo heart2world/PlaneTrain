@@ -24,15 +24,30 @@ namespace ACMS.Controllers
             var loginUser = _userService.Login(dto);
             if (loginUser != null)
             {
-                HttpContext.Current.Session["SESSION_CURRENTUSER"] = loginUser;
+                if (loginUser.Result)
+                {
 
-                var loginResult = new UserLoginDto() { LoginResult = true, LoginAccount = loginUser.LoginAccount, Password = loginUser.Password, Ticket = loginUser.ID };
+                    HttpContext.Current.Session["SESSION_CURRENTUSER"] = loginUser.ResultData;
 
-                return Ok(loginResult);
+                    var loginResult = new UserLoginDto()
+                    {
+                        LoginResult = true,
+                        ResultMessage = loginUser.ResultMsg,
+                        LoginAccount = loginUser.ResultData.LoginAccount,
+                        Password = loginUser.ResultData.Password,
+                        Ticket = loginUser.ResultData.ID
+                    };
+
+                    return Ok(loginResult);
+                }
+                else
+                {
+                    return Ok(new UserLoginDto() { LoginResult = loginUser.Result, ResultMessage = loginUser.ResultMsg });
+                }
             }
             else
             {
-                return Ok(new UserLoginDto() { LoginResult = false });
+                return Ok(new UserLoginDto() { LoginResult = false, ResultMessage = "未知异常！" });
             }
         }
     }

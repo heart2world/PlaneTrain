@@ -26,6 +26,7 @@ namespace ACMS.Models
         public string Password { get; set; }
         public bool LoginResult { get; set; }
         public string Ticket { get; set; }
+        public string ResultMessage { get; set; }
     }
 
 
