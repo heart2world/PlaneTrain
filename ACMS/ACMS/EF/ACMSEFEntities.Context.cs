@@ -82,6 +82,8 @@ public partial class ACMSEFEntities : DbContext
 
     public virtual DbSet<Menu> Menu { get; set; }
 
+    public virtual DbSet<ExecuteUnit> ExecuteUnit { get; set; }
+
 }
 
 }

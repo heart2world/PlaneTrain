@@ -52,6 +52,19 @@
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
+        <EntityType Name="ExecuteUnit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UnitName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="OrderIndex" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="Menu">
           <Key>
             <PropertyRef Name="ID" />
@@ -718,6 +731,7 @@
         <EntityContainer Name="ACMSModelStoreContainer">
           <EntitySet Name="AirTimeAlarmSet" EntityType="Self.AirTimeAlarmSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CESSNA172RDailyRecord" EntityType="Self.CESSNA172RDailyRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExecuteUnit" EntityType="Self.ExecuteUnit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PA44-180DailyRecord" EntityType="Self.PA44-180DailyRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Planes" EntityType="Self.Planes" Schema="dbo" store:Type="Tables" />
@@ -1041,6 +1055,7 @@
           <EntitySet Name="V_RecordMonthReport" EntityType="ACMSModel.V_RecordMonthReport" />
           <EntitySet Name="V_EngineReport" EntityType="ACMSModel.V_EngineReport" />
           <EntitySet Name="Menu" EntityType="ACMSModel.Menu" />
+          <EntitySet Name="ExecuteUnit" EntityType="ACMSModel.ExecuteUnit" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1640,6 +1655,19 @@
           <Property Name="MenuLevel" Type="Int32" Nullable="false" />
           <Property Name="OrderIndex" Type="Int32" />
           <Property Name="MenuIcon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ExecuteUnit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UnitName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OrderIndex" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -2261,6 +2289,20 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="MenuURL" ColumnName="MenuURL" />
                 <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExecuteUnit">
+            <EntityTypeMapping TypeName="ACMSModel.ExecuteUnit">
+              <MappingFragment StoreEntitySet="ExecuteUnit">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
