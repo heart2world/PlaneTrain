@@ -34,8 +34,6 @@ public partial class Planes
 
     public int RankNo { get; set; }
 
-    public string ExecuteUnitID { get; set; }
-
     public bool IsActive { get; set; }
 
     public string CreateTime { get; set; }

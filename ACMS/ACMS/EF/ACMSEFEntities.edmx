@@ -136,7 +136,6 @@
           <Property Name="IsMonitored" Type="bit" Nullable="false" />
           <Property Name="Memo" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="RankNo" Type="int" Nullable="false" />
-          <Property Name="ExecuteUnitID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
@@ -1668,7 +1667,6 @@
           <Property Name="IsMonitored" Type="Boolean" Nullable="false" />
           <Property Name="Memo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="RankNo" Type="Int32" Nullable="false" />
-          <Property Name="ExecuteUnitID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
@@ -2298,7 +2296,6 @@
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ExecuteUnitID" ColumnName="ExecuteUnitID" />
                 <ScalarProperty Name="RankNo" ColumnName="RankNo" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="IsMonitored" ColumnName="IsMonitored" />
