@@ -15,7 +15,7 @@ namespace ACMS.Models
         public Nullable<decimal> PlanDayAirTime { get; set; }
         public Nullable<decimal> PlanDayGroundTime { get; set; }
         public string ExecUnit { get; set; }
-        public int HeatingMachineDayTime { get; set; }
+        public Nullable<decimal> HeatingMachineDayTime { get; set; }
         public string PlaneNo { get; set; }
         public string PlaneTypeID { get; set; }
         public string TypeName { get; set; }

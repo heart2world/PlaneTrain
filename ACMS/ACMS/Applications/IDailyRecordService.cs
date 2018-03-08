@@ -53,7 +53,7 @@ namespace ACMS.Applications
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        PageResult<DailyRecordReportDto> GetDailyRecordReportList(List<string> planTypeID, List<string> planID, List<string> ExecUnit, string startDate, string endDate);
+        PageResult<DailyRecordReportDto> GetDailyRecordReportList(int pageSize, int pageNo, List<string> planTypeID, List<string> planID, List<string> ExecUnit, string startDate, string endDate);
 
         #region CESSNA172RDailyRecord
         /// <summary>

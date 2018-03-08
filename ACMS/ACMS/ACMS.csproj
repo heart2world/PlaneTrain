@@ -147,9 +147,11 @@
     <Compile Include="ApplicationBase\ServiceBase.cs" />
     <Compile Include="Applications\IAirTimeAlarmSetService.cs" />
     <Compile Include="Applications\IDailyRecordService.cs" />
+    <Compile Include="Applications\IExecuteUnitService.cs" />
     <Compile Include="Applications\IMenuService.cs" />
     <Compile Include="Applications\Impl\AirTimeAlarmSetService.cs" />
     <Compile Include="Applications\Impl\DailyRecordService.cs" />
+    <Compile Include="Applications\Impl\ExecuteUnitService.cs" />
     <Compile Include="Applications\Impl\MenuService.cs" />
     <Compile Include="Applications\Impl\PlanesService.cs" />
     <Compile Include="Applications\Impl\PlanesTCtrlItemServices.cs" />
@@ -192,6 +194,7 @@
     <Compile Include="Controllers\AirTimeAlarmSetController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DailyRecordController.cs" />
+    <Compile Include="Controllers\ExecuteUnitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PlanesController.cs" />
@@ -224,6 +227,9 @@
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\CESSNA172RDailyRecord.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ExecuteUnit.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\Menu.cs">
@@ -7236,6 +7242,8 @@
     <Content Include="Web\Admin\index2.html" />
     <Content Include="Web\Admin\starter.html" />
     <Content Include="Web\CSS\app.css" />
+    <Content Include="Web\CSS\btselect.css" />
+    <Content Include="Web\JS\btselect.js" />
     <Content Include="Web\JS\common.js" />
     <Content Include="Web\Pages\add_airplane.html" />
     <Content Include="Web\Pages\add_dailyRecord.html" />
@@ -7250,6 +7258,7 @@
     <Content Include="Web\Pages\check_airplane_byday.html" />
     <Content Include="Web\Pages\dailyRecord_list.html" />
     <Content Include="Web\Pages\edit_airplane.html" />
+    <Content Include="Web\Pages\edit_ctrtime_menu.html" />
     <Content Include="Web\Pages\edit_dailyRecord.html" />
     <Content Include="Web\Pages\edit_permission.html" />
     <Content Include="Web\Pages\edit_planetype.html" />
@@ -7259,13 +7268,17 @@
     <Content Include="Web\Pages\index.html" />
     <Content Include="Web\Pages\login.html" />
     <Content Include="Web\Pages\motor_month_report.html" />
+    <Content Include="Web\Pages\motor_month_report_detail.html" />
     <Content Include="Web\Pages\motor_report.html" />
+    <Content Include="Web\Pages\motor_report_detail.html" />
     <Content Include="Web\Pages\PA44180.html" />
     <Content Include="Web\Pages\planetype_menu.html" />
     <Content Include="Web\Pages\planetype_menu_log.html" />
     <Content Include="Web\Pages\plane_manage_list.html" />
     <Content Include="Web\Pages\plane_month_report.html" />
+    <Content Include="Web\Pages\plane_month_report_detail.html" />
     <Content Include="Web\Pages\plane_report.html" />
+    <Content Include="Web\Pages\plane_report_detail.html" />
     <Content Include="Web\Pages\plan_ctrtime_log.html" />
     <Content Include="Web\Pages\plan_ctrtime_menu.html" />
     <Content Include="Web\Pages\plan_ctrtime_plus.html" />
@@ -7273,6 +7286,7 @@
     <Content Include="Web\Pages\preset_var.html" />
     <Content Include="Web\Pages\print_preview.html" />
     <Content Include="Web\Pages\product_info_report.html" />
+    <Content Include="Web\Pages\product_info_report_detail.html" />
     <Content Include="Web\Pages\report_filltype.html" />
     <Content Include="Web\Pages\report_forms.html" />
     <Content Include="Web\Pages\role_list.html" />

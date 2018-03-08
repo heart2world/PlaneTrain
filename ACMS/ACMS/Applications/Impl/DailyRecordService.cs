@@ -77,11 +77,12 @@ namespace ACMS.Applications.Impl
             if (list.ResultData != null && list.ResultData.Count > 0)
             {
                 //用于统计机型下的飞机数目
-                var result2 = (from a in _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive)
+                /*var result2 = (from a in _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive)
                                where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
                                select new { PlaneNo = a.PlaneNo, PlaneTypeID = a.PlaneTypeID }
 
-                              ).Distinct().ToList();
+                              ).Distinct().ToList();*/
+                var result2 = _dbContext.Set<Planes>().Where(a => a.IsActive);
                 foreach (var item in list.ResultData)
                 {
                     item.PlanesCount = result2.Where(m => m.PlaneTypeID == item.PlaneTypeID).Count();
@@ -141,7 +142,7 @@ namespace ACMS.Applications.Impl
                                where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
                                select a
 
-                              ).OrderByDescending(m => m.InputDate);
+                              ).OrderByDescending(m => m.InputDate).ThenByDescending(m => m.CreateTime);
                 foreach (var item in list.ResultData)
                 {
                     if (result2.Where(m => m.PlaneNo == item.PlaneNo).Count() > 0)
@@ -294,7 +295,7 @@ namespace ACMS.Applications.Impl
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public PageResult<DailyRecordReportDto> GetDailyRecordReportList(List<string> planTypeID, List<string> planID, List<string> ExecUnit, string startDate, string endDate)
+        public PageResult<DailyRecordReportDto> GetDailyRecordReportList(int pageSize, int pageNo, List<string> planTypeID, List<string> planID, List<string> ExecUnit, string startDate, string endDate)
         {
             PageResult<DailyRecordReportDto> list = new PageResult<DailyRecordReportDto>();
 
@@ -303,7 +304,7 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive && a.Type == 2);//初值不统计
+            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);//初值不统计
             if (!string.IsNullOrEmpty(startDate))
             {
                 result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
@@ -312,11 +313,11 @@ namespace ACMS.Applications.Impl
             {
                 result = result.Where(x => string.Compare(x.InputDate, endDate) <= 0);
             }
-            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlanID, a.PlaneNo, a.PlaneTypeID })
+            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlanID, a.PlaneNo, a.PlaneTypeID, a.ExecUnit })
                          .Select(g => new DailyRecordReportDto()
                          {
                              DayMaintenaceTime = g.Sum(i => i.DayMaintenaceTime),
-                             ExecUnit = "遂宁飞行学院",
+                             ExecUnit = g.Key.ExecUnit,
                              DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
                              HeatingMachineDayTime = g.Sum(i => i.HeatingMachineDayTime),
                              PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
@@ -369,11 +370,11 @@ namespace ACMS.Applications.Impl
                 var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
                 if (!string.IsNullOrEmpty(startDate))
                 {
-                    result2 = result2.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+                    result2 = result2.Where(x => string.Compare(x.InputDate, startDate) >= 0);
                 }
                 if (!string.IsNullOrEmpty(endDate))
                 {
-                    result2 = result2.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+                    result2 = result2.Where(x => string.Compare(x.InputDate, endDate) <= 0);
                 }
 
                 //汇总每日每个飞机的登记数据
@@ -393,6 +394,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = list.ResultData.Count();
+            list.ResultData = list.ResultData.OrderByDescending(a => a.PlanID).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
             return list;
         }
         #region CESSNA172RDailyRecord

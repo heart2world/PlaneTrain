@@ -48,7 +48,7 @@ namespace ACMS.Applications.Impl
         /// 根据机型ID获取列表
         /// </summary>
         /// <returns>列表信息</returns>
-        public PageResult<Planes> GetListByPlaneType(int pageSize, int pageNo, string PlaneTypeID)
+        public PageResult<Planes> GetListByPlaneType(int pageSize, int pageNo, List<string> PlaneTypeID)
         {
             PageResult<Planes> list = new PageResult<Planes>();
 
@@ -56,12 +56,22 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<Planes>().Where(a => a.IsActive);
-            if (!string.IsNullOrEmpty(PlaneTypeID))//关键词查询    
-                result = result.Where(a => a.PlaneTypeID.Equals(PlaneTypeID));
-            list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
-            list.ResultData = result.ToList();
+            var result = _dbContext.Set<Planes>().Where(a => a.IsActive).ToList();
+            List<Planes> tempResult = new List<Planes>();//临时放结果的列表
+            if (result.Count > 0)
+            {
+                foreach (var temp in PlaneTypeID)
+                {
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        tempResult.AddRange(result.Where(m => m.PlaneTypeID == temp).ToList());
+                    }
+                }
+            }
+
+            list.Total = tempResult.Count();
+            tempResult = tempResult.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+            list.ResultData = tempResult.ToList();
             return list;
         }
 

@@ -20,7 +20,7 @@ namespace ACMS.Applications
         /// 根据机型ID获取列表
         /// </summary>
         /// <returns>列表信息</returns>
-        PageResult<Planes> GetListByPlaneType(int pageSize, int pageNo, string PlaneTypeID);
+        PageResult<Planes> GetListByPlaneType(int pageSize, int pageNo, List<string> PlaneTypeID);
 
 
         /// <summary>

@@ -18,8 +18,19 @@ namespace ACMS.Controllers
     {
         IDailyRecordService _dailyRecordService = new DailyRecordService();
 
+        /// <summary>
+        /// 获取飞行数据统计
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="planTypeID"></param>
+        /// <param name="planID"></param>
+        /// <param name="ExecUnit"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
         [HttpGet, Route("getreportlist")]
-        public IHttpActionResult GetDailyRecordReportList(string planTypeID, string planID, string ExecUnit, string startDate, string endDate)
+        public IHttpActionResult GetDailyRecordReportList(int? pageSize, int? pageNo, string planTypeID, string planID, string ExecUnit, string startDate, string endDate)
         {
             List<string> planTypeIDList = new List<string>();
             planTypeIDList = !string.IsNullOrEmpty(planTypeID) ? planTypeID.Split(',').ToList() : null;
@@ -27,7 +38,17 @@ namespace ACMS.Controllers
             planIDList = !string.IsNullOrEmpty(planID) ? planID.Split(',').ToList() : null;
             List<string> ExecUnitList = new List<string>();
             ExecUnitList = !string.IsNullOrEmpty(ExecUnit) ? ExecUnit.Split(',').ToList() : null;
-            return Ok(_dailyRecordService.GetDailyRecordReportList(planTypeIDList, planIDList, ExecUnitList, startDate, endDate));
+            int tempPageSize = 1;
+            if(pageSize!=null)
+            {
+                tempPageSize = pageSize.Value;
+            }
+            int tempPageNo = 1;
+            if (pageNo != null)
+            {
+                tempPageNo = pageNo.Value;
+            }
+            return Ok(_dailyRecordService.GetDailyRecordReportList(tempPageSize, tempPageNo, planTypeIDList, planIDList, ExecUnitList, startDate, endDate));
         }
 
         #region CESSNA172RDailyRecord
@@ -181,7 +202,7 @@ namespace ACMS.Controllers
         {
             return this.Ok(_dailyRecordService.CheckPA44_180DailyRecordHaveRecord(planeID));
         }
-        
+
 
         /// <summary>
         /// 获取PA44_180型号初始设置的最后一次记录
