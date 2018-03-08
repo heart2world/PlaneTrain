@@ -22,5 +22,16 @@ namespace ACMS.Controllers
             return Ok(_execUnitService.GetList());
 
         }
+
+        [HttpPost, Route("getlistByPlanesID")]
+        public IHttpActionResult GetExecuteUnitByPlaneIDs(QueryParam param)
+        {
+            return Ok(_execUnitService.GetExecuteUnitByPlaneIDs(param.planeIDs));
+        }
+
+        public class QueryParam
+        {
+            public List<string> planeIDs { get; set; }
+        }
     }
 }

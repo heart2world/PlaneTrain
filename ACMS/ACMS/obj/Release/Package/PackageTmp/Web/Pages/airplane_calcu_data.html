@@ -29,6 +29,8 @@
   <link rel="stylesheet" href="../../Web/Admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
   <!--app.css-->
   <link rel="stylesheet" href="../CSS/app.css">
+  <!--多选下拉框-->
+  <link rel="stylesheet" href="../CSS/btselect.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -40,7 +42,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper" id="app">
+<div class="wrapper" id="app" @click="cur_index2 = '-1'">
   <header class="main-header">
     <!-- Logo -->
     <a href="javascript:void(0);" class="logo">
@@ -72,24 +74,24 @@
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <li :class="{'treeview':item.child}" v-for="(item,index) in menus" :key="index">
-		  <a v-if="item.child" href="javascript:void(0);">
-			<span v-html="item.icon"></span><span v-text="item.menu_name"></span>
-			<span class="pull-right-container">
-			  <i class="fa fa-angle-left pull-right"></i>
-			</span>
-		  </a>
-		  <a v-if="!item.child" :href="item.menu_url">
-		  <span v-html="item.icon"></span> <span v-text="item.menu_name"></span>
-			<span class="pull-right-container">
-			  <i class="fa fa-angle-left pull-right"></i>
-			</span>
-		  </a>
-		   <ul v-if="item.child" class="treeview-menu">
-			<li v-for="child in item.child"><a :href="child.menu_url"><i class="fa fa-circle-o"></i><span v-text="child.menu_name"></span></a></li>
-		  </ul>
-		</li>
+      <ul class="sidebar-menu" data-widget="tree" v-cloak>
+		<li :class="{'treeview':item.child}" v-for="(item,index) in menus" :key="index">
+			  <a v-if="item.child" href="javascript:void(0);">
+				<span v-html="item.icon"></span><span v-text="item.menu_name"></span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-right pull-right"></i>
+				</span>
+			  </a>
+			  <a v-if="!item.child" :href="item.menu_url">
+			  <span v-html="item.icon"></span> <span v-text="item.menu_name"></span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-right pull-right"></i>
+				</span>
+			  </a>
+			   <ul v-if="item.child" class="treeview-menu">
+				<li v-for="child in item.child"><a :href="child.menu_url"><i class="fa fa-circle-o"></i><span v-text="child.menu_name"></span></a></li>
+			  </ul>
+			</li>
 		</ul>
     </section>
     <!-- /.sidebar -->
@@ -98,31 +100,11 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="app-content">
-	<div class="modal fade in" id="modal-default" style="">
-	  <div class="modal-dialog">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			  <span aria-hidden="true">×</span></button>
-			<h4 class="modal-title">操作提示</h4>
-		  </div>
-		  <div class="modal-body">
-			<p>点击确认按钮删除</p>
-		  </div>
-		  <div class="modal-footer">
-			<button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
-			<button type="button" class="btn btn-primary" @click="del_role(checked_role_id,checked_index);">确认</button>
-		  </div>
-		</div>
-		<!-- /.modal-content -->
-	  </div>
-	  <!-- /.modal-dialog -->
-	</div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>飞行数据统计</h1>
     </section>
-	<section class="header-fn">
+	<section class="header-fn" style="overflow: none;">
 		<form class="form-inline">
 		  <div class="choose-page pull-left" style="padding: 0;">
 			<div class="form-group">
@@ -136,32 +118,55 @@
 			</div>
 			记录/页
 		</div>
-		<div class="input-groups pull-right">
+		<div class="input-groups pull-right" style="overflow: none;">
 			<div class="form-group">
-					<select class="form-control" v-model="PlaneTypeID" @change="switch_page($event);">
-					  <option value="" disabled>请选择机型</option>
-					  <option v-for="prop in planetype_data" :value="prop.ID" v-text="prop.TypeName">
-					</select>
+					<div class="form-control">
+						<div class="control-title" @click="swicth_select_tab($event,1);" v-text="planeText" v-cloak></div>
+						<ul v-show="cur_index2 == 1" class="select-list" v-cloak>
+							<li v-for="prop in planetype_data" :value="prop.ID" @click="select_tap($event);">
+								<label>
+									<input type="checkbox" :value="prop.ID" v-model="PlaneTypeID">
+									<span v-text="prop.TypeName"></span>
+								</label>
+							</li>
+							<li class="certain-btn" @click="do_certain_select($event,1);">确 定</li>
+						</ul>
+					</div>
 			</div>
 			<div class="form-group">
-				<select class="form-control" v-model="PlaneID" @change="switch_page($event);">
-				  <option value="" disabled>请选择机号</option>
-				  <option v-for="prop in plane_data" :value="prop.ID" v-text="prop.PlaneNo">
-				</select>
+				<div class="form-control">
+					<div class="control-title" @click="swicth_select_tab($event,2);" v-text="planeNoText" v-cloak></div>
+					<ul v-show="cur_index2 == 2" class="select-list" v-cloak>
+						<li v-for="prop in plane_data" :value="prop.ID" @click="select_tap($event);">
+							<label>
+								<input type="checkbox" :value="prop.ID" v-model="PlaneID">
+								<span v-text="prop.PlaneNo"></span>
+							</label>
+						</li>
+						<li class="certain-btn" @click="do_certain_select($event,2);">确 定</li>
+					</ul>
+				</div>
 			</div>
 			<div class="form-group">
-				<select class="form-control" @change="switch_page($event);">
-					<option>请选择执机单位</option>
-					<option value="all">遂宁学院</option>
-					<option value="notall">XX学院</option>
-				</select>
+				<div class="form-control">
+					<div class="control-title" @click="swicth_select_tab($event,3);" v-text="exeText" v-cloak></div>
+					<ul v-show="cur_index2 == 3" class="select-list" v-cloak>
+						<li @click="select_tap($event);">
+							<label>
+								<input type="checkbox" value="遂宁飞行学院" v-model="excUnit">
+								<span>遂宁飞行学院</span>
+							</label>
+						</li>
+						<li class="certain-btn" @click="do_certain_select($event,3);">确 定</li>
+					</ul>
+				</div>
 			</div>
 			<div class="form-group">
 				<div class="input-group date" id="startdate">
 					<div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</div> 
-					<input type="text" id="datepicker" class="form-control pull-right" value="2018-01-04" v-model="startDate">
+					<input type="text" id="datepicker" class="form-control pull-right" value="" v-model="startDate">
 				</div>
 			</div>
 			<div class="form-group">
@@ -169,17 +174,17 @@
 					<div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</div>
-					<input type="text" id="datepicker2" class="form-control pull-right" value="2018-01-04" v-model="endDate"></div>
+					<input type="text" id="datepicker2" class="form-control pull-right" value="" v-model="endDate"></div>
 			</div>
 			<div class="form-group btns-group">
-				<button class="btn btn-default" @click="query_role_list($event);">查询</button>
+				<button  type="button" class="btn btn-info" @click="query_data_list($event);">查询</button>
 			</div>
 		</form>
 		</div>	
 	</section>
 	<section class="content">
-	  <div class="data-null" v-if="total_page < 1">暂无其他数据</div>			
-      <div v-if="total_page > 0" class="row">
+	  <div class="data-null" v-show="total_page < 1" v-cloak>暂无其他数据</div>			
+      <div v-show="total_page > 0" class="row" v-cloak>
         <div class="col-xs-12">
           <div class="box">
             <!-- /.box-header -->
@@ -187,7 +192,7 @@
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>ID</th>
+                  <th width="5%">ID</th>
                   <th>日期段</th>
                   <th>机型</th>
                   <th>机号</th>
@@ -197,47 +202,42 @@
 				  <th>当日地面时间</th>
 				  <th>当日总起落数</th>
 				  <th>维护开车空地时间</th>
-				  <th>家文集当日时间</th>
+				  <th>加温机当日时间</th>
 				  <th>飞行天数</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in role_data" :key="index" @click="checked_row_content(prop.ID,index);">
-                  <td>A00{{index}}</td>
-                  <td>2017/12/10-2018/12/12</td>
-                  <td>ABCSN</td>
-                  <td>B-3609</td>
-                  <td>遂宁学院</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
-				  <td>1</td>
+                <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in reportData" :key="index" @click="checked_row_content(prop.ID,index);">
+                  <td v-text="index+1"></td>
+                  <td v-text="prop.Time"></td>
+                  <td v-text="prop.TypeName"></td>
+                  <td v-text="prop.PlaneNo"></td>
+                  <td v-text="prop.ExecUnit"></td>
+				  <td v-text="prop.PlanDayClearingTime" class="clearTime"></td>
+				  <td v-text="prop.PlanDayAirTime" class="airTime"></td>
+				  <td v-text="prop.PlanDayGroundTime" class="groundTime"></td>
+				  <td v-text="prop.DayRiseAndFallNum" class="fallTime"></td>
+				  <td v-text="prop.DayMaintenaceTime" class="mTime"></td>
+				  <td v-text="prop.HeatingMachineDayTime" class="hTime"></td>
+				  <td v-text="prop.FlyNum" class="flyTime"></td>
                 </tr>
+				<tr>
+				  <td>合计</td>
+				  <td></td>
+				  <td></td>
+				  <td></td>
+				  <td></td>
+				  <td  v-cloak>{{clearTime || clearTimeCount}}</td>
+				  <td  v-cloak>{{airTime || airTimeCount}}</td>
+				  <td  v-cloak>{{groundTime || groundTimeCount}}</td>
+				  <td  v-cloak>{{riseTime || riseTimeCount}}</td>
+				  <td  v-cloak>{{mTime || mTimeCount}}</td>
+				  <td  v-cloak>{{hTime || hTimeCount}}</td>
+				  <td  v-cloak>{{allTime || allTimeCount}}</td>
+				</tr>
                 </tbody>
               </table>
             </div>
-			<nav aria-label="Page navigation">
-			  <ul class="pagination">
-				<li>
-				  <a href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				  </a>
-				</li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li>
-				  <a href="#" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				  </a>
-				</li>
-			  </ul>
-</nav>
             <!-- /.box-body -->
           </div>
         </div>
@@ -246,7 +246,17 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-	
+	<nav v-show="total_page > 0" class="navigation" v-cloak>
+      <ul class="pagination">
+        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="false">«</span></a></li>
+        <li><a href="#">1 <span class="sr-only"></span></a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+     </ul>
+   </nav>
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
@@ -303,19 +313,32 @@
 <script src="../../Web/Admin/dist/js/demo.js"></script>
 <!--common.js-->
 <script src="../JS/common.js"></script>
+<!--bootstrap-select.js-->
+<script src="../JS/btselect.js"></script>
 </body>
 <script>
 	var loginContext = {'ticket':''};
 	var mvvm = new Vue({
 		el:'#app',
 		data:{
+			cur_index2:'-1',
 			note_num:20,
-			PlaneTypeID:'',
-			PlaneID:'',
+			planeText:'请选择飞机型号',
+			planeNoText:'请选择飞机机号',
+			exeText:'请选择执机单位',
+			PlaneTypeID:[],
+			PlaneID:[],
 			cartype:'',
-			uname:'',
+			excUnit:[],
 			account:'',
-			total_page:1,
+			total_page:0,
+			clearTime:0,
+			airTime:0,
+			groundTime:0,
+			riseTime:0,
+			mTime:0,
+			hTime:0,
+			allTime:0,
 			cur_page:1,
 			role_data:[],
 			startDate:Common.getToMorrowDate(),
@@ -325,6 +348,7 @@
 			cur_index:-1,
 			planetype_data:[],
 			plane_data:[],
+			reportData:[],
 			menus:[]
 		},
 		mounted:function(){
@@ -335,18 +359,180 @@
 				//console.log(loginContext.ticket);
 				this.getAirplaneOptions();
 				this.getPlaneOptions();
-				this.getRoleList();
+				this.getReportList();
 				this.get_menus();
 			});
 		},
+		computed:{
+			clearTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.PlanDayClearingTime;
+				})
+				return num.toFixed(1);
+			},
+			airTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.PlanDayAirTime;
+				})
+				return num.toFixed(1);
+			},
+			groundTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.PlanDayGroundTime;
+				})
+				return num.toFixed(1);
+			},
+			riseTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.DayRiseAndFallNum;
+				})
+				return num;
+			},
+			mTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.DayMaintenaceTime;
+				})
+				return num.toFixed(1);
+			},
+			hTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.HeatingMachineDayTime;
+				})
+				return num;
+			},
+			allTimeCount:function(){
+				var num= 0;
+				this.reportData.forEach(function(n,m){
+					num+=n.FlyNum;
+				})
+				return num.toFixed(1);
+			}
+		},
 		methods:{
 			switch_page:function(evt){
-				this.role_data = [];
-				this.getRoleList();
+				this.reportData = [];
+				this.getReportList();
 			},
-			query_role_list:function(evt){
-				this.role_data = [];
-				this.getRoleList();
+			query_data_list:function(evt){
+				this.reportData = [];
+				this.getReportList();
+			},
+			swicth_select_tab:function(evt,type){
+				//支持多选筛选数据条件
+				evt.stopPropagation();
+				var self = this;
+				if(self.cur_index2 == type){
+					self.cur_index2 = '-1';
+				}else{
+					self.cur_index2 = type;
+				}
+				
+			},
+			select_tap:function(evt){
+				evt.stopPropagation();
+			},
+			do_certain_select:function(evt,type){
+				//判断点击确定是否选取了相应的类型值
+				var self = this;
+				evt.stopPropagation();
+				if(type == 1 && this.PlaneTypeID.length < 1){
+					Common.tips("请选择飞机机型");
+					self.planeText = "请选择飞机型号";
+					return;
+				}
+				if(type == 2 && this.PlaneID.length < 1){
+					Common.tips("请选择飞机机号");
+					self.planeNoText = "请选择飞机机号";
+					return;
+				}
+				if(type == 3 && this.excUnit.length < 1){
+					Common.tips("请选择执机单位");
+					self.exeText = "请选择执机单位";
+					return;
+				}
+				
+				if(type == 1){
+					var textArr = [];
+					$(evt.target).parent().find('li').each(function(i,v){
+						console.log(v);
+						$(v).find("input[type='checkbox']").each(function(j,k){
+							if(k.checked){
+								console.log($(k).next().text());
+								textArr.push($(k).next().text());
+								self.planeText = textArr.toString();
+							}
+						})
+					});
+				}
+				
+				if(type == 2){
+					var textArr = [];
+					$(evt.target).parent().find('li').each(function(i,v){
+						console.log(v);
+						$(v).find("input[type='checkbox']").each(function(j,k){
+							if(k.checked){
+								console.log($(k).next().text());
+								textArr.push($(k).next().text());
+								self.planeNoText = textArr.toString();
+							}
+						})
+					});
+				}
+				
+				if(type == 3){
+					var textArr = [];
+					$(evt.target).parent().find('li').each(function(i,v){
+						console.log(v);
+						$(v).find("input[type='checkbox']").each(function(j,k){
+							if(k.checked){
+								console.log($(k).next().text());
+								textArr.push($(k).next().text());
+								self.exeText = textArr.toString();
+							}
+						})
+					});
+				}
+				
+				this.cur_index2 = '-1';
+			},
+			getlistbyplanetype:function(evt){
+				var self = this;
+				$.ajax({
+					type: "get",
+					url: "../../api/planes/getlistbyplanetype",
+					data: {"pageSize":100,"pageNo":1,"planeTypeID":self.PlaneTypeID},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						console.log(data);
+						setTimeout(function(){
+							self.plane_data = [];
+							data.ResultData.forEach(function(n,m){
+								if(m <= data.ResultData.length){
+									self.plane_data.push({
+										'ID': n.ID,
+										'PlaneNo':n.PlaneNo
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
 			},
 			get_menus:function(){
 				var self = this;
@@ -380,7 +566,7 @@
 						},0);
 					},
 					error: function (e) {
-						
+						location.href="login.html?auth=error";
 					},
 					complete: function () {
 
@@ -413,41 +599,6 @@
 						},0);
 					},
 					error: function (e) {
-						
-					},
-					complete: function () {
-
-					}
-				});
-			},
-			getRoleList:function(){
-				var self = this;
-				$.ajax({
-					type: "get",
-					url: "../../api/role/getlist",
-					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"keyWord":self.uname},
-					beforeSend: function (XHR) {
-                    //发送ajax请求之前向http的head里面加入验证信息
-						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
-					},
-					success: function (data, status) {
-						console.log(data);
-						self.total_page = data.Total;
-						setTimeout(function(){
-							self.role_data = data.ResultData;
-							data.ResultData.forEach(function(m,n){
-								if(m <= data.ResultData.length){
-									self.role_data.push({
-										'ID': n.ID,
-										'RoleName':n.RoleName,
-										'CreateTime':n.CreateTime,
-										'RoleDesc':n.RoleDesc
-									});
-								}
-							});
-						},0);
-					},
-					error: function (e) {
 						location.href="login.html?auth=error";
 					},
 					complete: function () {
@@ -455,11 +606,59 @@
 					}
 				});
 			},
-			checked_row_content:function(rid,index){
+			getReportList:function(){
 				var self = this;
-				self.checked_role_id = rid;
-				self.checked_index = index;
-				self.cur_index = index;
+				$.ajax({
+					type: "get",
+					url: "../../api/dailyRecord/getreportlist",
+					data: {
+						"planTypeID":self.PlaneTypeID,
+						"planID":self.PlaneID,
+						"ExecUnit":self.excUnit,
+						"startDate":self.startDate,
+						"endDate":self.endDate
+						},
+					beforeSend: function (XHR) {
+                    //发送ajax请求之前向http的head里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						//console.log(data);
+						self.total_page = data.Total;
+						setTimeout(function(){
+							data.ResultData && data.ResultData.forEach(function(n,m){
+								if(m < data.ResultData.length){
+									self.reportData.push({
+										ID:'缺字段',
+										Time:self.startDate+'~'+self.endDate,
+										PlaneTypeID:n.PlaneTypeID,
+										TypeName:n.TypeName,
+										PlanID:n.PlanID,
+										PlaneNo:n.PlaneNo,
+										DayMaintenaceTime:n.DayMaintenaceTime,
+										DayRiseAndFallNum:n.DayRiseAndFallNum,
+										ExecUnit:n.ExecUnit,
+										HeatingMachineDayTime:n.HeatingMachineDayTime,
+										PlanDayAirTime:n.PlanDayAirTime,
+										PlanDayClearingTime:n.PlanDayClearingTime,
+										PlanDayGroundTime:n.PlanDayGroundTime,
+										FlyNum:n.FlightDays
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						//location.href="login.html?auth=error";
+					},
+					complete: function () {
+
+					}
+				});
+			},
+			checked_row_content:function(rid,index){
+				return;
 			},
 			jump_to_url:function(url,typeid){
 				//跳转至角色添加
@@ -472,60 +671,30 @@
 					}
 					location.href = url;
 				}
-			},
-			pop_alert:function(){
-				if(this.checked_role_id == ''){
-					//判断是否勾选行内容
-					Common.tips("请选择操作行");
-					return;
-				}
-				$("#modal-default").modal();
-				return false;
-			},
-			del_role:function(rid,index){
-				var self = this;
-				//删除角色
-				if(!!rid){
-					$.ajax({
-						type: "get",
-						url: "../../api/role/delete",
-						data: { "ID": rid},
-						beforeSend: function (XHR) {
-						//发送ajax请求之前向http的head里面加入验证信息
-							XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
-						},
-						success: function (data, status) {
-							console.log(data);
-							if(data.Result){
-								//删除成功 刷新数据
-								console.log(index);
-								self.role_data.splice(index,1);
-								self.cur_index = '';
-								
-								$("#modal-default").modal('hide');
-							}
-						},
-						error: function (e) {
-							
-						},
-						complete: function () {
-
-						}
-					});
-				}
 			}
 		}
 	});
 	$(function(){
 		//开始时间
-		$('#startdate').datepicker({
+		$('#datepicker').datepicker({
 		  format: 'yyyy-mm-dd',
 		  language:  "zh-CN",
 		  autoclose: true,
 		  startView: 0,
           clearBtn:true,  
           todayBtn:true
-		})
+		}).on('changeDate', function(ev){    
+			var	odate = mvvm.startDate;	
+			mvvm.startDate = $(ev.target).val();
+			var comp = Common.comPareStartDateAndEndDate(mvvm.startDate,mvvm.endDate);
+			if(comp){
+				mvvm.query_data_list();
+			}else{
+				Common.tips("开始时间须小于结束时间");
+				//mvvm.endDate = odate;
+				return;
+			}
+		  })
 		
 		//结束时间
 		$('#datepicker2').datepicker({
@@ -535,7 +704,18 @@
 		  startView: 0,
           clearBtn:true,  
           todayBtn:true
-		})
+		}).on('changeDate', function(ev){    
+			var	odate = mvvm.endDate;	
+			mvvm.endDate = $(ev.target).val();
+			var comp = Common.comPareStartDateAndEndDate(mvvm.startDate,mvvm.endDate);
+			if(comp){
+				mvvm.query_data_list();
+			}else{
+				Common.tips("开始时间须小于结束时间");
+				//mvvm.endDate = odate;
+				return;
+			}
+		  })
 	})
 </script>
 </html>

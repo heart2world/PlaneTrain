@@ -56,8 +56,6 @@ public partial class ACMSEFEntities : DbContext
 
     public virtual DbSet<AirTimeAlarmSet> AirTimeAlarmSet { get; set; }
 
-    public virtual DbSet<Planes> Planes { get; set; }
-
     public virtual DbSet<PlanesTCtrlItem_ReList> PlanesTCtrlItem_ReList { get; set; }
 
     public virtual DbSet<V_Planes> V_Planes { get; set; }
@@ -83,6 +81,8 @@ public partial class ACMSEFEntities : DbContext
     public virtual DbSet<Menu> Menu { get; set; }
 
     public virtual DbSet<ExecuteUnit> ExecuteUnit { get; set; }
+
+    public virtual DbSet<Planes> Planes { get; set; }
 
 }
 
