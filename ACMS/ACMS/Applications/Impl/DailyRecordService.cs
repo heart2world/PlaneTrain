@@ -178,8 +178,8 @@ namespace ACMS.Applications.Impl
             list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position })
                          .Select(g => new EngineReportDto()
                          {
-                             EngineCorrectTSO = g.Sum(i => i.EngineCorrectTSO),
-                             EngineNewTSN = g.Sum(i => i.EngineNewTSN),
+                             EngineCorrectTSO = g.Max(i => i.EngineCorrectTSO),
+                             EngineNewTSN = g.Max(i => i.EngineNewTSN),
                              PlaneNo = g.Key.PlaneNo,
                              Position = g.Key.Position,
                              EngineNo = g.Key.EngineNo
@@ -189,7 +189,7 @@ namespace ACMS.Applications.Impl
             {
                 var tempList = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
                 string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                ).ToList();
+                );
                 List<EngineReportDto> tempList2 = new List<EngineReportDto>();
                 foreach (var item in list.ResultData)
                 {//复制列表至临时表中
@@ -209,13 +209,17 @@ namespace ACMS.Applications.Impl
             //查询飞机本月空中时间
             if (list.ResultData != null && list.ResultData.Count > 0)
             {
-                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 2 &&
+                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive &&
                 string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
                 ).ToList();
                 foreach (var item in list.ResultData)
                 {
-                    var tempResult = result2.Where(a => a.EngineNo == item.EngineNo && a.PlaneNo == item.PlaneNo).ToList();
+                    var tempResult = result2.Where(a => a.PlaneNo == item.PlaneNo).ToList();
                     item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+                    if (item.Position != "前")
+                    {
+                        item.PlanDayAirTime = item.PlanDayAirTime / 2;
+                    }
                 }
             }
             list.Total = list.ResultData.Count();
@@ -237,12 +241,12 @@ namespace ACMS.Applications.Impl
                 _dbContext = base.CreateDbContext();
             }
             var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
-            && string.Compare(a.InputDate, endDate) <= 0 && a.Type == 2);
+            && string.Compare(a.InputDate, endDate) <= 0);
             list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName })
                          .Select(g => new EngineReportDto()
                          {
-                             EngineCorrectTSO = g.Sum(i => i.EngineCorrectTSO),
-                             EngineNewTSN = g.Sum(i => i.EngineNewTSN),
+                             EngineCorrectTSO = g.Max(i => i.EngineCorrectTSO),
+                             EngineNewTSN = g.Max(i => i.EngineNewTSN),
                              PlaneNo = g.Key.PlaneNo,
                              Position = g.Key.Position,
                              EngineNo = g.Key.EngineNo,
@@ -252,13 +256,17 @@ namespace ACMS.Applications.Impl
             //查询飞机本月空中时间
             if (list.ResultData != null && list.ResultData.Count > 0)
             {
-                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 2 &&
+                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive &&
                 string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
                 ).ToList();
                 foreach (var item in list.ResultData)
                 {
-                    var tempResult = result2.Where(a => a.EngineNo == item.EngineNo && a.PlaneNo == item.PlaneNo).ToList();
+                    var tempResult = result2.Where(a => a.PlaneNo == item.PlaneNo).ToList();
                     item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+                    if (item.Position != "前")
+                    {
+                        item.PlanDayAirTime = item.PlanDayAirTime / 2;
+                    }
                 }
             }
 
@@ -267,13 +275,20 @@ namespace ACMS.Applications.Impl
             {
                 var result3 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
                 string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                ).ToList();
+                );
                 foreach (var item in list.ResultData)
                 {
-                    var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).ToList();
-                    if (temp != null && temp.Count > 0 && temp.Where(m => string.Compare(m.EngineNo, item.EngineNo, true) == 0).Count() == 0)
-                    {//如果在初值中有设置过 飞机的发动机  则之前的发动机表示为：拆卸了的
-                        item.EngineStatus = "拆卸";
+                    var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a=>a.InputDate).ThenByDescending(a=>a.CreateTime);
+                    if (temp != null && temp.Count() > 0)
+                    {//如果在初值中有设置过 飞机的发动机  
+                        if (temp.First().EngineNo != item.EngineNo)
+                        {//如果最后装载的发动机和 当前的不一致  则为拆卸
+                            item.EngineStatus = "拆卸";
+                        }
+                        else
+                        {
+                            item.EngineStatus = "装机";
+                        }
                     }
                     else
                     {
@@ -387,6 +402,7 @@ namespace ACMS.Applications.Impl
                                        PlaneNo = temp.Key.PlaneNo,
                                        Count = temp.Count()
                                    }).ToList();
+                list.TotalPagesCount = result3.GroupBy(m => m.InputDate).Count();//返回所有飞机总飞行天数 临时借用下这个字段
                 foreach (var item in list.ResultData)
                 {
                     item.FlightDays = result3.Where(m => m.PlaneNo == item.PlaneNo).Count();

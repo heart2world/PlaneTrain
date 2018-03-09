@@ -399,6 +399,9 @@ namespace ACMS.Services.Impl
         /// <returns></returns>
         public List<MenuForDisplayDto> GetPrivilegeMenuByUserID(string userID)
         {
+
+            var menuList = _dbContext.Set<Menu>().Where(x => x.IsActive).ToList();
+
             var userRoleMenuQuery = (from a in _dbContext.Set<User>()
                                      join b in _dbContext.Set<UserRole>() on a.ID equals b.UserID
                                      join c in _dbContext.Set<RoleMenu>() on b.RoleID equals c.RoleID
@@ -408,6 +411,15 @@ namespace ACMS.Services.Impl
 
             //find rootMenu
             var rootMenus = userRoleMenuQuery.Where(x => x.ParentMenuID == null).OrderBy(o => o.OrderIndex).ToList();
+
+            if (rootMenus.Where(x => x.MenuName == "退出/注销账号").FirstOrDefault() == null)
+            {
+                var specialMenu = menuList.Where(x => x.MenuName == "退出/注销账号").FirstOrDefault();
+                if (specialMenu != null)
+                {
+                    rootMenus.Add(specialMenu);
+                }
+            }
 
             var rootMenusForDisplay = new List<MenuForDisplayDto>();
 
@@ -431,7 +443,27 @@ namespace ACMS.Services.Impl
                     GetMenuRecursion(rootMenu, userRoleMenuQuery);
                 }
             }
-            return rootMenusForDisplay;
+
+            var result = new List<MenuForDisplayDto>();
+
+            //将没有子菜单权限的父节点移除
+            rootMenusForDisplay.ForEach(p =>
+            {
+                if (p.menu_name == "飞行逐日登记" || p.menu_name == "时控管理" || p.menu_name == "用户管理")
+                {
+                    if (p.child.Count > 0)
+                    {
+                        result.Add(p);
+                    }
+                }
+                else
+                {
+                    result.Add(p);
+                }
+            });
+
+
+            return result;
         }
 
         /// <summary>

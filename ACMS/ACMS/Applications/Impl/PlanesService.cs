@@ -41,6 +41,18 @@ namespace ACMS.Applications.Impl
             list.Total = result.Count();
             result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
+            //查询每个
+            if(list.ResultData!=null && list.ResultData.Count>0)
+            {
+                foreach(var item in list.ResultData)
+                {
+                    var tempResult = _dbContext.Set<PlanesTCtrlItem>().Where(a => a.IsActive && a.PlaneNo==item.ID && a.IsCtrl).ToList();
+                    if(tempResult!=null && tempResult.Count>0)
+                    {//如果飞机监控项目中存在任何一项处于监控的项目  则表示该飞机处于监控下
+                        item.IsMonitored = true;
+                    }
+                }
+            }
             return list;
         }
 

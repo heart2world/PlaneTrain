@@ -48,7 +48,7 @@ namespace ACMS.Applications.Impl
 
             var roleMenuList = (from a in _dbContext.Set<RoleMenu>()
                                 join b in _dbContext.Set<Menu>() on a.MenuID equals b.ID
-                                where a.IsActive && b.IsActive
+                                where a.IsActive && b.IsActive && b.MenuLevel == 1
                                 select new
                                 {
                                     RoleID = a.RoleID,
@@ -231,17 +231,23 @@ namespace ACMS.Applications.Impl
                     //先将原来的角色菜单都删除掉
                     var deleteRoleMenuList = _dbContext.Set<RoleMenu>().Where(x => x.RoleID == item.RoleID).ToList();
 
-                    foreach (var deleteItem in deleteRoleMenuList)
+                    for (var m = 0; m < deleteRoleMenuList.Count; m++)
                     {
-                        deleteItem.IsActive = false;
+                        deleteRoleMenuList[m].IsActive = false;
                     }
 
+                    _dbContext.SaveChanges();
+
+                    var menuList = _dbContext.Set<Menu>().ToList();
+
+                    var allAddMenuIDs = item.MenuIDs.Distinct().ToList();
+
                     //增加新的角色菜单数据
-                    if (item.MenuIDs.Count > 0)
+                    if (allAddMenuIDs.Count > 0)
                     {
                         var addList = new List<RoleMenu>();
 
-                        foreach (var menuID in item.MenuIDs)
+                        foreach (var menuID in allAddMenuIDs)
                         {
                             addList.Add(new RoleMenu()
                             {
@@ -252,6 +258,22 @@ namespace ACMS.Applications.Impl
                                 Creator = userID,
                                 CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                             });
+
+                            var childMenu = menuList.Where(x => x.ParentMenuID == menuID).Distinct().ToList();
+
+                            foreach (var childMenuItem in childMenu)
+                            {
+                                addList.Add(new RoleMenu()
+                                {
+                                    ID = Guid.NewGuid().ToString(),
+                                    MenuID = childMenuItem.ID,
+                                    RoleID = item.RoleID,
+                                    IsActive = true,
+                                    Creator = userID,
+                                    CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                });
+                            }
+                            
                         }
 
                         _dbContext.Set<RoleMenu>().AddRange(addList);
