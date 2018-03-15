@@ -39,7 +39,7 @@ namespace ACMS.Controllers
             List<string> ExecUnitList = new List<string>();
             ExecUnitList = !string.IsNullOrEmpty(ExecUnit) ? ExecUnit.Split(',').ToList() : null;
             int tempPageSize = 1;
-            if(pageSize!=null)
+            if (pageSize != null)
             {
                 tempPageSize = pageSize.Value;
             }
@@ -124,9 +124,9 @@ namespace ACMS.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("cessna172r/getLatestRecord")]
-        public IHttpActionResult GetLatestCESSNA172RDailyRecord()
+        public IHttpActionResult GetLatestCESSNA172RDailyRecord(string planeID)
         {
-            return this.Ok(_dailyRecordService.GetLatestCESSNA172RDailyRecord());
+            return this.Ok(_dailyRecordService.GetLatestCESSNA172RDailyRecord(planeID));
         }
 
 
@@ -209,9 +209,9 @@ namespace ACMS.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("pa44-180/getLatestRecord")]
-        public IHttpActionResult GetLatestPA44_180DailyRecord()
+        public IHttpActionResult GetLatestPA44_180DailyRecord(string planeID)
         {
-            return this.Ok(_dailyRecordService.GetLatestPA44_180DailyRecord());
+            return this.Ok(_dailyRecordService.GetLatestPA44_180DailyRecord(planeID));
         }
 
 

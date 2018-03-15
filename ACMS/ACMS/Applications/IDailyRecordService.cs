@@ -120,7 +120,7 @@ namespace ACMS.Applications
         /// 获取CESSNA172R型号初始设置的最后一次记录
         /// </summary>
         /// <returns></returns>
-        CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord();
+        CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord(string planeID);
 
         HttpResponseMessage GetCESSNA172RDownloadFileStream(string type, string planeID, string startDate, string endDate);
 
@@ -192,7 +192,7 @@ namespace ACMS.Applications
         /// 获取PA44_180型号初始设置的最后一次记录
         /// </summary>
         /// <returns></returns>
-        PA44_180DailyRecord GetLatestPA44_180DailyRecord();
+        PA44_180DailyRecord GetLatestPA44_180DailyRecord(string planeID);
 
 
         HttpResponseMessage GetPA44_180DownloadFileStream(string type, string planeID, string startDate, string endDate);

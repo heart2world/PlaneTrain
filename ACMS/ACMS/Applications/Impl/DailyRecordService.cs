@@ -278,7 +278,7 @@ namespace ACMS.Applications.Impl
                 );
                 foreach (var item in list.ResultData)
                 {
-                    var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a=>a.InputDate).ThenByDescending(a=>a.CreateTime);
+                    var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime);
                     if (temp != null && temp.Count() > 0)
                     {//如果在初值中有设置过 飞机的发动机  
                         if (temp.First().EngineNo != item.EngineNo)
@@ -833,9 +833,9 @@ namespace ACMS.Applications.Impl
         /// 获取CESSNA172R型号初始设置的最后一次记录
         /// </summary>
         /// <returns></returns>
-        public CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord()
+        public CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord(string planeID)
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1 && x.IsActive && x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1700,9 +1700,9 @@ namespace ACMS.Applications.Impl
         /// 获取PA44_180型号初始设置的最后一次记录
         /// </summary>
         /// <returns></returns>
-        public PA44_180DailyRecord GetLatestPA44_180DailyRecord()
+        public PA44_180DailyRecord GetLatestPA44_180DailyRecord(string planeID)
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.IsActive).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.IsActive && x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
