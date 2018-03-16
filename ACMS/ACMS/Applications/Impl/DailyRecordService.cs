@@ -512,7 +512,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         private CESSNA172RDailyRecord GetLastCESSNA172RDailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -522,7 +522,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         private CESSNA172RDailyRecord GetLastInitCESSNA172RDailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -558,8 +558,8 @@ namespace ACMS.Applications.Impl
                     item.PlanDayClearingTime = item.PlanNewClearingTime - (lastRecord == null ? 0 : lastRecord.PlanNewClearingTime);
                     //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                     item.PlanDayAirTime = item.PlanNewAirTime - (lastRecord == null ? 0 : lastRecord.PlanNewAirTime);
-                    //当日地面时间=自新空中时间-自新空地时间；
-                    item.PlanDayGroundTime = item.PlanNewAirTime - item.PlanNewClearingTime;
+                    //当日地面时间=当日空地时间-当日空中时间；
+                    item.PlanDayGroundTime = item.PlanDayClearingTime - item.PlanDayAirTime;
 
 
                     //修后时间=当日空中时间+上一条修后时间
@@ -602,7 +602,7 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Update(CESSNA172RDailyRecord item, string userID)
         {
-            var allData = _dbContext.Set<CESSNA172RDailyRecord>().ToList();
+            var allData = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.IsActive && x.PlanID == item.PlanID).ToList();
 
             var editModel = allData.Where(x => x.ID == item.ID).FirstOrDefault();
 
@@ -639,8 +639,8 @@ namespace ACMS.Applications.Impl
                     editModel.PlanDayClearingTime = editModel.PlanNewClearingTime - (lastRecord == null ? 0 : lastRecord.PlanNewClearingTime);
                     //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                     editModel.PlanDayAirTime = editModel.PlanNewAirTime - (lastRecord == null ? 0 : lastRecord.PlanNewAirTime);
-                    //当日地面时间=自新空中时间-自新空地时间；
-                    editModel.PlanDayGroundTime = editModel.PlanNewAirTime - editModel.PlanNewClearingTime;
+                    //当日地面时间=当日空地时间-当日空中时间；
+                    editModel.PlanDayGroundTime = editModel.PlanDayClearingTime - editModel.PlanDayAirTime;
 
 
                     //修后时间=当日空中时间+上一条修后时间
@@ -706,7 +706,7 @@ namespace ACMS.Applications.Impl
                             currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
                             //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                             currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                            //当日地面时间=自新空中时间-自新空地时间；
+                            //当日地面时间=当日空地时间-当日空中时间；
                             //currentRecord.PlanDayGroundTime = currentRecord.PlanNewAirTime - currentRecord.PlanNewClearingTime;
 
 
@@ -1331,7 +1331,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         private PA44_180DailyRecord GetLastPA44_180DailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1341,7 +1341,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         private PA44_180DailyRecord GetLastInitPA44_180DailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1381,8 +1381,8 @@ namespace ACMS.Applications.Impl
                     item.PlanDayClearingTime = item.PlanNewClearingTime - (lastRecord == null ? 0 : lastRecord.PlanNewClearingTime);
                     //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                     item.PlanDayAirTime = item.PlanNewAirTime - (lastRecord == null ? 0 : lastRecord.PlanNewAirTime);
-                    //当日地面时间=自新空中时间-自新空地时间；
-                    item.PlanDayGroundTime = item.PlanNewAirTime - item.PlanNewClearingTime;
+                    //当日地面时间=当日空地时间-当日空中时间；
+                    item.PlanDayGroundTime = item.PlanDayClearingTime - item.PlanDayAirTime;
 
 
                     //修后时间TSO=当日空中时间+上一条修后时间
@@ -1440,7 +1440,7 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Update(PA44_180DailyRecord item, string userID)
         {
-            var allData = _dbContext.Set<PA44_180DailyRecord>().ToList();
+            var allData = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.IsActive && x.PlanID == item.PlanID).ToList();
 
             var editModel = allData.Where(x => x.ID == item.ID).FirstOrDefault();
 
@@ -1480,8 +1480,8 @@ namespace ACMS.Applications.Impl
                     editModel.PlanDayClearingTime = editModel.PlanNewClearingTime - (lastRecord == null ? 0 : lastRecord.PlanNewClearingTime);
                     //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                     editModel.PlanDayAirTime = editModel.PlanNewAirTime - (lastRecord == null ? 0 : lastRecord.PlanNewAirTime);
-                    //当日地面时间=自新空中时间-自新空地时间；
-                    editModel.PlanDayGroundTime = editModel.PlanNewAirTime - editModel.PlanNewClearingTime;
+                    //当日地面时间=当日空地时间-当日空中时间；
+                    editModel.PlanDayGroundTime = editModel.PlanDayClearingTime - editModel.PlanDayAirTime;
 
 
                     //修后时间TSO=当日空中时间+上一条修后时间
@@ -1563,8 +1563,8 @@ namespace ACMS.Applications.Impl
                             currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
                             //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                             currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                            //当日地面时间=自新空中时间-自新空地时间；
-                            //currentRecord.PlanDayGroundTime = currentRecord.PlanNewAirTime - currentRecord.PlanNewClearingTime;
+                            //当日地面时间=当日空地时间-当日空中时间；
+                            //currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
 
 
                             //修后时间TSO=当日空中时间+上一条修后时间
