@@ -48,7 +48,7 @@ public partial class V_DailyRecordReport
 
     public string Updator { get; set; }
 
-    public int HeatingMachineDayTime { get; set; }
+    public Nullable<int> HeatingMachineDayTime { get; set; }
 
     public string PlaneNo { get; set; }
 

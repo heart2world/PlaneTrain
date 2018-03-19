@@ -42,15 +42,11 @@ public partial class ACMSEFEntities : DbContext
 
     public virtual DbSet<PlaneType> PlaneType { get; set; }
 
-    public virtual DbSet<PlTypeTCtrlList> PlTypeTCtrlList { get; set; }
-
     public virtual DbSet<V_PlTypeTCtrlList> V_PlTypeTCtrlList { get; set; }
 
     public virtual DbSet<CESSNA172RDailyRecord> CESSNA172RDailyRecord { get; set; }
 
     public virtual DbSet<PA44_180DailyRecord> PA44_180DailyRecord { get; set; }
-
-    public virtual DbSet<PlTypeTCtrlList_Log> PlTypeTCtrlList_Log { get; set; }
 
     public virtual DbSet<V_V_PlTypeTCtrlList_Log> V_V_PlTypeTCtrlList_Log { get; set; }
 
@@ -83,6 +79,10 @@ public partial class ACMSEFEntities : DbContext
     public virtual DbSet<ExecuteUnit> ExecuteUnit { get; set; }
 
     public virtual DbSet<Planes> Planes { get; set; }
+
+    public virtual DbSet<PlTypeTCtrlList> PlTypeTCtrlList { get; set; }
+
+    public virtual DbSet<PlTypeTCtrlList_Log> PlTypeTCtrlList_Log { get; set; }
 
 }
 

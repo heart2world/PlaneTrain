@@ -671,13 +671,13 @@ namespace ACMS.Applications.Impl
                             //获取该条数据之后，下一条初值之前的所有普通数据
                             list = allData.Where(x => string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0
                                                                                         && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0
-                                                                                        && x.Type == 2).ToList();
+                                                                                        && x.Type == 2).OrderBy(o => o.CreateTime).ToList();
                         }
                         else
                         {
                             //获取该条数据之后，下一条初值之前的所有普通数据
                             list = allData.Where(x => string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0
-                                                                                        && x.Type == 2).ToList();
+                                                                                        && x.Type == 2).OrderBy(o => o.CreateTime).ToList();
                         }
 
                         for (var i = 0; i < list.Count; i++)
@@ -707,7 +707,7 @@ namespace ACMS.Applications.Impl
                             //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                             currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
                             //当日地面时间=当日空地时间-当日空中时间；
-                            //currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
+                            currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
 
 
                             //修后时间=当日空中时间+上一条修后时间
@@ -1526,13 +1526,13 @@ namespace ACMS.Applications.Impl
                             //获取该条数据之后，下一条初值之前的所有普通数据
                             list = allData.Where(x => string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0
                                                                                         && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0
-                                                                                        && x.Type == 2).ToList();
+                                                                                        && x.Type == 2).OrderBy(o => o.CreateTime).ToList();
                         }
                         else
                         {
                             //获取该条数据之后，下一条初值之前的所有普通数据
                             list = allData.Where(x => string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0
-                                                                                        && x.Type == 2).ToList();
+                                                                                        && x.Type == 2).OrderBy(o => o.CreateTime).ToList();
                         }
 
                         for (var i = 0; i < list.Count; i++)
@@ -1564,7 +1564,7 @@ namespace ACMS.Applications.Impl
                             //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
                             currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
                             //当日地面时间=当日空地时间-当日空中时间；
-                            //currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
+                            currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
 
 
                             //修后时间TSO=当日空中时间+上一条修后时间

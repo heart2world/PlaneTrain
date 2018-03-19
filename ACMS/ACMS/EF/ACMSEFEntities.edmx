@@ -204,7 +204,7 @@
           <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="MainTainName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Capacity" Type="int" />
-          <Property Name="FCheckDate" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FCheckDate" Type="varchar" MaxLength="50" />
           <Property Name="FAirTime" Type="decimal" Precision="10" Scale="2" />
           <Property Name="FOnOffTime" Type="int" />
           <Property Name="FUpTemprTime" Type="decimal" Precision="10" Scale="2" />
@@ -228,7 +228,7 @@
           <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="MainTainName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Capacity" Type="int" />
-          <Property Name="FCheckDate" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FCheckDate" Type="varchar" MaxLength="50" />
           <Property Name="FAirTime" Type="decimal" Precision="10" Scale="2" />
           <Property Name="FOnOffTime" Type="int" />
           <Property Name="FUpTemprTime" Type="decimal" Precision="10" Scale="2" />
@@ -336,7 +336,6 @@
             
             
             
-            
           </Key>
           <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
@@ -353,7 +352,7 @@
           <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="HeatingMachineDayTime" Type="int" Nullable="false" />
+          <Property Name="HeatingMachineDayTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="PlaneNo" Type="varchar" MaxLength="50" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
@@ -363,6 +362,14 @@
         <EntityType Name="V_EngineReport">
           <Key>
             <PropertyRef Name="ID" />
+            
+            
+            
+            
+            
+            
+            
+            
             <PropertyRef Name="Position" />
           </Key>
           <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
@@ -717,7 +724,7 @@
           <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Creator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Updator" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityContainer Name="ACMSModelStoreContainer">
@@ -1027,11 +1034,9 @@
           <EntitySet Name="RoleMenu" EntityType="ACMSModel.RoleMenu" />
           <EntitySet Name="UserRole" EntityType="ACMSModel.UserRole" />
           <EntitySet Name="PlaneType" EntityType="ACMSModel.PlaneType" />
-          <EntitySet Name="PlTypeTCtrlList" EntityType="ACMSModel.PlTypeTCtrlList" />
           <EntitySet Name="V_PlTypeTCtrlList" EntityType="ACMSModel.V_PlTypeTCtrlList" />
           <EntitySet Name="CESSNA172RDailyRecord" EntityType="ACMSModel.CESSNA172RDailyRecord" />
           <EntitySet Name="PA44_180DailyRecord" EntityType="ACMSModel.PA44_180DailyRecord" />
-          <EntitySet Name="PlTypeTCtrlList_Log" EntityType="ACMSModel.PlTypeTCtrlList_Log" />
           <EntitySet Name="V_V_PlTypeTCtrlList_Log" EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" />
           <EntitySet Name="AirTimeAlarmSet" EntityType="ACMSModel.AirTimeAlarmSet" />
           <EntitySet Name="PlanesTCtrlItem_ReList" EntityType="ACMSModel.PlanesTCtrlItem_ReList" />
@@ -1048,6 +1053,8 @@
           <EntitySet Name="Menu" EntityType="ACMSModel.Menu" />
           <EntitySet Name="ExecuteUnit" EntityType="ACMSModel.ExecuteUnit" />
           <EntitySet Name="Planes" EntityType="ACMSModel.Planes" />
+          <EntitySet Name="PlTypeTCtrlList" EntityType="ACMSModel.PlTypeTCtrlList" />
+          <EntitySet Name="PlTypeTCtrlList_Log" EntityType="ACMSModel.PlTypeTCtrlList_Log" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1106,29 +1113,6 @@
           <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="TypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Memo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="PlTypeTCtrlList">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="ProSource" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="MainTainName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Capacity" Type="Int32" />
-          <Property Name="FCheckDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FAirTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="FOnOffTime" Type="Int32" />
-          <Property Name="FUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="RCheckDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RAirTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="ROnOffTime" Type="Int32" />
-          <Property Name="RUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
@@ -1233,30 +1217,6 @@
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="PlTypeTCtrlList_Log">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TCtrlID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="ProSource" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="MainTainName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Capacity" Type="Int32" />
-          <Property Name="FCheckDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FAirTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="FOnOffTime" Type="Int32" />
-          <Property Name="FUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="RCheckDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RAirTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="ROnOffTime" Type="Int32" />
-          <Property Name="RUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="V_V_PlTypeTCtrlList_Log">
           <Key>
             <PropertyRef Name="ID" />
@@ -1279,7 +1239,7 @@
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AirTimeAlarmSet">
@@ -1546,7 +1506,7 @@
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="HeatingMachineDayTime" Type="Int32" Nullable="false" />
+          <Property Name="HeatingMachineDayTime" Type="Int32" />
           <Property Name="PlaneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PlaneTypeID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
@@ -1666,6 +1626,53 @@
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="PlTypeTCtrlList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="ProSource" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="MainTainName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Capacity" Type="Int32" />
+          <Property Name="FCheckDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FAirTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="FOnOffTime" Type="Int32" />
+          <Property Name="FUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="RCheckDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RAirTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ROnOffTime" Type="Int32" />
+          <Property Name="RUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PlTypeTCtrlList_Log">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TCtrlID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="ProSource" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="MainTainName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Capacity" Type="Int32" />
+          <Property Name="FCheckDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FAirTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="FOnOffTime" Type="Int32" />
+          <Property Name="FUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="RCheckDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RAirTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ROnOffTime" Type="Int32" />
+          <Property Name="RUpTemprTime" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1736,30 +1743,6 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PlTypeTCtrlList">
-            <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList">
-              <MappingFragment StoreEntitySet="PlTypeTCtrlList">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
-                <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
-                <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
-                <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
-                <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
-                <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
-                <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
-                <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
-                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
-                <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
-                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
-                <ScalarProperty Name="ProSource" ColumnName="ProSource" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1861,31 +1844,6 @@
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PlTypeTCtrlList_Log">
-            <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList_Log">
-              <MappingFragment StoreEntitySet="PlTypeTCtrlList_Log">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
-                <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
-                <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
-                <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
-                <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
-                <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
-                <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
-                <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
-                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
-                <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
-                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
-                <ScalarProperty Name="ProSource" ColumnName="ProSource" />
-                <ScalarProperty Name="TCtrlID" ColumnName="TCtrlID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2296,6 +2254,55 @@
                 <ScalarProperty Name="PlaneSeria" ColumnName="PlaneSeria" />
                 <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
                 <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlTypeTCtrlList">
+            <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList">
+              <MappingFragment StoreEntitySet="PlTypeTCtrlList">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+                <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+                <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+                <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+                <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+                <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+                <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+                <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+                <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlTypeTCtrlList_Log">
+            <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList_Log">
+              <MappingFragment StoreEntitySet="PlTypeTCtrlList_Log">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RUpTemprTime" ColumnName="RUpTemprTime" />
+                <ScalarProperty Name="ROnOffTime" ColumnName="ROnOffTime" />
+                <ScalarProperty Name="RAirTime" ColumnName="RAirTime" />
+                <ScalarProperty Name="RCheckDate" ColumnName="RCheckDate" />
+                <ScalarProperty Name="FUpTemprTime" ColumnName="FUpTemprTime" />
+                <ScalarProperty Name="FOnOffTime" ColumnName="FOnOffTime" />
+                <ScalarProperty Name="FAirTime" ColumnName="FAirTime" />
+                <ScalarProperty Name="FCheckDate" ColumnName="FCheckDate" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
+                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
+                <ScalarProperty Name="ProSource" ColumnName="ProSource" />
+                <ScalarProperty Name="TCtrlID" ColumnName="TCtrlID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
