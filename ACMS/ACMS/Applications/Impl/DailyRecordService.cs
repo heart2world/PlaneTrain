@@ -319,7 +319,7 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);//初值不统计
+            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive && a.Type == 2);//初值不统计
             if (!string.IsNullOrEmpty(startDate))
             {
                 result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
@@ -548,6 +548,7 @@ namespace ACMS.Applications.Impl
                 //如果数据是普通逐日，则需要将部分字段根据页面上录入的值自动计算并做保存；如果数据是初值，则不需要自动计算步骤，因为所有字段均为手工录入
                 if (item.Type == 2)
                 {
+                    item.ExecUnit = "中飞院遂宁分院";
                     //自新空中时间=空中时间（表）+空中时间（表）修正；
                     item.PlanNewAirTime = item.DayAirTime + item.CorrectAirTime;
                     //自新空地时间=空地时间（表）+空地时间（表）修正；
@@ -650,7 +651,14 @@ namespace ACMS.Applications.Impl
 
                     editModel.EngineType = item.EngineType;
                     editModel.EngineNo = item.EngineNo;
-                    editModel.ExecUnit = item.ExecUnit;
+                    if (item.Type == 2)
+                    {
+                        editModel.ExecUnit = "中飞院遂宁分院";
+                    }
+                    else
+                    {
+                        editModel.ExecUnit = item.ExecUnit;
+                    }
                     editModel.Memo = item.Memo;
                     editModel.Updator = userID;
                     editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -717,6 +725,7 @@ namespace ACMS.Applications.Impl
 
                             currentRecord.Updator = userID;
                             currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                            currentRecord.ExecUnit = "中飞院遂宁分院";
                         }
 
 
@@ -1369,6 +1378,7 @@ namespace ACMS.Applications.Impl
                 //如果数据是普通逐日，则需要将部分字段根据页面上录入的值自动计算并做保存；如果数据是初值，则不需要自动计算步骤，因为所有字段均为手工录入
                 if (item.Type == 2)
                 {
+                    item.ExecUnit = "中飞院遂宁分院";
                     //自新空中时间=空中时间（表）+空中时间（表）修正；
                     item.PlanNewAirTime = item.DayAirTime + item.CorrectAirTime;
                     //自新空地时间=空地时间（表）+空地时间（表）修正；
@@ -1505,7 +1515,14 @@ namespace ACMS.Applications.Impl
                     editModel.RightEngineType = item.RightEngineType;
                     editModel.RightEngineNo = item.RightEngineNo;
 
-                    editModel.ExecUnit = item.ExecUnit;
+                    if (item.Type == 2)
+                    {
+                        editModel.ExecUnit = "中飞院遂宁分院";
+                    }
+                    else
+                    {
+                        editModel.ExecUnit = item.ExecUnit;
+                    }
                     editModel.Memo = item.Memo;
                     editModel.Updator = userID;
                     editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -1584,6 +1601,7 @@ namespace ACMS.Applications.Impl
 
                             currentRecord.Updator = userID;
                             currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                            currentRecord.ExecUnit = "中飞院遂宁分院";
                         }
 
                     }
