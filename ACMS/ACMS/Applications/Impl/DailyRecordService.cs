@@ -510,6 +510,16 @@ namespace ACMS.Applications.Impl
         /// 获取上一条记录（不分数据类型）
         /// </summary>
         /// <returns></returns>
+        public CESSNA172RDailyRecord GetLastCESSNA172RDailyRecordByPlaneID(string planeID)
+        {
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
+
+        /// <summary>
+        /// 获取上一条记录（不分数据类型）
+        /// </summary>
+        /// <returns></returns>
         private CESSNA172RDailyRecord GetLastCESSNA172RDailyRecordByPlaneID(string planeID, string InputDate, string CreateTime)
         {
             var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID &&
@@ -1413,6 +1423,17 @@ namespace ACMS.Applications.Impl
             return query;
         }
 
+
+        /// <summary>
+        /// 获取上一条记录（不分数据类型）
+        /// </summary>
+        /// <returns></returns>
+        public PA44_180DailyRecord GetLastPA44_180DailyRecordByPlaneID(string planeID)
+        {
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            return query;
+        }
+
         /// <summary>
         /// 获取上一条记录（不分数据类型）
         /// </summary>
@@ -1486,8 +1507,8 @@ namespace ACMS.Applications.Impl
                     item.RightEngineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineNewTSN);
 
 
-                    //当日时间=加温机时间（表）+加温机时间（表）修正-上一条当日时间
-                    item.HeatingMachineDayTime = item.DayHeatingMachineTime + item.CorrectHeatingMachineTime - (lastRecord == null ? 0 : lastRecord.HeatingMachineDayTime);
+                    //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
+                    item.HeatingMachineDayTime = item.DayHeatingMachineTime + item.CorrectHeatingMachineTime - (lastRecord == null ? 0 : lastRecord.DayHeatingMachineTime) - (lastRecord == null ? 0 : lastRecord.CorrectHeatingMachineTime);
                     //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
                     item.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + item.HeatingMachineDayTime;
                     //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间

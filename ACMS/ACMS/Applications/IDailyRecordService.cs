@@ -76,6 +76,12 @@ namespace ACMS.Applications
         /// <returns>数据实体</returns>
         CESSNA172RDailyRecord GetCESSNA172RDailyRecord(string ID);
 
+        /// <summary>
+        /// 获取上一条记录（不分数据类型）
+        /// </summary>
+        /// <returns></returns>
+        CESSNA172RDailyRecord GetLastCESSNA172RDailyRecordByPlaneID(string planeID);
+
 
         /// <summary>
         /// 新增
@@ -193,6 +199,13 @@ namespace ACMS.Applications
         /// </summary>
         /// <returns></returns>
         PA44_180DailyRecord GetLatestPA44_180DailyRecord(string planeID);
+
+
+        /// <summary>
+        /// 获取上一条记录（不分数据类型）
+        /// </summary>
+        /// <returns></returns>
+        PA44_180DailyRecord GetLastPA44_180DailyRecordByPlaneID(string planeID);
 
 
         HttpResponseMessage GetPA44_180DownloadFileStream(string type, string planeID, string startDate, string endDate);
