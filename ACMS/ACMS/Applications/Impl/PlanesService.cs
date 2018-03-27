@@ -39,7 +39,7 @@ namespace ACMS.Applications.Impl
             if (!string.IsNullOrEmpty(keyWord))//关键词查询    
                 result = result.Where(a => a.PlaneNo.Contains(keyWord));
             list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderBy(a => a.PlaneTypeID).ThenBy(o => o.PlaneSeria).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             //查询每个
             //if (list.ResultData != null && list.ResultData.Count > 0)
