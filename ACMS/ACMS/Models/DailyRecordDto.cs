@@ -27,7 +27,7 @@ namespace ACMS.Models
         public Nullable<decimal> PlanDayGroundTime { get; set; }
         public string EngineType { get; set; }
         public string EngineNo { get; set; }
-        public Nullable<decimal> EngineCorrectTSO { get; set; }
+        public string EngineCorrectTSO { get; set; }
         public Nullable<decimal> EngineNewTSN { get; set; }
         public string ExecUnit { get; set; }
         public string Memo { get; set; }
@@ -62,14 +62,14 @@ namespace ACMS.Models
         public Nullable<decimal> PlanDayGroundTime { get; set; }
         public string LeftEngineType { get; set; }
         public string LeftEngineNo { get; set; }
-        public Nullable<decimal> LeftEngineCorrectTSO { get; set; }
+        public string LeftEngineCorrectTSO { get; set; }
         public Nullable<decimal> LeftEngineNewTSN { get; set; }
         public string RightEngineType { get; set; }
         public string RightEngineNo { get; set; }
-        public Nullable<decimal> RightEngineCorrectTSO { get; set; }
+        public string RightEngineCorrectTSO { get; set; }
         public Nullable<decimal> RightEngineNewTSN { get; set; }
         public Nullable<decimal> HeatingMachineDayTime { get; set; }
-        public Nullable<decimal> HeatingMachineCorrectTSO { get; set; }
+        public string HeatingMachineCorrectTSO { get; set; }
         public Nullable<decimal> HeatingMachineNewTSN { get; set; }
         public string ExecUnit { get; set; }
         public string Memo { get; set; }

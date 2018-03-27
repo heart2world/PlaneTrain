@@ -54,7 +54,7 @@ public partial class CESSNA172RDailyRecord
 
     public string EngineNo { get; set; }
 
-    public Nullable<decimal> EngineCorrectTSO { get; set; }
+    public string EngineCorrectTSO { get; set; }
 
     public Nullable<decimal> EngineNewTSN { get; set; }
 

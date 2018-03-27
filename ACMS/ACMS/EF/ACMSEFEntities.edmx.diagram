@@ -11,8 +11,6 @@
         <EntityTypeShape EntityType="ACMSModel.UserRole" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="ACMSModel.PlaneType" Width="1.5" PointX="8.75" PointY="4.75" />
         <EntityTypeShape EntityType="ACMSModel.V_PlTypeTCtrlList" Width="1.5" PointX="11.375" PointY="0.75" />
-        <EntityTypeShape EntityType="ACMSModel.CESSNA172RDailyRecord" Width="1.5" PointX="5.75" PointY="7.75" />
-        <EntityTypeShape EntityType="ACMSModel.PA44_180DailyRecord" Width="1.5" PointX="0.75" PointY="11.75" />
         <EntityTypeShape EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" Width="1.5" PointX="11.375" PointY="12.75" />
         <EntityTypeShape EntityType="ACMSModel.AirTimeAlarmSet" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem_ReList" Width="1.5" PointX="0.75" PointY="7.75" />
@@ -31,6 +29,8 @@
         <EntityTypeShape EntityType="ACMSModel.Planes" Width="1.5" PointX="9.375" PointY="18.75" />
         <EntityTypeShape EntityType="ACMSModel.PlTypeTCtrlList" Width="1.5" PointX="8.375" PointY="8.75" />
         <EntityTypeShape EntityType="ACMSModel.PlTypeTCtrlList_Log" Width="1.5" PointX="11.375" PointY="18.75" />
+        <EntityTypeShape EntityType="ACMSModel.CESSNA172RDailyRecord" Width="1.5" PointX="3.375" PointY="7.75" />
+        <EntityTypeShape EntityType="ACMSModel.PA44_180DailyRecord" Width="1.5" PointX="0.75" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

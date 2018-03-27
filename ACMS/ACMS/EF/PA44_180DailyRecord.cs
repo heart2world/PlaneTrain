@@ -60,7 +60,7 @@ public partial class PA44_180DailyRecord
 
     public string LeftEngineNo { get; set; }
 
-    public Nullable<decimal> LeftEngineCorrectTSO { get; set; }
+    public string LeftEngineCorrectTSO { get; set; }
 
     public Nullable<decimal> LeftEngineNewTSN { get; set; }
 
@@ -68,13 +68,13 @@ public partial class PA44_180DailyRecord
 
     public string RightEngineNo { get; set; }
 
-    public Nullable<decimal> RightEngineCorrectTSO { get; set; }
+    public string RightEngineCorrectTSO { get; set; }
 
     public Nullable<decimal> RightEngineNewTSN { get; set; }
 
     public Nullable<decimal> HeatingMachineDayTime { get; set; }
 
-    public Nullable<decimal> HeatingMachineCorrectTSO { get; set; }
+    public string HeatingMachineCorrectTSO { get; set; }
 
     public Nullable<decimal> HeatingMachineNewTSN { get; set; }
 

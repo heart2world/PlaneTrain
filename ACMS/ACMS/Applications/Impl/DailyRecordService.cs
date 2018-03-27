@@ -580,7 +580,9 @@ namespace ACMS.Applications.Impl
 
 
                     //修后时间=当日空中时间+上一条修后时间
-                    item.EngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineCorrectTSO);
+                    item.EngineCorrectTSO = lastRecord == null ? "0" : (lastRecord.EngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.EngineCorrectTSO) + Convert.ToDecimal(item.PlanDayAirTime ?? 0m)).ToString());
+                    //item.EngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineCorrectTSO);
+
                     //自新时间=当日空中时间+上一条自新时间
                     item.EngineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineNewTSN);
 
@@ -673,7 +675,8 @@ namespace ACMS.Applications.Impl
 
 
                         //修后时间=当日空中时间+上一条修后时间
-                        editModel.EngineCorrectTSO = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineCorrectTSO);
+                        editModel.EngineCorrectTSO = lastRecord == null ? "0" : (lastRecord.EngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.EngineCorrectTSO) + Convert.ToDecimal(editModel.PlanDayAirTime ?? 0m)).ToString());
+                        //editModel.EngineCorrectTSO = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineCorrectTSO);
                         //自新时间=当日空中时间+上一条自新时间
                         editModel.EngineNewTSN = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.EngineNewTSN);
 
@@ -695,9 +698,17 @@ namespace ACMS.Applications.Impl
                         //当日地面时间
                         editModel.PlanDayGroundTime = item.PlanDayGroundTime;
 
-
+                        var tempValue = string.Empty;
+                        try
+                        {
+                            tempValue = Convert.ToDecimal(item.EngineCorrectTSO).ToString();
+                        }
+                        catch
+                        {
+                            tempValue = "N/A";
+                        }
                         //修后时间
-                        editModel.EngineCorrectTSO = item.EngineCorrectTSO;
+                        editModel.EngineCorrectTSO = tempValue;
                         //自新时间
                         editModel.EngineNewTSN = item.EngineNewTSN;
 
@@ -852,7 +863,7 @@ namespace ACMS.Applications.Impl
 
 
                 //修后时间=当日空中时间+上一条修后时间
-                currentRecord.EngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineCorrectTSO);
+                currentRecord.EngineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.EngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.EngineCorrectTSO) + Convert.ToDecimal(currentRecord.PlanDayAirTime ?? 0m)).ToString());
                 //自新时间=当日空中时间+上一条自新时间
                 currentRecord.EngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineNewTSN);
 
@@ -1470,8 +1481,10 @@ namespace ACMS.Applications.Impl
 
 
                     //修后时间TSO=当日空中时间+上一条修后时间
-                    item.LeftEngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.LeftEngineCorrectTSO);
-                    item.RightEngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineCorrectTSO);
+                    item.LeftEngineCorrectTSO = lastRecord == null ? "0" : (lastRecord.LeftEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.LeftEngineCorrectTSO) + Convert.ToDecimal(item.PlanDayAirTime ?? 0m)).ToString());
+                    item.RightEngineCorrectTSO = lastRecord == null ? "0" : (lastRecord.RightEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.RightEngineCorrectTSO) + Convert.ToDecimal(item.PlanDayAirTime ?? 0m)).ToString());
+                    //item.LeftEngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.LeftEngineCorrectTSO);
+                    //item.RightEngineCorrectTSO = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineCorrectTSO);
                     //自新时间TSN=当日空中时间+上一条自新时间
                     item.LeftEngineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.LeftEngineNewTSN);
                     item.RightEngineNewTSN = item.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineNewTSN);
@@ -1480,7 +1493,8 @@ namespace ACMS.Applications.Impl
                     //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
                     item.HeatingMachineDayTime = item.DayHeatingMachineTime + item.CorrectHeatingMachineTime - (lastRecord == null ? 0 : lastRecord.DayHeatingMachineTime) - (lastRecord == null ? 0 : lastRecord.CorrectHeatingMachineTime);
                     //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                    item.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + item.HeatingMachineDayTime;
+                    item.HeatingMachineCorrectTSO = lastRecord == null ? "0" : (lastRecord.HeatingMachineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.RightEngineCorrectTSO) + Convert.ToDecimal(item.HeatingMachineDayTime ?? 0m)).ToString());
+                    //item.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + item.HeatingMachineDayTime;
                     //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
                     item.HeatingMachineNewTSN = (lastRecord == null ? 0 : lastRecord.HeatingMachineNewTSN) + item.HeatingMachineDayTime;
 
@@ -1587,8 +1601,10 @@ namespace ACMS.Applications.Impl
 
 
                         //修后时间TSO=当日空中时间+上一条修后时间
-                        editModel.LeftEngineCorrectTSO = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.LeftEngineCorrectTSO);
-                        editModel.RightEngineCorrectTSO = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineCorrectTSO);
+                        editModel.LeftEngineCorrectTSO = lastRecord == null ? "0" : (lastRecord.LeftEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.LeftEngineCorrectTSO) + Convert.ToDecimal(editModel.PlanDayAirTime ?? 0m)).ToString());
+                        editModel.RightEngineCorrectTSO = lastRecord == null ? "0" : (lastRecord.RightEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.RightEngineCorrectTSO) + Convert.ToDecimal(editModel.PlanDayAirTime ?? 0m)).ToString());
+                        //editModel.LeftEngineCorrectTSO = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.LeftEngineCorrectTSO);
+                        //editModel.RightEngineCorrectTSO = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineCorrectTSO);
                         //自新时间TSN=当日空中时间+上一条自新时间
                         editModel.LeftEngineNewTSN = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.LeftEngineNewTSN);
                         editModel.RightEngineNewTSN = editModel.PlanDayAirTime + (lastRecord == null ? 0 : lastRecord.RightEngineNewTSN);
@@ -1597,7 +1613,8 @@ namespace ACMS.Applications.Impl
                         //当日时间=加温机时间（表）+加温机时间（表）修正-上一条当日时间
                         editModel.HeatingMachineDayTime = editModel.DayHeatingMachineTime + editModel.CorrectHeatingMachineTime - (lastRecord == null ? 0 : lastRecord.HeatingMachineDayTime);
                         //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                        editModel.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + editModel.HeatingMachineDayTime;
+                        editModel.HeatingMachineCorrectTSO = lastRecord == null ? "0" : (lastRecord.HeatingMachineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.HeatingMachineCorrectTSO) + Convert.ToDecimal(editModel.HeatingMachineDayTime ?? 0m)).ToString());
+                        //editModel.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + editModel.HeatingMachineDayTime;
                         //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
                         editModel.HeatingMachineNewTSN = (lastRecord == null ? 0 : lastRecord.HeatingMachineNewTSN) + editModel.HeatingMachineDayTime;
 
@@ -1785,8 +1802,11 @@ namespace ACMS.Applications.Impl
 
 
                 //修后时间TSO=当日空中时间+上一条修后时间
-                currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
-                currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
+                currentRecord.LeftEngineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.LeftEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.LeftEngineCorrectTSO) + Convert.ToDecimal(currentRecord.PlanDayAirTime ?? 0m)).ToString());
+                currentRecord.RightEngineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.RightEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.RightEngineCorrectTSO) + Convert.ToDecimal(currentRecord.PlanDayAirTime ?? 0m)).ToString());
+                        
+                //currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
+                //currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
                 //自新时间TSN=当日空中时间+上一条自新时间
                 currentRecord.LeftEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineNewTSN);
                 currentRecord.RightEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineNewTSN);
@@ -1795,7 +1815,9 @@ namespace ACMS.Applications.Impl
                 //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
                 currentRecord.HeatingMachineDayTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime - (lastRecordItem == null ? 0 : lastRecordItem.DayHeatingMachineTime) - (lastRecordItem == null ? 0 : lastRecordItem.CorrectHeatingMachineTime);
                 //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
+                currentRecord.HeatingMachineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.HeatingMachineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.HeatingMachineCorrectTSO) + Convert.ToDecimal(currentRecord.HeatingMachineDayTime ?? 0m)).ToString());
+                
+                //currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
                 //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
                 currentRecord.HeatingMachineNewTSN = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineNewTSN) + currentRecord.HeatingMachineDayTime;
 

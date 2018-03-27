@@ -42,7 +42,7 @@
           <Property Name="PlanDayGroundTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="EngineType" Type="nvarchar" MaxLength="50" />
           <Property Name="EngineNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="EngineCorrectTSO" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EngineCorrectTSO" Type="nvarchar" MaxLength="10" />
           <Property Name="EngineNewTSN" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ExecUnit" Type="nvarchar" MaxLength="50" />
           <Property Name="Memo" Type="nvarchar" MaxLength="200" />
@@ -107,14 +107,14 @@
           <Property Name="PlanDayGroundTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="LeftEngineType" Type="nvarchar" MaxLength="50" />
           <Property Name="LeftEngineNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="LeftEngineCorrectTSO" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LeftEngineCorrectTSO" Type="nvarchar" MaxLength="10" />
           <Property Name="LeftEngineNewTSN" Type="decimal" Precision="18" Scale="2" />
           <Property Name="RightEngineType" Type="nvarchar" MaxLength="50" />
           <Property Name="RightEngineNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="RightEngineCorrectTSO" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="RightEngineCorrectTSO" Type="nvarchar" MaxLength="10" />
           <Property Name="RightEngineNewTSN" Type="decimal" Precision="18" Scale="2" />
           <Property Name="HeatingMachineDayTime" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="HeatingMachineCorrectTSO" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HeatingMachineCorrectTSO" Type="nvarchar" MaxLength="10" />
           <Property Name="HeatingMachineNewTSN" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ExecUnit" Type="nvarchar" MaxLength="50" />
           <Property Name="Memo" Type="nvarchar" MaxLength="200" />
@@ -1035,8 +1035,6 @@
           <EntitySet Name="UserRole" EntityType="ACMSModel.UserRole" />
           <EntitySet Name="PlaneType" EntityType="ACMSModel.PlaneType" />
           <EntitySet Name="V_PlTypeTCtrlList" EntityType="ACMSModel.V_PlTypeTCtrlList" />
-          <EntitySet Name="CESSNA172RDailyRecord" EntityType="ACMSModel.CESSNA172RDailyRecord" />
-          <EntitySet Name="PA44_180DailyRecord" EntityType="ACMSModel.PA44_180DailyRecord" />
           <EntitySet Name="V_V_PlTypeTCtrlList_Log" EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" />
           <EntitySet Name="AirTimeAlarmSet" EntityType="ACMSModel.AirTimeAlarmSet" />
           <EntitySet Name="PlanesTCtrlItem_ReList" EntityType="ACMSModel.PlanesTCtrlItem_ReList" />
@@ -1055,6 +1053,8 @@
           <EntitySet Name="Planes" EntityType="ACMSModel.Planes" />
           <EntitySet Name="PlTypeTCtrlList" EntityType="ACMSModel.PlTypeTCtrlList" />
           <EntitySet Name="PlTypeTCtrlList_Log" EntityType="ACMSModel.PlTypeTCtrlList_Log" />
+          <EntitySet Name="CESSNA172RDailyRecord" EntityType="ACMSModel.CESSNA172RDailyRecord" />
+          <EntitySet Name="PA44_180DailyRecord" EntityType="ACMSModel.PA44_180DailyRecord" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1142,80 +1142,6 @@
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="PlaneTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="CESSNA172RDailyRecord">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DayClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DayRiseAndFallNum" Type="Int32" Nullable="false" />
-          <Property Name="DayAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DayMaintenaceTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CorrectClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CorrectAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="PlanNewClearingTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
-          <Property Name="PlanDayClearingTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanDayGroundTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EngineCorrectTSO" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="EngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Memo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="PA44_180DailyRecord">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DayClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DayRiseAndFallNum" Type="Int32" Nullable="false" />
-          <Property Name="DayAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DayHeatingMachineTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DayMaintenaceTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CorrectClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CorrectAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CorrectHeatingMachineTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="PlanNewClearingTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanNewHeatingMachineTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
-          <Property Name="PlanDayClearingTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PlanDayGroundTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="LeftEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LeftEngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LeftEngineCorrectTSO" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="LeftEngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="RightEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RightEngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RightEngineCorrectTSO" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="RightEngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="HeatingMachineDayTime" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="HeatingMachineCorrectTSO" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="HeatingMachineNewTSN" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Memo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="V_V_PlTypeTCtrlList_Log">
           <Key>
@@ -1673,6 +1599,80 @@
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="CESSNA172RDailyRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DayClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DayRiseAndFallNum" Type="Int32" Nullable="false" />
+          <Property Name="DayAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DayMaintenaceTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CorrectClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CorrectAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="PlanNewClearingTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
+          <Property Name="PlanDayClearingTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayGroundTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EngineCorrectTSO" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Memo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PA44_180DailyRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PlanID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="InputDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DayClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DayRiseAndFallNum" Type="Int32" Nullable="false" />
+          <Property Name="DayAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DayHeatingMachineTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DayMaintenaceTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CorrectClearingTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CorrectAirTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CorrectHeatingMachineTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="PlanNewClearingTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewHeatingMachineTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanNewRiseAndFallNum" Type="Int32" />
+          <Property Name="PlanDayClearingTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayAirTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PlanDayGroundTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LeftEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LeftEngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LeftEngineCorrectTSO" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="LeftEngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="RightEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RightEngineNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RightEngineCorrectTSO" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="RightEngineNewTSN" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HeatingMachineDayTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HeatingMachineCorrectTSO" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="HeatingMachineNewTSN" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Memo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1768,82 +1768,6 @@
                 <ScalarProperty Name="MainTainName" ColumnName="MainTainName" />
                 <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
                 <ScalarProperty Name="ProSource" ColumnName="ProSource" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CESSNA172RDailyRecord">
-            <EntityTypeMapping TypeName="ACMSModel.CESSNA172RDailyRecord">
-              <MappingFragment StoreEntitySet="CESSNA172RDailyRecord">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Memo" ColumnName="Memo" />
-                <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
-                <ScalarProperty Name="EngineNewTSN" ColumnName="EngineNewTSN" />
-                <ScalarProperty Name="EngineCorrectTSO" ColumnName="EngineCorrectTSO" />
-                <ScalarProperty Name="EngineNo" ColumnName="EngineNo" />
-                <ScalarProperty Name="EngineType" ColumnName="EngineType" />
-                <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
-                <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
-                <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
-                <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
-                <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
-                <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
-                <ScalarProperty Name="CorrectAirTime" ColumnName="CorrectAirTime" />
-                <ScalarProperty Name="CorrectClearingTime" ColumnName="CorrectClearingTime" />
-                <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
-                <ScalarProperty Name="DayAirTime" ColumnName="DayAirTime" />
-                <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
-                <ScalarProperty Name="DayClearingTime" ColumnName="DayClearingTime" />
-                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
-                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PA44_180DailyRecord">
-            <EntityTypeMapping TypeName="ACMSModel.PA44_180DailyRecord">
-              <MappingFragment StoreEntitySet="PA44-180DailyRecord">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Memo" ColumnName="Memo" />
-                <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
-                <ScalarProperty Name="HeatingMachineNewTSN" ColumnName="HeatingMachineNewTSN" />
-                <ScalarProperty Name="HeatingMachineCorrectTSO" ColumnName="HeatingMachineCorrectTSO" />
-                <ScalarProperty Name="HeatingMachineDayTime" ColumnName="HeatingMachineDayTime" />
-                <ScalarProperty Name="RightEngineNewTSN" ColumnName="RightEngineNewTSN" />
-                <ScalarProperty Name="RightEngineCorrectTSO" ColumnName="RightEngineCorrectTSO" />
-                <ScalarProperty Name="RightEngineNo" ColumnName="RightEngineNo" />
-                <ScalarProperty Name="RightEngineType" ColumnName="RightEngineType" />
-                <ScalarProperty Name="LeftEngineNewTSN" ColumnName="LeftEngineNewTSN" />
-                <ScalarProperty Name="LeftEngineCorrectTSO" ColumnName="LeftEngineCorrectTSO" />
-                <ScalarProperty Name="LeftEngineNo" ColumnName="LeftEngineNo" />
-                <ScalarProperty Name="LeftEngineType" ColumnName="LeftEngineType" />
-                <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
-                <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
-                <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
-                <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
-                <ScalarProperty Name="PlanNewHeatingMachineTime" ColumnName="PlanNewHeatingMachineTime" />
-                <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
-                <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
-                <ScalarProperty Name="CorrectHeatingMachineTime" ColumnName="CorrectHeatingMachineTime" />
-                <ScalarProperty Name="CorrectAirTime" ColumnName="CorrectAirTime" />
-                <ScalarProperty Name="CorrectClearingTime" ColumnName="CorrectClearingTime" />
-                <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
-                <ScalarProperty Name="DayHeatingMachineTime" ColumnName="DayHeatingMachineTime" />
-                <ScalarProperty Name="DayAirTime" ColumnName="DayAirTime" />
-                <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
-                <ScalarProperty Name="DayClearingTime" ColumnName="DayClearingTime" />
-                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
-                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2303,6 +2227,82 @@
                 <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
                 <ScalarProperty Name="ProSource" ColumnName="ProSource" />
                 <ScalarProperty Name="TCtrlID" ColumnName="TCtrlID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CESSNA172RDailyRecord">
+            <EntityTypeMapping TypeName="ACMSModel.CESSNA172RDailyRecord">
+              <MappingFragment StoreEntitySet="CESSNA172RDailyRecord">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
+                <ScalarProperty Name="EngineNewTSN" ColumnName="EngineNewTSN" />
+                <ScalarProperty Name="EngineCorrectTSO" ColumnName="EngineCorrectTSO" />
+                <ScalarProperty Name="EngineNo" ColumnName="EngineNo" />
+                <ScalarProperty Name="EngineType" ColumnName="EngineType" />
+                <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
+                <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+                <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
+                <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
+                <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
+                <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
+                <ScalarProperty Name="CorrectAirTime" ColumnName="CorrectAirTime" />
+                <ScalarProperty Name="CorrectClearingTime" ColumnName="CorrectClearingTime" />
+                <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
+                <ScalarProperty Name="DayAirTime" ColumnName="DayAirTime" />
+                <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+                <ScalarProperty Name="DayClearingTime" ColumnName="DayClearingTime" />
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PA44_180DailyRecord">
+            <EntityTypeMapping TypeName="ACMSModel.PA44_180DailyRecord">
+              <MappingFragment StoreEntitySet="PA44-180DailyRecord">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="ExecUnit" ColumnName="ExecUnit" />
+                <ScalarProperty Name="HeatingMachineNewTSN" ColumnName="HeatingMachineNewTSN" />
+                <ScalarProperty Name="HeatingMachineCorrectTSO" ColumnName="HeatingMachineCorrectTSO" />
+                <ScalarProperty Name="HeatingMachineDayTime" ColumnName="HeatingMachineDayTime" />
+                <ScalarProperty Name="RightEngineNewTSN" ColumnName="RightEngineNewTSN" />
+                <ScalarProperty Name="RightEngineCorrectTSO" ColumnName="RightEngineCorrectTSO" />
+                <ScalarProperty Name="RightEngineNo" ColumnName="RightEngineNo" />
+                <ScalarProperty Name="RightEngineType" ColumnName="RightEngineType" />
+                <ScalarProperty Name="LeftEngineNewTSN" ColumnName="LeftEngineNewTSN" />
+                <ScalarProperty Name="LeftEngineCorrectTSO" ColumnName="LeftEngineCorrectTSO" />
+                <ScalarProperty Name="LeftEngineNo" ColumnName="LeftEngineNo" />
+                <ScalarProperty Name="LeftEngineType" ColumnName="LeftEngineType" />
+                <ScalarProperty Name="PlanDayGroundTime" ColumnName="PlanDayGroundTime" />
+                <ScalarProperty Name="PlanDayAirTime" ColumnName="PlanDayAirTime" />
+                <ScalarProperty Name="PlanDayClearingTime" ColumnName="PlanDayClearingTime" />
+                <ScalarProperty Name="PlanNewRiseAndFallNum" ColumnName="PlanNewRiseAndFallNum" />
+                <ScalarProperty Name="PlanNewHeatingMachineTime" ColumnName="PlanNewHeatingMachineTime" />
+                <ScalarProperty Name="PlanNewAirTime" ColumnName="PlanNewAirTime" />
+                <ScalarProperty Name="PlanNewClearingTime" ColumnName="PlanNewClearingTime" />
+                <ScalarProperty Name="CorrectHeatingMachineTime" ColumnName="CorrectHeatingMachineTime" />
+                <ScalarProperty Name="CorrectAirTime" ColumnName="CorrectAirTime" />
+                <ScalarProperty Name="CorrectClearingTime" ColumnName="CorrectClearingTime" />
+                <ScalarProperty Name="DayMaintenaceTime" ColumnName="DayMaintenaceTime" />
+                <ScalarProperty Name="DayHeatingMachineTime" ColumnName="DayHeatingMachineTime" />
+                <ScalarProperty Name="DayAirTime" ColumnName="DayAirTime" />
+                <ScalarProperty Name="DayRiseAndFallNum" ColumnName="DayRiseAndFallNum" />
+                <ScalarProperty Name="DayClearingTime" ColumnName="DayClearingTime" />
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
