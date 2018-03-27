@@ -512,7 +512,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public CESSNA172RDailyRecord GetLastCESSNA172RDailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -524,7 +524,7 @@ namespace ACMS.Applications.Impl
         {
             var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.PlanID == planeID &&
                                                                     ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) < 0) || string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) < 0) &&
-                                                                    x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                                                                    x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -536,7 +536,7 @@ namespace ACMS.Applications.Impl
         {
             var query = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID &&
                                                                     ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) < 0) || string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) < 0) &&
-                                                                    x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                                                                    x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -548,17 +548,18 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Add(CESSNA172RDailyRecord item, string userID)
         {
-            //获取上一条记录
-            var lastRecord = GetLastCESSNA172RDailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
-            //获取上一条初值
-            var lastInitRecord = GetLastInitCESSNA172RDailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
-
             try
             {
                 item.ID = Guid.NewGuid().ToString();
                 item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
+
+                //获取上一条记录
+                var lastRecord = GetLastCESSNA172RDailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
+                //获取上一条初值
+                var lastInitRecord = GetLastInitCESSNA172RDailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
+
                 //如果数据是普通逐日，则需要将部分字段根据页面上录入的值自动计算并做保存；如果数据是初值，则不需要自动计算步骤，因为所有字段均为手工录入
                 if (item.Type == 2)
                 {
@@ -592,73 +593,7 @@ namespace ACMS.Applications.Impl
                     #endregion
                 }
 
-                #region 还需要将下一条初值之前的所有普通数据都做一次修改
-
-                var allData = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.IsActive && x.PlanID == item.PlanID).ToList();
-
-                //获取当前修改的普通数据的下一条初值
-                var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, item.CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) > 0) &&
-                                                        x.Type == 1).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).FirstOrDefault();
-
-                List<CESSNA172RDailyRecord> list = new List<CESSNA172RDailyRecord>();
-
-                if (nextInitData != null)
-                {
-                    //获取该条数据之后，下一条初值之前的所有普通数据
-                    list = allData.Where(x => ((string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, item.CreateTime, StringComparison.Ordinal) > 0) ||
-                                               (string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
-                                               (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
-                                                x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                }
-                else
-                {
-                    //获取该条数据之后，所有普通数据
-                    list = allData.Where(x => ((string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, item.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) > 0) &&
-                                                x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                }
-
-                for (var i = 0; i < list.Count; i++)
-                {
-                    var currentRecord = list[i];
-
-                    CESSNA172RDailyRecord lastRecordItem = null;
-
-                    if (i == 0)
-                    {
-                        lastRecordItem = item;
-                    }
-                    else
-                    {
-                        lastRecordItem = list[i - 1];
-                    }
-
-
-                    //自新空中时间=空中时间（表）+空中时间（表）修正；
-                    //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
-                    //自新空地时间=空地时间（表）+空地时间（表）修正；
-                    //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
-                    //自新起落次数=本日起落+自新起落（上一条的记录）
-                    currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
-                    //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
-                    currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
-                    //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
-                    currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                    //当日地面时间=当日空地时间-当日空中时间；
-                    currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
-
-
-                    //修后时间=当日空中时间+上一条修后时间
-                    currentRecord.EngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineCorrectTSO);
-                    //自新时间=当日空中时间+上一条自新时间
-                    currentRecord.EngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineNewTSN);
-
-                    currentRecord.Updator = userID;
-                    currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    currentRecord.ExecUnit = "中飞院遂宁分院";
-                }
-
-                #endregion
+                UpdateDailyRecordCascadingChangesCESSNA172(item.PlanID, item.InputDate, item.CreateTime, userID, item);
 
                 _dbContext.Set<CESSNA172RDailyRecord>().Add(item);
                 _dbContext.SaveChanges();
@@ -721,7 +656,7 @@ namespace ACMS.Applications.Impl
                     {
                         //获取该条数据的上一条记录
                         var lastRecord = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) < 0) ||
-                                                            string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) < 0)).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                                                            string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) < 0)).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
 
                         //自新空中时间=空中时间（表）+空中时间（表）修正；
                         editModel.PlanNewAirTime = editModel.DayAirTime + editModel.CorrectAirTime;
@@ -773,71 +708,7 @@ namespace ACMS.Applications.Impl
 
                     #endregion
 
-                    #region 如果修改的数据是普通数据，则需要将下一条初值之前的所有普通数据都做一次修改
-
-                    //获取当前修改的普通数据的下一条初值
-                    var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                            x.Type == 1).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).FirstOrDefault();
-
-                    List<CESSNA172RDailyRecord> list = new List<CESSNA172RDailyRecord>();
-
-                    if (nextInitData != null)
-                    {
-                        //获取该条数据之后，下一条初值之前的所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                   (string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
-                                                   (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-                    else
-                    {
-                        //获取该条数据之后，所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                    string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-
-                    for (var i = 0; i < list.Count; i++)
-                    {
-                        var currentRecord = list[i];
-
-                        CESSNA172RDailyRecord lastRecordItem = null;
-
-                        if (i == 0)
-                        {
-                            lastRecordItem = editModel;
-                        }
-                        else
-                        {
-                            lastRecordItem = list[i - 1];
-                        }
-
-
-                        //自新空中时间=空中时间（表）+空中时间（表）修正；
-                        //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
-                        //自新空地时间=空地时间（表）+空地时间（表）修正；
-                        //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
-                        //自新起落次数=本日起落+自新起落（上一条的记录）
-                        currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
-                        //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
-                        currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
-                        //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
-                        currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                        //当日地面时间=当日空地时间-当日空中时间；
-                        currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
-
-
-                        //修后时间=当日空中时间+上一条修后时间
-                        currentRecord.EngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineCorrectTSO);
-                        //自新时间=当日空中时间+上一条自新时间
-                        currentRecord.EngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineNewTSN);
-
-                        currentRecord.Updator = userID;
-                        currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        currentRecord.ExecUnit = "中飞院遂宁分院";
-                    }
-
-                    #endregion
+                    UpdateDailyRecordCascadingChangesCESSNA172(editModel.PlanID, editModel.InputDate, editModel.CreateTime, userID, editModel);
 
                     _dbContext.SaveChanges();
 
@@ -884,77 +755,10 @@ namespace ACMS.Applications.Impl
                     editModel.Updator = userID;
                     editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                    #region 重新计算与当前删除数据相关联的当前数据之后，下一个初值数据之前的普通数据
 
-                    var allData = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.IsActive && x.PlanID == editModel.PlanID).ToList();
-
-                    //获取该删除数据的上一条数据
                     var lastRecord = GetLastCESSNA172RDailyRecordByPlaneID(editModel.PlanID, editModel.InputDate, editModel.CreateTime);
 
-
-                    //获取当前修改的普通数据的下一条初值
-                    var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                            x.Type == 1).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).FirstOrDefault();
-
-                    List<CESSNA172RDailyRecord> list = new List<CESSNA172RDailyRecord>();
-
-                    if (nextInitData != null)
-                    {
-                        //获取该条数据之后，下一条初值之前的所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                   (string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
-                                                   (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-                    else
-                    {
-                        //获取该条数据之后，所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                    string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-
-                    for (var i = 0; i < list.Count; i++)
-                    {
-                        var currentRecord = list[i];
-
-                        CESSNA172RDailyRecord lastRecordItem = null;
-
-                        if (i == 0)
-                        {
-                            lastRecordItem = lastRecord;
-                        }
-                        else
-                        {
-                            lastRecordItem = list[i - 1];
-                        }
-
-
-                        //自新空中时间=空中时间（表）+空中时间（表）修正；
-                        //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
-                        //自新空地时间=空地时间（表）+空地时间（表）修正；
-                        //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
-                        //自新起落次数=本日起落+自新起落（上一条的记录）
-                        currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
-                        //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
-                        currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
-                        //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
-                        currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                        //当日地面时间=当日空地时间-当日空中时间；
-                        currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
-
-
-                        //修后时间=当日空中时间+上一条修后时间
-                        currentRecord.EngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineCorrectTSO);
-                        //自新时间=当日空中时间+上一条自新时间
-                        currentRecord.EngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineNewTSN);
-
-                        currentRecord.Updator = userID;
-                        currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        currentRecord.ExecUnit = "中飞院遂宁分院";
-                    }
-                    #endregion
-
+                    UpdateDailyRecordCascadingChangesCESSNA172(editModel.PlanID, editModel.InputDate, editModel.CreateTime, userID, lastRecord);
 
                     _dbContext.SaveChanges();
 
@@ -980,6 +784,83 @@ namespace ACMS.Applications.Impl
                     ResultMsg = "需要删除的数据不存在！"
                 };
             }
+        }
+
+        /// <summary>
+        /// 级联修改CESSNA172普通逐日数据
+        /// </summary>
+        /// <param name="PlaneID">飞机ID</param>
+        /// <param name="InputDate">逐日登记输入时间</param>
+        /// <param name="CreateTime">创建时间</param>
+        /// <param name="UserID">操作人ID</param>
+        /// <param name="lastRecord">作为级联修改数据的第一条数据</param>
+        private void UpdateDailyRecordCascadingChangesCESSNA172(string PlaneID, string InputDate, string CreateTime, string UserID, CESSNA172RDailyRecord lastRecord)
+        {
+            var allData = _dbContext.Set<CESSNA172RDailyRecord>().Where(x => x.IsActive && x.PlanID == PlaneID).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).ToList();
+
+
+            //获取当前修改的普通数据的下一条初值
+            var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) > 0) &&
+                                                    x.Type == 1).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).FirstOrDefault();
+
+            List<CESSNA172RDailyRecord> list = new List<CESSNA172RDailyRecord>();
+
+            if (nextInitData != null)
+            {
+                //获取该条数据之后，下一条初值之前的所有普通数据
+                list = allData.Where(x => ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) > 0) ||
+                                           (string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
+                                           (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
+                                            x.Type == 2).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).ToList();
+            }
+            else
+            {
+                //获取该条数据之后，所有普通数据
+                list = allData.Where(x => ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) > 0) ||
+                                            string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) > 0) &&
+                                            x.Type == 2).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).ToList();
+            }
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                var currentRecord = list[i];
+
+                CESSNA172RDailyRecord lastRecordItem = null;
+
+                if (i == 0)
+                {
+                    lastRecordItem = lastRecord;
+                }
+                else
+                {
+                    lastRecordItem = list[i - 1];
+                }
+
+
+                //自新空中时间=空中时间（表）+空中时间（表）修正；
+                //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
+                //自新空地时间=空地时间（表）+空地时间（表）修正；
+                //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
+                //自新起落次数=本日起落+自新起落（上一条的记录）
+                currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
+                //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
+                currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
+                //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
+                currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
+                //当日地面时间=当日空地时间-当日空中时间；
+                currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
+
+
+                //修后时间=当日空中时间+上一条修后时间
+                currentRecord.EngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineCorrectTSO);
+                //自新时间=当日空中时间+上一条自新时间
+                currentRecord.EngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.EngineNewTSN);
+
+                currentRecord.Updator = UserID;
+                currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                currentRecord.ExecUnit = "中飞院遂宁分院";
+            }
+
         }
 
         /// <summary>
@@ -1519,7 +1400,7 @@ namespace ACMS.Applications.Impl
         /// <returns></returns>
         public PA44_180DailyRecord GetLastPA44_180DailyRecordByPlaneID(string planeID)
         {
-            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1531,7 +1412,7 @@ namespace ACMS.Applications.Impl
         {
             var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID &&
                                                                 ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) < 0) || string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) < 0) &&
-                                                                x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                                                                x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1543,7 +1424,7 @@ namespace ACMS.Applications.Impl
         {
             var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.Type == 1 && x.PlanID == planeID &&
                                                                 ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) < 0) || string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) < 0) &&
-                                                                x.IsActive).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                                                                x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
         }
 
@@ -1555,18 +1436,17 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Add(PA44_180DailyRecord item, string userID)
         {
-
-            //获取上一条记录
-            var lastRecord = GetLastPA44_180DailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
-            //获取上一条初值
-            var lastInitRecord = GetLastInitPA44_180DailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
-
             try
             {
                 item.ID = Guid.NewGuid().ToString();
                 item.CreateTime = item.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 item.Creator = item.Updator = userID;
                 item.IsActive = true;
+
+                //获取上一条记录
+                var lastRecord = GetLastPA44_180DailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
+                //获取上一条初值
+                var lastInitRecord = GetLastInitPA44_180DailyRecordByPlaneID(item.PlanID, item.InputDate, item.CreateTime);
 
                 //如果数据是普通逐日，则需要将部分字段根据页面上录入的值自动计算并做保存；如果数据是初值，则不需要自动计算步骤，因为所有字段均为手工录入
                 if (item.Type == 2)
@@ -1619,86 +1499,7 @@ namespace ACMS.Applications.Impl
                     #endregion
                 }
 
-                #region 新增数据后，需要将下一条初值之前的所有普通数据都做一次修改
-
-                var allData = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.IsActive && x.PlanID == item.PlanID).ToList();
-
-                //获取当前修改的普通数据的下一条初值
-                var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, item.CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) > 0) &&
-                                                        x.Type == 1).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).FirstOrDefault();
-
-                List<PA44_180DailyRecord> list = new List<PA44_180DailyRecord>();
-
-                if (nextInitData != null)
-                {
-                    //获取该条数据之后，下一条初值之前的所有普通数据
-                    list = allData.Where(x => ((string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, item.CreateTime, StringComparison.Ordinal) > 0) ||
-                                               (string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
-                                               (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
-                                                x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                }
-                else
-                {
-                    //获取该条数据之后，所有普通数据
-                    list = allData.Where(x => ((string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, item.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                string.Compare(x.InputDate, item.InputDate, StringComparison.Ordinal) > 0) &&
-                                                x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                }
-
-                for (var i = 0; i < list.Count; i++)
-                {
-                    var currentRecord = list[i];
-
-                    PA44_180DailyRecord lastRecordItem = null;
-
-                    if (i == 0)
-                    {
-                        lastRecordItem = item;
-                    }
-                    else
-                    {
-                        lastRecordItem = list[i - 1];
-                    }
-
-
-                    //自新空中时间=空中时间（表）+空中时间（表）修正；
-                    //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
-                    //自新空地时间=空地时间（表）+空地时间（表）修正；
-                    //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
-                    //自新起落次数=本日起落+自新起落（上一条的记录）
-                    currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
-                    //自新加温机时间==加温机时间（表）+加温机时间（表）修正
-                    //currentRecord.PlanNewHeatingMachineTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime;
-                    //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
-                    currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
-                    //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
-                    currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                    //当日地面时间=当日空地时间-当日空中时间；
-                    currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
-
-
-                    //修后时间TSO=当日空中时间+上一条修后时间
-                    currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
-                    currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
-                    //自新时间TSN=当日空中时间+上一条自新时间
-                    currentRecord.LeftEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineNewTSN);
-                    currentRecord.RightEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineNewTSN);
-
-
-                    //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
-                    currentRecord.HeatingMachineDayTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime - (lastRecordItem == null ? 0 : lastRecordItem.DayHeatingMachineTime) - (lastRecordItem == null ? 0 : lastRecordItem.CorrectHeatingMachineTime);
-                    //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                    currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
-                    //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
-                    currentRecord.HeatingMachineNewTSN = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineNewTSN) + currentRecord.HeatingMachineDayTime;
-
-                    currentRecord.Updator = userID;
-                    currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    currentRecord.ExecUnit = "中飞院遂宁分院";
-                }
-
-
-                #endregion
+                UpdateDailyRecordCascadingChangesPA44_180(item.PlanID, item.InputDate, item.CreateTime, userID, item);
 
                 _dbContext.Set<PA44_180DailyRecord>().Add(item);
                 _dbContext.SaveChanges();
@@ -1766,7 +1567,7 @@ namespace ACMS.Applications.Impl
                     {
                         //获取该条数据的上一条记录
                         var lastRecord = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) < 0) ||
-                                                            string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) < 0)).OrderByDescending(o => o.InputDate).OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                                                            string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) < 0)).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
 
 
                         //自新空中时间=空中时间（表）+空中时间（表）修正；
@@ -1839,84 +1640,7 @@ namespace ACMS.Applications.Impl
                     }
                     #endregion
 
-                    #region 修改数据后，需要将下一条初值之前的所有普通数据都做一次修改
-
-                    //获取当前修改的普通数据的下一条初值
-                    var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                            x.Type == 1).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).FirstOrDefault();
-
-                    List<PA44_180DailyRecord> list = new List<PA44_180DailyRecord>();
-
-                    if (nextInitData != null)
-                    {
-                        //获取该条数据之后，下一条初值之前的所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                   (string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
-                                                   (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-                    else
-                    {
-                        //获取该条数据之后，所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                    string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-
-                    for (var i = 0; i < list.Count; i++)
-                    {
-                        var currentRecord = list[i];
-
-                        PA44_180DailyRecord lastRecordItem = null;
-
-                        if (i == 0)
-                        {
-                            lastRecordItem = editModel;
-                        }
-                        else
-                        {
-                            lastRecordItem = list[i - 1];
-                        }
-
-
-                        //自新空中时间=空中时间（表）+空中时间（表）修正；
-                        //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
-                        //自新空地时间=空地时间（表）+空地时间（表）修正；
-                        //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
-                        //自新起落次数=本日起落+自新起落（上一条的记录）
-                        currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
-                        //自新加温机时间==加温机时间（表）+加温机时间（表）修正
-                        //currentRecord.PlanNewHeatingMachineTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime;
-                        //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
-                        currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
-                        //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
-                        currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                        //当日地面时间=当日空地时间-当日空中时间；
-                        currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
-
-
-                        //修后时间TSO=当日空中时间+上一条修后时间
-                        currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
-                        currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
-                        //自新时间TSN=当日空中时间+上一条自新时间
-                        currentRecord.LeftEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineNewTSN);
-                        currentRecord.RightEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineNewTSN);
-
-
-                        //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
-                        currentRecord.HeatingMachineDayTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime - (lastRecordItem == null ? 0 : lastRecordItem.DayHeatingMachineTime) - (lastRecordItem == null ? 0 : lastRecordItem.CorrectHeatingMachineTime);
-                        //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                        currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
-                        //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
-                        currentRecord.HeatingMachineNewTSN = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineNewTSN) + currentRecord.HeatingMachineDayTime;
-
-                        currentRecord.Updator = userID;
-                        currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        currentRecord.ExecUnit = "中飞院遂宁分院";
-                    }
-
-
-                    #endregion
+                    UpdateDailyRecordCascadingChangesPA44_180(editModel.PlanID, editModel.InputDate, editModel.CreateTime, userID, editModel);
 
                     _dbContext.SaveChanges();
 
@@ -1963,87 +1687,10 @@ namespace ACMS.Applications.Impl
                     editModel.Updator = userID;
                     editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                    #region  重新计算与当前删除数据相关联的当前数据之后，下一个初值数据之前的普通数据
-
-                    var allData = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.IsActive && x.PlanID == editModel.PlanID).ToList();
-
                     //获取该删除数据的上一条数据
                     var lastRecord = GetLastPA44_180DailyRecordByPlaneID(editModel.PlanID, editModel.InputDate, editModel.CreateTime);
 
-                    //获取当前修改的普通数据的下一条初值
-                    var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                            x.Type == 1).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).FirstOrDefault();
-
-                    List<PA44_180DailyRecord> list = new List<PA44_180DailyRecord>();
-
-                    if (nextInitData != null)
-                    {
-                        //获取该条数据之后，下一条初值之前的所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                   (string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
-                                                   (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-                    else
-                    {
-                        //获取该条数据之后，所有普通数据
-                        list = allData.Where(x => ((string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, editModel.CreateTime, StringComparison.Ordinal) > 0) ||
-                                                    string.Compare(x.InputDate, editModel.InputDate, StringComparison.Ordinal) > 0) &&
-                                                    x.Type == 2).OrderBy(o => o.InputDate).OrderBy(o => o.CreateTime).ToList();
-                    }
-
-                    for (var i = 0; i < list.Count; i++)
-                    {
-                        var currentRecord = list[i];
-
-                        PA44_180DailyRecord lastRecordItem = null;
-
-                        if (i == 0)
-                        {
-                            lastRecordItem = lastRecord;
-                        }
-                        else
-                        {
-                            lastRecordItem = list[i - 1];
-                        }
-
-
-                        //自新空中时间=空中时间（表）+空中时间（表）修正；
-                        //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
-                        //自新空地时间=空地时间（表）+空地时间（表）修正；
-                        //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
-                        //自新起落次数=本日起落+自新起落（上一条的记录）
-                        currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
-                        //自新加温机时间==加温机时间（表）+加温机时间（表）修正
-                        //currentRecord.PlanNewHeatingMachineTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime;
-                        //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
-                        currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
-                        //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
-                        currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
-                        //当日地面时间=当日空地时间-当日空中时间；
-                        currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
-
-
-                        //修后时间TSO=当日空中时间+上一条修后时间
-                        currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
-                        currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
-                        //自新时间TSN=当日空中时间+上一条自新时间
-                        currentRecord.LeftEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineNewTSN);
-                        currentRecord.RightEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineNewTSN);
-
-
-                        //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
-                        currentRecord.HeatingMachineDayTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime - (lastRecordItem == null ? 0 : lastRecordItem.DayHeatingMachineTime) - (lastRecordItem == null ? 0 : lastRecordItem.CorrectHeatingMachineTime);
-                        //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                        currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
-                        //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
-                        currentRecord.HeatingMachineNewTSN = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineNewTSN) + currentRecord.HeatingMachineDayTime;
-
-                        currentRecord.Updator = userID;
-                        currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        currentRecord.ExecUnit = "中飞院遂宁分院";
-                    }
-                    #endregion
+                    UpdateDailyRecordCascadingChangesPA44_180(editModel.PlanID, editModel.InputDate, editModel.CreateTime, userID, lastRecord);
 
                     _dbContext.SaveChanges();
 
@@ -2069,6 +1716,94 @@ namespace ACMS.Applications.Impl
                     ResultMsg = "需要删除的数据不存在！"
                 };
             }
+        }
+
+        /// <summary>
+        /// 级联修改PA44_180普通逐日数据
+        /// </summary>
+        /// <param name="PlaneID">飞机ID</param>
+        /// <param name="InputDate">逐日登记输入时间</param>
+        /// <param name="CreateTime">创建时间</param>
+        /// <param name="UserID">操作人ID</param>
+        /// <param name="lastRecord">作为级联修改数据的第一条数据</param>
+        private void UpdateDailyRecordCascadingChangesPA44_180(string PlaneID, string InputDate, string CreateTime, string UserID, PA44_180DailyRecord lastRecord)
+        {
+            var allData = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.IsActive && x.PlanID == PlaneID).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).ToList();
+
+            //获取当前修改的普通数据的下一条初值
+            var nextInitData = allData.Where(x => ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) > 0) || string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) > 0) &&
+                                                    x.Type == 1).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).FirstOrDefault();
+
+            List<PA44_180DailyRecord> list = new List<PA44_180DailyRecord>();
+
+            if (nextInitData != null)
+            {
+                //获取该条数据之后，下一条初值之前的所有普通数据
+                list = allData.Where(x => ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) > 0) ||
+                                           (string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) > 0 && string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) < 0) ||
+                                           (string.Compare(x.InputDate, nextInitData.InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, nextInitData.CreateTime, StringComparison.Ordinal) <= 0)) &&
+                                            x.Type == 2).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).ToList();
+            }
+            else
+            {
+                //获取该条数据之后，所有普通数据
+                list = allData.Where(x => ((string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) == 0 && string.Compare(x.CreateTime, CreateTime, StringComparison.Ordinal) > 0) ||
+                                            string.Compare(x.InputDate, InputDate, StringComparison.Ordinal) > 0) &&
+                                            x.Type == 2).OrderBy(o => o.InputDate).ThenBy(o => o.CreateTime).ToList();
+            }
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                var currentRecord = list[i];
+
+                PA44_180DailyRecord lastRecordItem = null;
+
+                if (i == 0)
+                {
+                    lastRecordItem = lastRecord;
+                }
+                else
+                {
+                    lastRecordItem = list[i - 1];
+                }
+
+
+                //自新空中时间=空中时间（表）+空中时间（表）修正；
+                //currentRecord.PlanNewAirTime = currentRecord.DayAirTime + currentRecord.CorrectAirTime;
+                //自新空地时间=空地时间（表）+空地时间（表）修正；
+                //currentRecord.PlanNewClearingTime = currentRecord.DayClearingTime + currentRecord.CorrectClearingTime;
+                //自新起落次数=本日起落+自新起落（上一条的记录）
+                currentRecord.PlanNewRiseAndFallNum = currentRecord.DayRiseAndFallNum + (lastRecordItem == null ? 0 : lastRecordItem.PlanNewRiseAndFallNum);
+                //自新加温机时间==加温机时间（表）+加温机时间（表）修正
+                //currentRecord.PlanNewHeatingMachineTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime;
+                //当日空地时间=自新空地时间-自新空地时间（上一条的记录）；
+                currentRecord.PlanDayClearingTime = currentRecord.PlanNewClearingTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewClearingTime);
+                //当日空中时间=自新空中时间-自新空中时间（上一条的记录）；
+                currentRecord.PlanDayAirTime = currentRecord.PlanNewAirTime - (lastRecordItem == null ? 0 : lastRecordItem.PlanNewAirTime);
+                //当日地面时间=当日空地时间-当日空中时间；
+                currentRecord.PlanDayGroundTime = currentRecord.PlanDayClearingTime - currentRecord.PlanDayAirTime;
+
+
+                //修后时间TSO=当日空中时间+上一条修后时间
+                currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
+                currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
+                //自新时间TSN=当日空中时间+上一条自新时间
+                currentRecord.LeftEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineNewTSN);
+                currentRecord.RightEngineNewTSN = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineNewTSN);
+
+
+                //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
+                currentRecord.HeatingMachineDayTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime - (lastRecordItem == null ? 0 : lastRecordItem.DayHeatingMachineTime) - (lastRecordItem == null ? 0 : lastRecordItem.CorrectHeatingMachineTime);
+                //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
+                currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
+                //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
+                currentRecord.HeatingMachineNewTSN = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineNewTSN) + currentRecord.HeatingMachineDayTime;
+
+                currentRecord.Updator = UserID;
+                currentRecord.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                currentRecord.ExecUnit = "中飞院遂宁分院";
+            }
+
         }
 
         /// <summary>
