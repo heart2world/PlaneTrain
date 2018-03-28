@@ -594,6 +594,21 @@ namespace ACMS.Applications.Impl
 
                     #endregion
                 }
+                else
+                {
+                    var tempValue = string.Empty;
+
+                    try
+                    {
+                        tempValue = Convert.ToDecimal(item.EngineCorrectTSO).ToString();
+                    }
+                    catch
+                    {
+                        tempValue = "N/A";
+                    }
+                    //修后时间
+                    item.EngineCorrectTSO = tempValue;
+                }
 
                 UpdateDailyRecordCascadingChangesCESSNA172(item.PlanID, item.InputDate, item.CreateTime, userID, item);
 
@@ -1512,6 +1527,41 @@ namespace ACMS.Applications.Impl
 
                     #endregion
                 }
+                else
+                {
+                    var tempValue = string.Empty;
+                    var tempValue1 = string.Empty;
+                    var tempValue2 = string.Empty;
+                    try
+                    {
+                        tempValue = Convert.ToDecimal(item.LeftEngineCorrectTSO).ToString();
+                    }
+                    catch
+                    {
+                        tempValue = "N/A";
+                    }
+                    //修后时间
+                    item.LeftEngineCorrectTSO = tempValue;
+                    try
+                    {
+                        tempValue1 = Convert.ToDecimal(item.RightEngineCorrectTSO).ToString();
+                    }
+                    catch
+                    {
+                        tempValue1 = "N/A";
+                    }
+                    //修后时间
+                    item.RightEngineCorrectTSO = tempValue1;
+                    try
+                    {
+                        tempValue2 = Convert.ToDecimal(item.HeatingMachineCorrectTSO).ToString();
+                    }
+                    catch
+                    {
+                        tempValue2 = "N/A";
+                    }
+                    item.HeatingMachineCorrectTSO = tempValue2;
+                }
 
                 UpdateDailyRecordCascadingChangesPA44_180(item.PlanID, item.InputDate, item.CreateTime, userID, item);
 
@@ -1637,10 +1687,42 @@ namespace ACMS.Applications.Impl
                         //当日地面时间 
                         editModel.PlanDayGroundTime = item.PlanDayGroundTime;
 
+                        var tempValue = string.Empty;
+                        var tempValue1 = string.Empty;
+                        var tempValue2 = string.Empty;
+                        try
+                        {
+                            tempValue = Convert.ToDecimal(item.LeftEngineCorrectTSO).ToString();
+                        }
+                        catch
+                        {
+                            tempValue = "N/A";
+                        }
+                        //修后时间TSO 
+                        item.LeftEngineCorrectTSO = tempValue;
+                        try
+                        {
+                            tempValue1 = Convert.ToDecimal(item.RightEngineCorrectTSO).ToString();
+                        }
+                        catch
+                        {
+                            tempValue1 = "N/A";
+                        }
+                        //修后时间TSO 
+                        item.RightEngineCorrectTSO = tempValue1;
+                        try
+                        {
+                            tempValue2 = Convert.ToDecimal(item.HeatingMachineCorrectTSO).ToString();
+                        }
+                        catch
+                        {
+                            tempValue2 = "N/A";
+                        }
+                        item.HeatingMachineCorrectTSO = tempValue2;
 
                         //修后时间TSO 
-                        editModel.LeftEngineCorrectTSO = item.LeftEngineCorrectTSO;
-                        editModel.RightEngineCorrectTSO = item.RightEngineCorrectTSO;
+                        //editModel.LeftEngineCorrectTSO = item.LeftEngineCorrectTSO;
+                        //editModel.RightEngineCorrectTSO = item.RightEngineCorrectTSO;
                         //自新时间TSN 
                         editModel.LeftEngineNewTSN = item.LeftEngineNewTSN;
                         editModel.RightEngineNewTSN = item.RightEngineNewTSN;
@@ -1649,7 +1731,7 @@ namespace ACMS.Applications.Impl
                         //当日时间 
                         editModel.HeatingMachineDayTime = item.HeatingMachineDayTime;
                         //修后时间TSO 
-                        editModel.HeatingMachineCorrectTSO = item.HeatingMachineCorrectTSO;
+                        //editModel.HeatingMachineCorrectTSO = item.HeatingMachineCorrectTSO;
                         //自新时间TSN 
                         editModel.HeatingMachineNewTSN = item.HeatingMachineNewTSN;
 
@@ -1804,7 +1886,7 @@ namespace ACMS.Applications.Impl
                 //修后时间TSO=当日空中时间+上一条修后时间
                 currentRecord.LeftEngineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.LeftEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.LeftEngineCorrectTSO) + Convert.ToDecimal(currentRecord.PlanDayAirTime ?? 0m)).ToString());
                 currentRecord.RightEngineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.RightEngineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.RightEngineCorrectTSO) + Convert.ToDecimal(currentRecord.PlanDayAirTime ?? 0m)).ToString());
-                        
+
                 //currentRecord.LeftEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.LeftEngineCorrectTSO);
                 //currentRecord.RightEngineCorrectTSO = currentRecord.PlanDayAirTime + (lastRecordItem == null ? 0 : lastRecordItem.RightEngineCorrectTSO);
                 //自新时间TSN=当日空中时间+上一条自新时间
@@ -1816,7 +1898,7 @@ namespace ACMS.Applications.Impl
                 currentRecord.HeatingMachineDayTime = currentRecord.DayHeatingMachineTime + currentRecord.CorrectHeatingMachineTime - (lastRecordItem == null ? 0 : lastRecordItem.DayHeatingMachineTime) - (lastRecordItem == null ? 0 : lastRecordItem.CorrectHeatingMachineTime);
                 //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
                 currentRecord.HeatingMachineCorrectTSO = lastRecordItem == null ? "0" : (lastRecordItem.HeatingMachineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecordItem.HeatingMachineCorrectTSO) + Convert.ToDecimal(currentRecord.HeatingMachineDayTime ?? 0m)).ToString());
-                
+
                 //currentRecord.HeatingMachineCorrectTSO = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineCorrectTSO) + currentRecord.HeatingMachineDayTime;
                 //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
                 currentRecord.HeatingMachineNewTSN = (lastRecordItem == null ? 0 : lastRecordItem.HeatingMachineNewTSN) + currentRecord.HeatingMachineDayTime;
