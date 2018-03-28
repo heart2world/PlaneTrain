@@ -402,7 +402,16 @@ namespace ACMS.Applications.Impl
                                        PlaneNo = temp.Key.PlaneNo,
                                        Count = temp.Count()
                                    }).ToList();
-                list.TotalPagesCount = result3.GroupBy(m => m.InputDate).Count();//返回所有飞机总飞行天数 临时借用下这个字段
+                //汇总每飞机的总飞行天数 有条件查询的
+                var test = (from a in result3
+                            join b in list.ResultData.ToList() on a.PlaneNo equals b.PlaneNo
+                            select new
+                                      {
+                                          InputDate = a.InputDate,
+                                          PlaneNo = a.PlaneNo,
+                                          Count = a.Count
+                                      }).ToList();
+                list.TotalPagesCount = test.GroupBy(m => m.InputDate).Count();//返回所有飞机总飞行天数 临时借用下这个字段
                 foreach (var item in list.ResultData)
                 {
                     item.FlightDays = result3.Where(m => m.PlaneNo == item.PlaneNo).Count();
@@ -413,6 +422,7 @@ namespace ACMS.Applications.Impl
             list.ResultData = list.ResultData.OrderBy(a => a.PlaneTypeID).ThenBy(a => a.PlanID).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
             return list;
         }
+        
         #region CESSNA172RDailyRecord
         /// <summary>
         /// 获取参数
@@ -1699,7 +1709,7 @@ namespace ACMS.Applications.Impl
                             tempValue = "N/A";
                         }
                         //修后时间TSO 
-                        item.LeftEngineCorrectTSO = tempValue;
+                        editModel.LeftEngineCorrectTSO = tempValue;
                         try
                         {
                             tempValue1 = Convert.ToDecimal(item.RightEngineCorrectTSO).ToString();
@@ -1709,7 +1719,7 @@ namespace ACMS.Applications.Impl
                             tempValue1 = "N/A";
                         }
                         //修后时间TSO 
-                        item.RightEngineCorrectTSO = tempValue1;
+                        editModel.RightEngineCorrectTSO = tempValue1;
                         try
                         {
                             tempValue2 = Convert.ToDecimal(item.HeatingMachineCorrectTSO).ToString();
@@ -1718,7 +1728,7 @@ namespace ACMS.Applications.Impl
                         {
                             tempValue2 = "N/A";
                         }
-                        item.HeatingMachineCorrectTSO = tempValue2;
+                        editModel.HeatingMachineCorrectTSO = tempValue2;
 
                         //修后时间TSO 
                         //editModel.LeftEngineCorrectTSO = item.LeftEngineCorrectTSO;
