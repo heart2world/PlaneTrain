@@ -382,7 +382,7 @@ namespace ACMS.Applications.Impl
             if (list != null && list.ResultData.Count > 0)
             {
                 //飞行天数查询
-                var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+                var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive && a.Type == 2);
                 if (!string.IsNullOrEmpty(startDate))
                 {
                     result2 = result2.Where(x => string.Compare(x.InputDate, startDate) >= 0);
@@ -410,7 +410,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = list.ResultData.Count();
-            list.ResultData = list.ResultData.OrderByDescending(a => a.PlanID).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+            list.ResultData = list.ResultData.OrderBy(a => a.PlaneTypeID).ThenBy(a => a.PlanID).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
             return list;
         }
         #region CESSNA172RDailyRecord
