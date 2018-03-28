@@ -26,11 +26,11 @@
         <EntityTypeShape EntityType="ACMSModel.V_EngineReport" Width="1.5" PointX="17.375" PointY="10.75" />
         <EntityTypeShape EntityType="ACMSModel.Menu" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.ExecuteUnit" Width="1.5" PointX="17.375" PointY="15.75" />
-        <EntityTypeShape EntityType="ACMSModel.Planes" Width="1.5" PointX="9.375" PointY="18.75" />
         <EntityTypeShape EntityType="ACMSModel.PlTypeTCtrlList" Width="1.5" PointX="8.375" PointY="8.75" />
         <EntityTypeShape EntityType="ACMSModel.PlTypeTCtrlList_Log" Width="1.5" PointX="11.375" PointY="18.75" />
         <EntityTypeShape EntityType="ACMSModel.CESSNA172RDailyRecord" Width="1.5" PointX="3.375" PointY="7.75" />
         <EntityTypeShape EntityType="ACMSModel.PA44_180DailyRecord" Width="1.5" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="ACMSModel.Planes" Width="1.5" PointX="5.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

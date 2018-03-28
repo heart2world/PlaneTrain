@@ -134,7 +134,7 @@
           <Property Name="PlaneSeria" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="PlaneFacDate" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsMonitored" Type="bit" Nullable="false" />
-          <Property Name="Memo" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="500" />
           <Property Name="RankNo" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreateTime" Type="varchar" MaxLength="20" Nullable="false" />
@@ -321,8 +321,8 @@
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_DailyRecordReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_DailyRecordReport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_DailyRecordReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -357,8 +357,8 @@
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_EngineReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_EngineReport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_EngineReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -390,8 +390,8 @@
           <Property Name="PlanDayAirTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_Planes”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_Planes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_Planes">
           <Key>
             <PropertyRef Name="ID" />
@@ -424,8 +424,8 @@
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_PlanesTCtrlItem">
           <Key>
             <PropertyRef Name="ID" />
@@ -484,8 +484,8 @@
           <Property Name="ROnOffTime2" Type="int" />
           <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem_Check”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem_Check' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_PlanesTCtrlItem_Check">
           <Key>
             <PropertyRef Name="ID" />
@@ -552,8 +552,8 @@
           <Property Name="IsPrinted" Type="int" Nullable="false" />
           <Property Name="DateDiffValue" Type="int" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_PlanesTCtrlItem_Log">
           <Key>
             <PropertyRef Name="ID" />
@@ -612,8 +612,8 @@
           <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
           <Property Name="Updator" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_PlTypeTCtrlList”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_PlTypeTCtrlList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_PlTypeTCtrlList">
           <Key>
             <PropertyRef Name="ID" />
@@ -648,8 +648,8 @@
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="PlaneTypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_RecordMonthReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_RecordMonthReport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_RecordMonthReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -689,8 +689,8 @@
           <Property Name="PlanNewRiseAndFallNum" Type="int" />
           <Property Name="PlanNewHeatingMachineTime" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“ACMS.dbo.V_V_PlTypeTCtrlList_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMS.dbo.V_V_PlTypeTCtrlList_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_V_PlTypeTCtrlList_Log">
           <Key>
             <PropertyRef Name="ID" />
@@ -1050,11 +1050,11 @@
           <EntitySet Name="V_EngineReport" EntityType="ACMSModel.V_EngineReport" />
           <EntitySet Name="Menu" EntityType="ACMSModel.Menu" />
           <EntitySet Name="ExecuteUnit" EntityType="ACMSModel.ExecuteUnit" />
-          <EntitySet Name="Planes" EntityType="ACMSModel.Planes" />
           <EntitySet Name="PlTypeTCtrlList" EntityType="ACMSModel.PlTypeTCtrlList" />
           <EntitySet Name="PlTypeTCtrlList_Log" EntityType="ACMSModel.PlTypeTCtrlList_Log" />
           <EntitySet Name="CESSNA172RDailyRecord" EntityType="ACMSModel.CESSNA172RDailyRecord" />
           <EntitySet Name="PA44_180DailyRecord" EntityType="ACMSModel.PA44_180DailyRecord" />
+          <EntitySet Name="Planes" EntityType="ACMSModel.Planes" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1534,24 +1534,6 @@
           <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Planes">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="PlaneNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PlaneSeria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PlaneFacDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsMonitored" Type="Boolean" Nullable="false" />
-          <Property Name="Memo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RankNo" Type="Int32" Nullable="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="PlTypeTCtrlList">
           <Key>
             <PropertyRef Name="ID" />
@@ -1667,6 +1649,24 @@
           <Property Name="HeatingMachineNewTSN" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="ExecUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Memo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Planes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneTypeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneSeria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PlaneFacDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsMonitored" Type="Boolean" Nullable="false" />
+          <Property Name="Memo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RankNo" Type="Int32" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreateTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
@@ -2163,25 +2163,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Planes">
-            <EntityTypeMapping TypeName="ACMSModel.Planes">
-              <MappingFragment StoreEntitySet="Planes">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RankNo" ColumnName="RankNo" />
-                <ScalarProperty Name="Memo" ColumnName="Memo" />
-                <ScalarProperty Name="IsMonitored" ColumnName="IsMonitored" />
-                <ScalarProperty Name="PlaneFacDate" ColumnName="PlaneFacDate" />
-                <ScalarProperty Name="PlaneSeria" ColumnName="PlaneSeria" />
-                <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
-                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PlTypeTCtrlList">
             <EntityTypeMapping TypeName="ACMSModel.PlTypeTCtrlList">
               <MappingFragment StoreEntitySet="PlTypeTCtrlList">
@@ -2303,6 +2284,25 @@
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Planes">
+            <EntityTypeMapping TypeName="ACMSModel.Planes">
+              <MappingFragment StoreEntitySet="Planes">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RankNo" ColumnName="RankNo" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="IsMonitored" ColumnName="IsMonitored" />
+                <ScalarProperty Name="PlaneFacDate" ColumnName="PlaneFacDate" />
+                <ScalarProperty Name="PlaneSeria" ColumnName="PlaneSeria" />
+                <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
+                <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
