@@ -1518,7 +1518,7 @@ namespace ACMS.Applications.Impl
                     //当日时间=加温机时间（表）+加温机时间（表）修正-上一条加温机时间（表）-上一条加温机时间（表）修正
                     item.HeatingMachineDayTime = item.DayHeatingMachineTime + item.CorrectHeatingMachineTime - (lastRecord == null ? 0 : lastRecord.DayHeatingMachineTime) - (lastRecord == null ? 0 : lastRecord.CorrectHeatingMachineTime);
                     //修后时间TSO=上一条修后时间TSO+（加温机数据）当日时间
-                    item.HeatingMachineCorrectTSO = lastRecord == null ? "0" : (lastRecord.HeatingMachineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.RightEngineCorrectTSO) + Convert.ToDecimal(item.HeatingMachineDayTime ?? 0m)).ToString());
+                    item.HeatingMachineCorrectTSO = lastRecord == null ? "0" : (lastRecord.HeatingMachineCorrectTSO == "N/A" ? "N/A" : (Convert.ToDecimal(lastRecord.HeatingMachineCorrectTSO) + Convert.ToDecimal(item.HeatingMachineDayTime ?? 0m)).ToString());
                     //item.HeatingMachineCorrectTSO = (lastRecord == null ? 0 : lastRecord.HeatingMachineCorrectTSO) + item.HeatingMachineDayTime;
                     //自新时间TSN=上一条自新时间TSN+（加温机数据）当日时间
                     item.HeatingMachineNewTSN = (lastRecord == null ? 0 : lastRecord.HeatingMachineNewTSN) + item.HeatingMachineDayTime;
