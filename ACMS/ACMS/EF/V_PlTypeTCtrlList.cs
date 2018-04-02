@@ -14,6 +14,7 @@ namespace ACMS.EF
     
     public partial class V_PlTypeTCtrlList
     {
+        public Nullable<long> RowNo { get; set; }
         public string ID { get; set; }
         public string ProSource { get; set; }
         public string PlaneTypeID { get; set; }

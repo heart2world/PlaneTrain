@@ -106,13 +106,13 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Add(PlTypeTCtrlList item, string userID)
         {
-            var query = _dbContext.Set<PlTypeTCtrlList>().Where(x => x.ProSource == item.ProSource && x.PlaneTypeID==item.PlaneTypeID && x.IsActive).FirstOrDefault();
+            var query = _dbContext.Set<PlTypeTCtrlList>().Where(x => x.MainTainName.ToLower() == item.MainTainName.ToLower() && x.PlaneTypeID == item.PlaneTypeID && x.IsActive).FirstOrDefault();
             if (query != null)
             {
                 return new OperationResult()
                 {
                     Result = false,
-                    ResultMsg = "该项目来源已存在"
+                    ResultMsg = "该项目名称已存在"
                 };
             }
             try
