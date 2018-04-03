@@ -30,19 +30,16 @@ namespace ACMS.EF
         public virtual DbSet<RoleMenu> RoleMenu { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<PlaneType> PlaneType { get; set; }
-        public virtual DbSet<V_PlTypeTCtrlList> V_PlTypeTCtrlList { get; set; }
         public virtual DbSet<V_V_PlTypeTCtrlList_Log> V_V_PlTypeTCtrlList_Log { get; set; }
         public virtual DbSet<AirTimeAlarmSet> AirTimeAlarmSet { get; set; }
         public virtual DbSet<PlanesTCtrlItem_ReList> PlanesTCtrlItem_ReList { get; set; }
         public virtual DbSet<PlanesTCtrlItem> PlanesTCtrlItem { get; set; }
-        public virtual DbSet<V_PlanesTCtrlItem> V_PlanesTCtrlItem { get; set; }
         public virtual DbSet<V_PlanesTCtrlItem_Log> V_PlanesTCtrlItem_Log { get; set; }
         public virtual DbSet<WatchPrintList> WatchPrintList { get; set; }
         public virtual DbSet<V_PlanesTCtrlItem_Check> V_PlanesTCtrlItem_Check { get; set; }
         public virtual DbSet<V_DailyRecordReport> V_DailyRecordReport { get; set; }
         public virtual DbSet<ReportRecord> ReportRecord { get; set; }
         public virtual DbSet<V_RecordMonthReport> V_RecordMonthReport { get; set; }
-        public virtual DbSet<V_EngineReport> V_EngineReport { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<ExecuteUnit> ExecuteUnit { get; set; }
         public virtual DbSet<PlTypeTCtrlList> PlTypeTCtrlList { get; set; }
@@ -51,5 +48,8 @@ namespace ACMS.EF
         public virtual DbSet<PA44_180DailyRecord> PA44_180DailyRecord { get; set; }
         public virtual DbSet<Planes> Planes { get; set; }
         public virtual DbSet<V_Planes> V_Planes { get; set; }
+        public virtual DbSet<V_EngineReport> V_EngineReport { get; set; }
+        public virtual DbSet<V_PlanesTCtrlItem> V_PlanesTCtrlItem { get; set; }
+        public virtual DbSet<V_PlTypeTCtrlList> V_PlTypeTCtrlList { get; set; }
     }
 }

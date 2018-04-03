@@ -112,7 +112,7 @@ namespace ACMS.Applications.Impl
                 return new OperationResult()
                 {
                     Result = false,
-                    ResultMsg = "该项目来源已存在"
+                    ResultMsg = "该项目名称已存在"
                 };
             }
             try
