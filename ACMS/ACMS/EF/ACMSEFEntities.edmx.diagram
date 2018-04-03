@@ -13,10 +13,7 @@
         <EntityTypeShape EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" Width="1.5" PointX="11.375" PointY="12.75" />
         <EntityTypeShape EntityType="ACMSModel.AirTimeAlarmSet" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem_ReList" Width="1.5" PointX="0.75" PointY="7.75" />
-        <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem" Width="1.5" PointX="13.375" PointY="9.75" />
-        <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Log" Width="1.5" PointX="7.375" PointY="14.75" />
         <EntityTypeShape EntityType="ACMSModel.WatchPrintList" Width="1.5" PointX="15.375" PointY="0.75" />
-        <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Check" Width="1.5" PointX="15.375" PointY="4.75" />
         <EntityTypeShape EntityType="ACMSModel.V_DailyRecordReport" Width="1.5" PointX="15.375" PointY="15.75" />
         <EntityTypeShape EntityType="ACMSModel.ReportRecord" Width="1.5" PointX="17.375" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.V_RecordMonthReport" Width="1.5" PointX="17.375" PointY="4.75" />
@@ -29,8 +26,11 @@
         <EntityTypeShape EntityType="ACMSModel.Planes" Width="1.5" PointX="5.375" PointY="8.75" />
         <EntityTypeShape EntityType="ACMSModel.V_Planes" Width="1.5" PointX="19.375" PointY="0.75" />
         <EntityTypeShape EntityType="ACMSModel.V_EngineReport" Width="1.5" PointX="17.375" PointY="10.75" />
-        <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem" Width="1.5" PointX="3.75" PointY="14.75" />
         <EntityTypeShape EntityType="ACMSModel.V_PlTypeTCtrlList" Width="1.5" PointX="0.75" PointY="19.75" />
+        <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem" Width="1.5" PointX="11.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem" Width="1.5" PointX="13.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Check" Width="1.5" PointX="5.375" PointY="13.75" />
+        <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Log" Width="1.5" PointX="7.375" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
