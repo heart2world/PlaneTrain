@@ -163,7 +163,7 @@ namespace ACMS.Applications.Impl
             if (!string.IsNullOrEmpty(keyWord))//关键词查询    
                 result = result.Where(a => a.JianNO.Contains(keyWord) || a.SerialNO.Contains(keyWord));
             list.Total = result.Count();
-            result = result.OrderBy(a => a.PlaneNoName).ThenByDescending(a=>a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderBy(a => a.TypeName).ThenBy(a=>a.PlaneNoName).ThenBy(a=>a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
