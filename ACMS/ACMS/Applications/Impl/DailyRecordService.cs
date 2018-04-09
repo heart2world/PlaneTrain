@@ -49,11 +49,11 @@ namespace ACMS.Applications.Impl
             var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
             if (!string.IsNullOrEmpty(startDate))
             {
-                result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+                result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
             }
             if (!string.IsNullOrEmpty(endDate))
             {
-                result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+                result = result.Where(x => string.Compare(x.InputDate, endDate) <= 0);
             }
             list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlaneTypeID })
                          .Select(g => new PlaneWorkReportDto()
@@ -64,14 +64,14 @@ namespace ACMS.Applications.Impl
                              PlaneTypeID = g.Key.PlaneTypeID,
                              TypeName = g.Key.TypeName
                          }).ToList();
-            if (!string.IsNullOrEmpty(startDate))
-            {
-                result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
-            }
-            if (!string.IsNullOrEmpty(endDate))
-            {
-                result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
-            }
+            //if (!string.IsNullOrEmpty(startDate))
+            //{
+            //    result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
+            //}
+            //if (!string.IsNullOrEmpty(endDate))
+            //{
+            //    result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
+            //}
 
             #region 用于统计机型下的飞机数目
             if (list.ResultData != null && list.ResultData.Count > 0)
@@ -382,7 +382,7 @@ namespace ACMS.Applications.Impl
             if (list != null && list.ResultData.Count > 0)
             {
                 //飞行天数查询
-                var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive && a.Type == 2);
+                var result2 = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
                 if (!string.IsNullOrEmpty(startDate))
                 {
                     result2 = result2.Where(x => string.Compare(x.InputDate, startDate) >= 0);
