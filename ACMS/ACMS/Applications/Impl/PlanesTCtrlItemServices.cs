@@ -24,7 +24,7 @@ namespace ACMS.Applications.Impl
 
         }
 
-        
+
         /*
         public PageResult<PlanesTCtrlItemDto> GetList(int pageSize, int pageNo, string planeTypeID, string planeNo, string listID, string keyWord)
         {
@@ -154,16 +154,25 @@ namespace ACMS.Applications.Impl
                 _dbContext = base.CreateDbContext();
             }
             var result = _dbContext.Set<V_PlanesTCtrlItem>().Where(a => a.IsActive);
-            if (!string.IsNullOrEmpty(planeTypeID))//关键词查询    
-                result = result.Where(a => a.PlaneTypeID.Equals(planeTypeID));
-            if (!string.IsNullOrEmpty(planeNo))//关键词查询    
-                result = result.Where(a => a.PlaneNo.Equals(planeNo));
-            if (!string.IsNullOrEmpty(listID))//关键词查询    
-                result = result.Where(a => a.PlTypeTCtrl.Equals(listID));
+            if (!string.IsNullOrEmpty(planeTypeID))//关键词查询 
+            {
+                var planeTypeIDList = planeTypeID.Split(',').ToList();
+                result = result.Where(a => planeTypeIDList.Contains(a.PlaneTypeID));
+            }
+            if (!string.IsNullOrEmpty(planeNo))//关键词查询 
+            {
+                var planeNoList = planeNo.Split(',').ToList();
+                result = result.Where(a => planeNoList.Contains(a.PlaneNo));
+            }
+            if (!string.IsNullOrEmpty(listID))//关键词查询   
+            {
+                var listIDList = listID.Split(',').ToList();
+                result = result.Where(a => listIDList.Contains(a.PlTypeTCtrl));
+            }
             if (!string.IsNullOrEmpty(keyWord))//关键词查询    
                 result = result.Where(a => a.JianNO.Contains(keyWord) || a.SerialNO.Contains(keyWord));
             list.Total = result.Count();
-            result = result.OrderBy(a => a.TypeName).ThenBy(a=>a.PlaneNoName).ThenBy(a=>a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderBy(a => a.TypeName).ThenBy(a => a.PlaneNoName).ThenBy(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -324,7 +333,7 @@ namespace ACMS.Applications.Impl
         /// <returns>操作结果</returns>
         public OperationResult Update(PlanesTCtrlItemDto item, string userID)
         {
-            
+
             var editModel = _dbContext.Set<PlanesTCtrlItem>().Where(x => x.ID == item.ID).FirstOrDefault();
             if (editModel != null)
             {

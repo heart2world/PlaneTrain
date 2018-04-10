@@ -240,49 +240,43 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
-            && string.Compare(a.InputDate, endDate) <= 0);
-            list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName })
-                         .Select(g => new EngineReportDto()
-                         {
-                             EngineCorrectTSO = g.Max(i => i.EngineCorrectTSO),
-                             EngineNewTSN = g.Max(i => i.EngineNewTSN),
-                             PlaneNo = g.Key.PlaneNo,
-                             Position = g.Key.Position,
-                             EngineNo = g.Key.EngineNo,
-                             PlaneTypeName = g.Key.TypeName
-                         }).ToList();
 
-            //查询飞机本月空中时间
-            if (list.ResultData != null && list.ResultData.Count > 0)
+            var v_engineReportQuery = _dbContext.Set<V_EngineReport>().ToList();
+
+            //先查询需要展示的发动机列表
+            var engineList = (from a in v_engineReportQuery
+                              where string.Compare(a.InputDate, endDate) <= 0
+                              group a by new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName } into g
+                              select new EngineReportDto
+                              {
+                                  PlaneNo = g.Key.PlaneNo,
+                                  EngineNo = g.Key.EngineNo,
+                                  Position = g.Key.Position,
+                                  PlaneTypeName = g.Key.TypeName,
+                                  EngineCorrectTSO = g.Max(m => m.EngineCorrectTSO),
+                                  EngineNewTSN = g.Max(m => m.EngineNewTSN)
+                              }).ToList();
+
+            //统计指定月份的发动机数据
+
+            if (engineList.Count > 0)
             {
-                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive &&
-                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                ).ToList();
-                foreach (var item in list.ResultData)
+                var periodEngineData = v_engineReportQuery.Where(x => string.Compare(x.InputDate, startDate) >= 0 && string.Compare(x.InputDate, endDate) <= 0).ToList();
+                foreach (var item in engineList)
                 {
-                    var tempResult = result2.Where(a => a.PlaneNo == item.PlaneNo).ToList();
-                    item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+                    item.PlanDayAirTime = periodEngineData.Where(x => x.PlaneNo == item.PlaneNo).Sum(a => a.PlanDayAirTime ?? 0m);
                     if (item.Position != "前")
                     {
                         item.PlanDayAirTime = item.PlanDayAirTime / 2;
                     }
-                }
-            }
 
-            //查询发动机本月状态
-            if (list.ResultData != null && list.ResultData.Count > 0)
-            {
-                var result3 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
-                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                );
-                foreach (var item in list.ResultData)
-                {
-                    var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime);
+                    var temp = periodEngineData.Where(a => a.Type == 1 && a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime);
                     if (temp != null && temp.Count() > 0)
-                    {//如果在初值中有设置过 飞机的发动机  
+                    {
+                        //如果在初值中有设置过 飞机的发动机  
                         if (temp.First().EngineNo != item.EngineNo)
-                        {//如果最后装载的发动机和 当前的不一致  则为拆卸
+                        {
+                            //如果最后装载的发动机和 当前的不一致  则为拆卸
                             item.EngineStatus = "拆卸";
                         }
                         else
@@ -297,7 +291,66 @@ namespace ACMS.Applications.Impl
                 }
             }
 
-            list.Total = list.ResultData.Count();
+            //var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
+            //&& string.Compare(a.InputDate, endDate) <= 0);
+            //list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName })
+            //             .Select(g => new EngineReportDto()
+            //             {
+            //                 EngineCorrectTSO = g.Max(i => i.EngineCorrectTSO),
+            //                 EngineNewTSN = g.Max(i => i.EngineNewTSN),
+            //                 PlaneNo = g.Key.PlaneNo,
+            //                 Position = g.Key.Position,
+            //                 EngineNo = g.Key.EngineNo,
+            //                 PlaneTypeName = g.Key.TypeName,
+
+            //             }).ToList();
+
+            ////查询飞机本月空中时间
+            //if (list.ResultData != null && list.ResultData.Count > 0)
+            //{
+            //    var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive &&
+            //    string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+            //    ).ToList();
+            //    foreach (var item in list.ResultData)
+            //    {
+            //        var tempResult = result2.Where(a => a.PlaneNo == item.PlaneNo).ToList();
+            //        item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+            //        if (item.Position != "前")
+            //        {
+            //            item.PlanDayAirTime = item.PlanDayAirTime / 2;
+            //        }
+            //    }
+            //}
+
+            ////查询发动机本月状态
+            //if (list.ResultData != null && list.ResultData.Count > 0)
+            //{
+            //    var result3 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
+            //    string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+            //    );
+            //    foreach (var item in list.ResultData)
+            //    {
+            //        var temp = result3.Where(a => a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime);
+            //        if (temp != null && temp.Count() > 0)
+            //        {//如果在初值中有设置过 飞机的发动机  
+            //            if (temp.First().EngineNo != item.EngineNo)
+            //            {//如果最后装载的发动机和 当前的不一致  则为拆卸
+            //                item.EngineStatus = "拆卸";
+            //            }
+            //            else
+            //            {
+            //                item.EngineStatus = "装机";
+            //            }
+            //        }
+            //        else
+            //        {
+            //            item.EngineStatus = "装机";
+            //        }
+            //    }
+            //}
+
+            list.ResultData = engineList.OrderBy(o => o.PlaneTypeName).ThenBy(o => o.PlaneNo).ToList();
+            list.Total = engineList.Count;
             return list;
         }
 
@@ -422,7 +475,7 @@ namespace ACMS.Applications.Impl
             list.ResultData = list.ResultData.OrderBy(a => a.PlaneTypeID).ThenBy(a => a.PlanID).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
             return list;
         }
-        
+
         #region CESSNA172RDailyRecord
         /// <summary>
         /// 获取参数
