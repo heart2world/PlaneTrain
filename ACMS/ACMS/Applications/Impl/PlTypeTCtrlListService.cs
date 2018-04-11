@@ -165,7 +165,8 @@ namespace ACMS.Applications.Impl
                     editModel.RCheckDate = item.RCheckDate;
                     editModel.ROnOffTime = item.ROnOffTime; ;
                     editModel.RUpTemprTime = item.RUpTemprTime; 
-                    editModel.RUpTemprTime = item.RUpTemprTime; 
+                    editModel.RUpTemprTime = item.RUpTemprTime;
+                    editModel.Memo = item.Memo;
                     editModel.Updator = userID;
                     editModel.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
