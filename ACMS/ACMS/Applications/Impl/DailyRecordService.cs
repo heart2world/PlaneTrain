@@ -46,50 +46,83 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
-            if (!string.IsNullOrEmpty(startDate))
-            {
-                result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
-            }
-            if (!string.IsNullOrEmpty(endDate))
-            {
-                result = result.Where(x => string.Compare(x.InputDate, endDate) <= 0);
-            }
-            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlaneTypeID })
-                         .Select(g => new PlaneWorkReportDto()
-                         {
-                             DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
-                             PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
-                             PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime),
-                             PlaneTypeID = g.Key.PlaneTypeID,
-                             TypeName = g.Key.TypeName
-                         }).ToList();
-            //if (!string.IsNullOrEmpty(startDate))
-            //{
-            //    result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
-            //}
-            //if (!string.IsNullOrEmpty(endDate))
-            //{
-            //    result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
-            //}
+            //显示所有的机型的数据
+            var allPlaneTypeList = (from a in _dbContext.Set<PlaneType>()
+                                    where a.IsActive
+                                    select new PlaneWorkReportDto()
+                                    {
+                                        PlaneTypeID = a.ID,
+                                        TypeName = a.TypeName
+                                    }).ToList();
 
-            #region 用于统计机型下的飞机数目
-            if (list.ResultData != null && list.ResultData.Count > 0)
+            if (allPlaneTypeList.Count > 0)
             {
-                //用于统计机型下的飞机数目
-                /*var result2 = (from a in _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive)
-                               where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                               select new { PlaneNo = a.PlaneNo, PlaneTypeID = a.PlaneTypeID }
-
-                              ).Distinct().ToList();*/
-                var result2 = _dbContext.Set<Planes>().Where(a => a.IsActive);
-                foreach (var item in list.ResultData)
+                var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+                if (!string.IsNullOrEmpty(startDate))
                 {
-                    item.PlanesCount = result2.Where(m => m.PlaneTypeID == item.PlaneTypeID).Count();
+                    result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
                 }
+                if (!string.IsNullOrEmpty(endDate))
+                {
+                    result = result.Where(x => string.Compare(x.InputDate, endDate) <= 0);
+                }
+                var tempResult = result.GroupBy(a => new { a.TypeName, a.PlaneTypeID })
+                             .Select(g => new PlaneWorkReportDto()
+                             {
+                                 DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
+                                 PlanDayAirTime = g.Sum(i => i.PlanDayAirTime ?? 0m),
+                                 PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime ?? 0m),
+                                 PlaneTypeID = g.Key.PlaneTypeID,
+                                 TypeName = g.Key.TypeName
+                             }).ToList();
+                //获取所有飞机列表
+                var planeQuery = _dbContext.Set<Planes>().Where(x => x.IsActive && string.Compare(x.PlaneFacDate, endDate) <= 0);
+
+                foreach (var item in allPlaneTypeList)
+                {
+                    var temp = tempResult.Where(x => x.PlaneTypeID == item.PlaneTypeID).FirstOrDefault();
+                    if (temp != null)
+                    {
+                        item.DayRiseAndFallNum = temp.DayRiseAndFallNum;
+                        item.PlanDayAirTime = temp.PlanDayAirTime ?? 0m;
+                        item.PlanDayClearingTime = temp.PlanDayClearingTime ?? 0m;
+                    }
+                    else
+                    {
+                        item.DayRiseAndFallNum = 0;
+                        item.PlanDayAirTime = 0m;
+                        item.PlanDayClearingTime = 0m;
+                    }
+
+                    item.PlanesCount = planeQuery.Where(m => m.PlaneTypeID == item.PlaneTypeID).Count();
+
+                }
+
             }
+
+            list.Total = allPlaneTypeList.Count;
+            list.ResultData = allPlaneTypeList;
+
+            #region 原逻辑注释
+            //#region 用于统计机型下的飞机数目
+            //if (list.ResultData != null && list.ResultData.Count > 0)
+            //{
+            //    //用于统计机型下的飞机数目
+            //    /*var result2 = (from a in _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive)
+            //                   where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+            //                   select new { PlaneNo = a.PlaneNo, PlaneTypeID = a.PlaneTypeID }
+
+            //                  ).Distinct().ToList();*/
+            //    var result2 = _dbContext.Set<Planes>().Where(a => a.IsActive);
+            //    foreach (var item in list.ResultData)
+            //    {
+            //        item.PlanesCount = result2.Where(m => m.PlaneTypeID == item.PlaneTypeID).Count();
+            //    }
+            //}
+            //#endregion
+            //list.Total = list.ResultData.Count();
             #endregion
-            list.Total = list.ResultData.Count();
+
             return list;
         }
 
@@ -107,55 +140,97 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive);
-            if (!string.IsNullOrEmpty(startDate))
-            {
-                result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
-            }
-            if (!string.IsNullOrEmpty(endDate))
-            {
-                result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
-            }
-            list.ResultData = result.GroupBy(a => new { a.TypeName, a.PlaneNo })
-                         .Select(g => new PlaneReportDto()
-                         {
-                             DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
-                             PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
-                             PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime),
-                             PlaneNo = g.Key.PlaneNo,
-                             TypeName = g.Key.TypeName
-                         }).ToList();
-            /*if (!string.IsNullOrEmpty(startDate))
-            {
-                result = result.Where(a => string.Compare(a.InputDate, startDate) >= 0);
-            }
-            if (!string.IsNullOrEmpty(endDate))
-            {
-                result = result.Where(a => string.Compare(a.InputDate, endDate) <= 0);
-            }*/
 
-            #region 用于计算飞机自新数据
-            if (list.ResultData != null && list.ResultData.Count > 0)
+            //获取所有飞机数据
+            var planesQuery = (from a in _dbContext.Set<Planes>()
+                               join b in _dbContext.Set<PlaneType>() on a.PlaneTypeID equals b.ID
+                               where a.IsActive && string.Compare(a.PlaneFacDate, endDate) <= 0
+                               orderby a.PlaneTypeID, a.PlaneNo
+                               select new PlaneReportDto()
+                               {
+                                   TypeName = b.TypeName,
+                                   PlaneNo = a.PlaneNo
+                               }).ToList();
+
+            if (planesQuery.Count > 0)
             {
+                var result = _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive);
+
                 //用于统计机型下的飞机数目
-                var result2 = (from a in _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive)
+                var result2 = (from a in result
                                where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                               select a
+                               select a).OrderByDescending(m => m.InputDate).ThenByDescending(m => m.CreateTime);
 
-                              ).OrderByDescending(m => m.InputDate).ThenByDescending(m => m.CreateTime);
-                foreach (var item in list.ResultData)
+                if (!string.IsNullOrEmpty(startDate))
                 {
+                    result = result.Where(x => string.Compare(x.CreateTime, startDate) > 0);
+                }
+                if (!string.IsNullOrEmpty(endDate))
+                {
+                    result = result.Where(x => string.Compare(x.CreateTime, endDate) < 0);
+                }
+                var tempResult = result.GroupBy(a => new { a.TypeName, a.PlaneNo })
+                             .Select(g => new PlaneReportDto()
+                             {
+                                 DayRiseAndFallNum = g.Sum(i => i.DayRiseAndFallNum),
+                                 PlanDayAirTime = g.Sum(i => i.PlanDayAirTime),
+                                 PlanDayClearingTime = g.Sum(i => i.PlanDayClearingTime),
+                                 PlaneNo = g.Key.PlaneNo,
+                                 TypeName = g.Key.TypeName
+                             }).ToList();
+
+                foreach (var item in planesQuery)
+                {
+                    var temp = tempResult.Where(x => x.PlaneNo == item.PlaneNo && x.TypeName == item.TypeName).FirstOrDefault();
+                    if (temp != null)
+                    {
+                        item.DayRiseAndFallNum = temp.DayRiseAndFallNum;
+                        item.PlanDayAirTime = temp.PlanDayAirTime ?? 0m;
+                        item.PlanDayClearingTime = temp.PlanDayClearingTime ?? 0m;
+                    }
+                    else
+                    {
+                        item.DayRiseAndFallNum = 0;
+                        item.PlanDayAirTime = 0m;
+                        item.PlanDayClearingTime = 0m;
+                    }
+
                     if (result2.Where(m => m.PlaneNo == item.PlaneNo).Count() > 0)
                     {
                         var tempItem = result2.Where(m => m.PlaneNo == item.PlaneNo).First();
-                        item.PlanNewAirTime = tempItem.PlanNewAirTime;
-                        item.PlanNewClearingTime = tempItem.PlanNewClearingTime;
-                        item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum;
+                        item.PlanNewAirTime = tempItem.PlanNewAirTime ?? 0m;
+                        item.PlanNewClearingTime = tempItem.PlanNewClearingTime ?? 0m;
+                        item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum ?? 0;
                     }
                 }
             }
+
+            list.ResultData = planesQuery;
+            list.Total = planesQuery.Count;
+
+            #region 原逻辑注释
+            //#region 用于计算飞机自新数据
+            //if (list.ResultData != null && list.ResultData.Count > 0)
+            //{
+            //    //用于统计机型下的飞机数目
+            //    var result2 = (from a in _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive)
+            //                   where string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+            //                   select a).OrderByDescending(m => m.InputDate).ThenByDescending(m => m.CreateTime);
+            //    foreach (var item in list.ResultData)
+            //    {
+            //        if (result2.Where(m => m.PlaneNo == item.PlaneNo).Count() > 0)
+            //        {
+            //            var tempItem = result2.Where(m => m.PlaneNo == item.PlaneNo).First();
+            //            item.PlanNewAirTime = tempItem.PlanNewAirTime;
+            //            item.PlanNewClearingTime = tempItem.PlanNewClearingTime;
+            //            item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum;
+            //        }
+            //    }
+            //}
+            //#endregion
+            //list.Total = list.ResultData.Count();
             #endregion
-            list.Total = list.ResultData.Count();
+
             return list;
         }
 
