@@ -512,6 +512,9 @@ namespace ACMS.Applications.Impl
                     result2 = result2.Where(x => string.Compare(x.InputDate, endDate) <= 0);
                 }
 
+                //排除当日空中时间为0.00和null的
+                result2 = result2.Where(x => x.PlanDayAirTime != null && x.PlanDayAirTime != 0m);
+
                 //汇总每日每个飞机的登记数据
                 var result3 = (from item in result2
                                group item by new { item.PlaneNo, item.InputDate }
