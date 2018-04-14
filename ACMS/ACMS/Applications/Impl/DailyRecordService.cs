@@ -173,46 +173,49 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
-            && string.Compare(a.InputDate, endDate) <= 0 && a.Type == 2);
-            list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position })
-                         .Select(g => new EngineReportDto()
-                         {
-                             EngineCorrectTSO = g.Max(i => i.EngineCorrectTSO),
-                             EngineNewTSN = g.Max(i => i.EngineNewTSN),
-                             PlaneNo = g.Key.PlaneNo,
-                             Position = g.Key.Position,
-                             EngineNo = g.Key.EngineNo
-                         }).ToList();
-            //剔除 新增发动机首月不统计 
-            if (list.ResultData != null && list.ResultData.Count > 0)
+
+            var v_engineReportQuery = _dbContext.Set<V_EngineReport>().ToList();
+
+            //先查询需要展示的发动机列表
+            var engineList = (from a in v_engineReportQuery
+                              where string.Compare(a.InputDate, endDate) <= 0
+                              group a by new { a.PlaneNo, a.EngineNo, a.Position } into g
+                              orderby g.Key.EngineNo, g.Key.PlaneNo
+                              select new EngineReportDto
+                              {
+                                  PlaneNo = g.Key.PlaneNo,
+                                  EngineNo = g.Key.EngineNo,
+                                  Position = g.Key.Position,
+                                  EngineCorrectTSO = g.Max(m => m.EngineCorrectTSO),
+                                  EngineNewTSN = g.Max(m => m.EngineNewTSN)
+                              }).ToList();
+
+            if (engineList.Count > 0)
             {
-                var tempList = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
-                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                );
-                List<EngineReportDto> tempList2 = new List<EngineReportDto>();
-                foreach (var item in list.ResultData)
-                {//复制列表至临时表中
+                //剔除 新增发动机首月不统计 
+                var tempList2 = new List<EngineReportDto>();
+                foreach (var item in engineList)
+                {
+                    //复制列表至临时表中
                     tempList2.Add(item);
                 }
+
+                var tempList = v_engineReportQuery.Where(a => a.IsActive && a.Type == 1 && string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0);
                 foreach (var item in tempList2)
-                {//剔除 数据
-                    var tempResult = tempList.Where(a => string.Compare(a.EngineNo, item.EngineNo, true) == 0
-                    && string.Compare(a.PlaneNo, item.PlaneNo) == 0 && string.Compare(a.Position, item.Position) == 0).ToList();
+                {
+                    //剔除 数据
+                    var tempResult = tempList.Where(a => a.EngineNo == item.EngineNo && a.PlaneNo == item.PlaneNo && a.Position == item.Position).ToList();
                     if (tempResult != null && tempResult.Count() > 0)
                     {
-                        list.ResultData.Remove(item);
+                        engineList.Remove(item);
                     }
-
                 }
-            }
-            //查询飞机本月空中时间
-            if (list.ResultData != null && list.ResultData.Count > 0)
-            {
-                var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive &&
-                string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
-                ).ToList();
-                foreach (var item in list.ResultData)
+
+
+                //查询飞机本月空中时间
+                var result2 = v_engineReportQuery.Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0).ToList();
+
+                foreach (var item in engineList)
                 {
                     var tempResult = result2.Where(a => a.PlaneNo == item.PlaneNo).ToList();
                     item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
@@ -221,8 +224,68 @@ namespace ACMS.Applications.Impl
                         item.PlanDayAirTime = item.PlanDayAirTime / 2;
                     }
                 }
+
             }
-            list.Total = list.ResultData.Count();
+
+            list.Total = engineList.Count();
+
+            list.ResultData = engineList;
+
+            #region 原逻辑注释
+            //var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
+            //&& string.Compare(a.InputDate, endDate) <= 0 && a.Type == 2);
+            //list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position })
+            //             .Select(g => new EngineReportDto()
+            //             {
+            //                 EngineCorrectTSO = g.Max(i => i.EngineCorrectTSO),
+            //                 EngineNewTSN = g.Max(i => i.EngineNewTSN),
+            //                 PlaneNo = g.Key.PlaneNo,
+            //                 Position = g.Key.Position,
+            //                 EngineNo = g.Key.EngineNo
+            //             }).ToList();
+            ////剔除 新增发动机首月不统计 
+            //if (list.ResultData != null && list.ResultData.Count > 0)
+            //{
+            //    var tempList = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && a.Type == 1 &&
+            //    string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+            //    );
+            //    List<EngineReportDto> tempList2 = new List<EngineReportDto>();
+            //    foreach (var item in list.ResultData)
+            //    {//复制列表至临时表中
+            //        tempList2.Add(item);
+            //    }
+            //    foreach (var item in tempList2)
+            //    {//剔除 数据
+            //        var tempResult = tempList.Where(a => string.Compare(a.EngineNo, item.EngineNo, true) == 0
+            //        && string.Compare(a.PlaneNo, item.PlaneNo) == 0 && string.Compare(a.Position, item.Position) == 0).ToList();
+            //        if (tempResult != null && tempResult.Count() > 0)
+            //        {
+            //            list.ResultData.Remove(item);
+            //        }
+
+            //    }
+            //}
+            ////查询飞机本月空中时间
+            //if (list.ResultData != null && list.ResultData.Count > 0)
+            //{
+            //    var result2 = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive &&
+            //    string.Compare(a.InputDate, startDate) >= 0 && string.Compare(a.InputDate, endDate) <= 0
+            //    ).ToList();
+            //    foreach (var item in list.ResultData)
+            //    {
+            //        var tempResult = result2.Where(a => a.PlaneNo == item.PlaneNo).ToList();
+            //        item.PlanDayAirTime = tempResult.Sum(a => a.PlanDayAirTime);
+            //        if (item.Position != "前")
+            //        {
+            //            item.PlanDayAirTime = item.PlanDayAirTime / 2;
+            //        }
+            //    }
+            //}
+            //list.Total = list.ResultData.Count();
+
+            #endregion
+
+
             return list;
         }
 
@@ -291,6 +354,8 @@ namespace ACMS.Applications.Impl
                 }
             }
 
+            #region 原逻辑注释
+
             //var result = _dbContext.Set<V_EngineReport>().Where(a => a.IsActive && string.Compare(a.InputDate, startDate) >= 0
             //&& string.Compare(a.InputDate, endDate) <= 0);
             //list.ResultData = result.GroupBy(a => new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName })
@@ -348,6 +413,8 @@ namespace ACMS.Applications.Impl
             //        }
             //    }
             //}
+
+            #endregion
 
             list.ResultData = engineList.OrderBy(o => o.PlaneTypeName).ThenBy(o => o.PlaneNo).ToList();
             list.Total = engineList.Count;
