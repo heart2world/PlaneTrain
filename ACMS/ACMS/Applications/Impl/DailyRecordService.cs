@@ -298,6 +298,25 @@ namespace ACMS.Applications.Impl
                     {
                         item.PlanDayAirTime = item.PlanDayAirTime / 2;
                     }
+
+                    var temp = result2.Where(a => a.Type == 1 && a.Position == item.Position && a.PlaneNo == item.PlaneNo).OrderByDescending(a => a.InputDate).ThenByDescending(a => a.CreateTime);
+                    if (temp != null && temp.Count() > 0)
+                    {
+                        //如果在初值中有设置过 飞机的发动机  
+                        if (temp.First().EngineNo != item.EngineNo)
+                        {
+                            //如果最后装载的发动机和 当前的不一致  则为拆卸
+                            item.EngineStatus = "拆卸";
+                        }
+                        else
+                        {
+                            item.EngineStatus = "装机";
+                        }
+                    }
+                    else
+                    {
+                        item.EngineStatus = "装机";
+                    }
                 }
 
             }
