@@ -384,13 +384,14 @@ namespace ACMS.Applications.Impl
             //先查询需要展示的发动机列表
             var engineList = (from a in v_engineReportQuery
                               where string.Compare(a.InputDate, endDate) <= 0
-                              group a by new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName } into g
+                              group a by new { a.PlaneNo, a.EngineNo, a.Position, a.TypeName, a.EngineType } into g
                               select new EngineReportDto
                               {
                                   PlaneNo = g.Key.PlaneNo,
                                   EngineNo = g.Key.EngineNo,
                                   Position = g.Key.Position,
                                   PlaneTypeName = g.Key.TypeName,
+                                  EngineType = g.Key.Position != "前" ? g.Key.Position + "：" + g.Key.EngineType : g.Key.EngineType,
                                   EngineCorrectTSO = g.Max(m => m.EngineCorrectTSO),
                                   EngineNewTSN = g.Max(m => m.EngineNewTSN)
                               }).ToList();
