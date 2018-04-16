@@ -430,6 +430,7 @@ namespace ACMS.Services.Impl
                         menu_id = p.ID,
                         menu_name = p.MenuName,
                         menu_url = p.MenuURL,
+                        menu_level = p.MenuLevel,
                         parent_menu_id = p.ParentMenuID,
                         order_index = p.OrderIndex,
                         icon = p.MenuIcon
@@ -483,6 +484,7 @@ namespace ACMS.Services.Impl
                     menu_id = p.ID,
                     menu_name = p.MenuName,
                     menu_url = p.MenuURL,
+                    menu_level = p.MenuLevel,
                     parent_menu_id = p.ParentMenuID,
                     order_index = p.OrderIndex,
                     icon = p.MenuIcon

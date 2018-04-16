@@ -25,6 +25,7 @@ namespace ACMS.Models
         public string menu_name { get; set; }
         public string menu_url { get; set; }
         public string icon { get; set; }
+        public int menu_level { get; set; }
         public Nullable<int> order_index { get; set; }
         public string parent_menu_id { get; set; }
         public List<MenuForDisplayDto> child { get; set; }
