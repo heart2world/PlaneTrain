@@ -406,7 +406,7 @@ namespace ACMS.Services.Impl
                                      join b in _dbContext.Set<UserRole>() on a.ID equals b.UserID
                                      join c in _dbContext.Set<RoleMenu>() on b.RoleID equals c.RoleID
                                      join d in _dbContext.Set<Menu>() on c.MenuID equals d.ID
-                                     where a.ID == userID && b.IsActive && c.IsActive && d.IsActive
+                                     where a.ID == userID && b.IsActive && c.IsActive && d.IsActive && d.MenuLevel < 3
                                      select d).ToList();
 
             //find rootMenu
