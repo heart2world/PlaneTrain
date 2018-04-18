@@ -69,20 +69,30 @@ namespace ACMS.Applications.Impl
         /// 获取列表
         /// </summary>
         /// <returns>根据机型获取时控项目监控清单</returns>
-        public PageResult<V_PlTypeTCtrlList> GetListByPlaneType(int pageSize, int pageNo, string PlaneTypeID)
+        public PageResult<V_PlTypeTCtrlList> GetListByPlaneType(int pageSize, int pageNo, List<string> PlaneTypeID)
         {
             PageResult<V_PlTypeTCtrlList> list = new PageResult<V_PlTypeTCtrlList>();
 
+            List<V_PlTypeTCtrlList> tempResult = new List<V_PlTypeTCtrlList>();//临时放结果的列表
             if (_dbContext == null)
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_PlTypeTCtrlList>().Where(a => a.IsActive);
-            if (!string.IsNullOrEmpty(PlaneTypeID))//关键词查询    
-                result = result.Where(a => a.PlaneTypeID.Equals(PlaneTypeID));
-            list.Total = result.Count();
-            result = result.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
-            list.ResultData = result.ToList();
+            var result = _dbContext.Set<V_PlTypeTCtrlList>().Where(a => a.IsActive).ToList();
+            if (result.Count > 0)
+            {
+                foreach (var temp in PlaneTypeID)
+                {
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        tempResult.AddRange(result.Where(m => m.PlaneTypeID == temp).ToList());
+                    }
+                }
+            }
+
+            list.Total = tempResult.Count();
+            tempResult = tempResult.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+            list.ResultData = tempResult.ToList();
             return list;
         }
 
@@ -164,7 +174,7 @@ namespace ACMS.Applications.Impl
                     editModel.RAirTime = item.RAirTime;
                     editModel.RCheckDate = item.RCheckDate;
                     editModel.ROnOffTime = item.ROnOffTime; ;
-                    editModel.RUpTemprTime = item.RUpTemprTime; 
+                    editModel.RUpTemprTime = item.RUpTemprTime;
                     editModel.RUpTemprTime = item.RUpTemprTime;
                     editModel.Memo = item.Memo;
                     editModel.Updator = userID;

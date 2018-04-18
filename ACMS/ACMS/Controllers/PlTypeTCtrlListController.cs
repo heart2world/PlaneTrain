@@ -34,7 +34,9 @@ namespace ACMS.Controllers
         [HttpGet, Route("getlistbyplanetype")]
         public IHttpActionResult GetListByPlaneType(int pageSize, int pageNo, string planeTypeID)
         {
-            return Ok(_service.GetListByPlaneType(pageSize, pageNo, planeTypeID));
+            List<string> planTypeIDList = new List<string>();
+            planTypeIDList = !string.IsNullOrEmpty(planeTypeID) ? planeTypeID.Split(',').ToList() : null;
+            return Ok(_service.GetListByPlaneType(pageSize, pageNo, planTypeIDList));
 
         }
 

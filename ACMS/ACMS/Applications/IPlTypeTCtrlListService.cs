@@ -27,7 +27,7 @@ namespace ACMS.Applications
         /// 获取列表
         /// </summary>
         /// <returns>根据机型获取时控项目监控清单</returns>
-        PageResult<V_PlTypeTCtrlList> GetListByPlaneType(int pageSize, int pageNo, string PlaneTypeID);
+        PageResult<V_PlTypeTCtrlList> GetListByPlaneType(int pageSize, int pageNo, List<string> PlaneTypeID);
 
         /// <summary>
         /// /// 根据ID获取信息
