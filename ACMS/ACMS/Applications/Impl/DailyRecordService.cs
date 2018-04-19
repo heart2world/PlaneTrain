@@ -154,6 +154,8 @@ namespace ACMS.Applications.Impl
 
             if (planesQuery.Count > 0)
             {
+                var allRecords = _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive).ToList();
+
                 var result = _dbContext.Set<V_RecordMonthReport>().Where(a => a.IsActive);
 
                 //用于统计机型下的飞机数目
@@ -195,9 +197,12 @@ namespace ACMS.Applications.Impl
                         item.PlanDayClearingTime = 0m;
                     }
 
-                    if (result2.Where(m => m.PlaneNo == item.PlaneNo).Count() > 0)
+                    //查询小于当前查询时间开始时间的数据，取最新的一条
+                    var allMonthDailyRecordByPlaneNo = allRecords.Where(x => string.Compare(x.InputDate, endDate) < 0 && x.PlaneNo == item.PlaneNo).OrderByDescending(m => m.InputDate).ThenByDescending(m => m.CreateTime).ToList();
+
+                    if (allMonthDailyRecordByPlaneNo.Count > 0)
                     {
-                        var tempItem = result2.Where(m => m.PlaneNo == item.PlaneNo).First();
+                        var tempItem = allMonthDailyRecordByPlaneNo.First();
                         item.PlanNewAirTime = tempItem.PlanNewAirTime ?? 0m;
                         item.PlanNewClearingTime = tempItem.PlanNewClearingTime ?? 0m;
                         item.PlanNewRiseAndFallNum = tempItem.PlanNewRiseAndFallNum ?? 0;
