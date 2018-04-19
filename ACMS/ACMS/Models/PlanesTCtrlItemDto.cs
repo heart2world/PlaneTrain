@@ -34,7 +34,7 @@ namespace ACMS.Models
         public string Creator { get; set; }
         public string UpdateTime { get; set; }
         public string Updator { get; set; }
-        public int ExeCapacity { get; set; }
+        public Nullable<int> ExeCapacity { get; set; }
         public List<string> ReList { get; set; }
     }
 }

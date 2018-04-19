@@ -22,7 +22,7 @@ namespace ACMS.EF
         public string SerialNO { get; set; }
         public Nullable<decimal> TSN { get; set; }
         public Nullable<decimal> TSO { get; set; }
-        public int ExeCapacity { get; set; }
+        public Nullable<int> ExeCapacity { get; set; }
         public Nullable<bool> IsWatDate { get; set; }
         public Nullable<bool> IsWatAirTime { get; set; }
         public Nullable<bool> IsWatOnOffTime { get; set; }

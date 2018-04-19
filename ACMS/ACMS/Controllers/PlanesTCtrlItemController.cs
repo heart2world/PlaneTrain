@@ -18,12 +18,24 @@ namespace ACMS.Controllers
     {
         IPlanesTCtrlItemServices _service = new PlanesTCtrlItemServices();
 
-        [HttpGet, Route("getlist")]
-        public IHttpActionResult GetList(int pageSize, int pageNo, string planeTypeID, string planeNo, string listID, string keyWord)
+        [HttpPost, Route("getlist")]
+        public IHttpActionResult GetList(QueryParam dto)
         {
-            return Ok(_service.GetList(pageSize, pageNo, planeTypeID, planeNo, listID, keyWord));
+            return Ok(_service.GetList(dto.pageSize, dto.pageNo, dto.planeTypeID, dto.planeNo, dto.listID, dto.keyWord));
 
         }
+
+        public class QueryParam
+        {
+            public int pageSize { get; set; }
+            public int pageNo { get; set; }
+            public string planeTypeID { get; set; }
+            public string planeNo { get; set; }
+            public string listID { get; set; }
+            public string keyWord { get; set; }
+
+        }
+
         [HttpGet, Route("getlist_history")]
         public IHttpActionResult GetListHistory(int pageSize, int pageNo, string itemID)
         {
