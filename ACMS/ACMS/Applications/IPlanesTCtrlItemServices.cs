@@ -23,6 +23,14 @@ namespace ACMS.Applications
         PageResult<V_PlanesTCtrlItem_Log> GetListHistory(int pageSize, int pageNo, string itemID);
 
         /// <summary>
+        /// 获取所有的历史记录，不带查询条件
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        PageResult<V_PlanesTCtrlItem_Log> GetAllListHistory(int pageSize, int pageNo);
+
+        /// <summary>
         /// /// 根据ID获取信息
         /// </summary>
         /// <param name="ID"></param>

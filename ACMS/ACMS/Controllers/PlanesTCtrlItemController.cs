@@ -43,6 +43,13 @@ namespace ACMS.Controllers
 
         }
 
+        [HttpGet, Route("getallhistorylist")]
+        public IHttpActionResult GetAllListHistory(int pageSize, int pageNo)
+        {
+            return Ok(_service.GetAllListHistory(pageSize, pageNo));
+
+        }
+
         [HttpPost, Route("add")]
         public IHttpActionResult Add(PlanesTCtrlItemDto item)
         {

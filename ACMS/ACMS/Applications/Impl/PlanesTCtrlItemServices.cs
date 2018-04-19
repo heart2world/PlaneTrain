@@ -172,7 +172,7 @@ namespace ACMS.Applications.Impl
             if (!string.IsNullOrEmpty(keyWord))//关键词查询    
                 result = result.Where(a => a.JianNO.Contains(keyWord) || a.SerialNO.Contains(keyWord));
             list.Total = result.Count();
-            result = result.OrderBy(a => a.TypeName).ThenBy(a => a.PlaneNoName).ThenBy(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderBy(a => a.TypeName).ThenBy(a => a.PlaneNoName).ThenBy(a => a.RowNo).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }
@@ -194,6 +194,27 @@ namespace ACMS.Applications.Impl
                 result = result.Where(a => a.ItemID.Equals(itemID));
             list.Total = result.Count();
             result = result.OrderByDescending(a => a.UpdateTime).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            list.ResultData = result.ToList();
+            return list;
+        }
+
+        /// <summary>
+        /// 获取所有的历史记录，不带查询条件
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public PageResult<V_PlanesTCtrlItem_Log> GetAllListHistory(int pageSize, int pageNo)
+        {
+            PageResult<V_PlanesTCtrlItem_Log> list = new PageResult<V_PlanesTCtrlItem_Log>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_PlanesTCtrlItem_Log>().Where(a => a.IsActive);
+            list.Total = result.Count();
+            result = result.OrderByDescending(a => a.PlaneTypeID).ThenByDescending(a => a.PlaneNo).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }

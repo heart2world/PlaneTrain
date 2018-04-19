@@ -24,6 +24,13 @@ namespace ACMS.Controllers
 
         }
 
+        [HttpGet, Route("getallhistorylist")]
+        public IHttpActionResult GetAllHistoryList(int pageSize, int pageNo)
+        {
+            return Ok(_service.GetAllHistoryList(pageSize, pageNo));
+
+        }
+
         [HttpGet, Route("getlist")]
         public IHttpActionResult GetList(int pageSize, int pageNo, string keyWord)
         {

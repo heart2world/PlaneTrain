@@ -18,6 +18,12 @@ namespace ACMS.Applications
         PageResult<V_V_PlTypeTCtrlList_Log> GetListHostory(int pageSize, int pageNo, string tCtrlID);
 
         /// <summary>
+        /// 获取机型时控项目清单所有历史记录
+        /// </summary>
+        /// <returns>用户列表信息</returns>
+        PageResult<V_V_PlTypeTCtrlList_Log> GetAllHistoryList(int pageSize, int pageNo);
+
+        /// <summary>
         /// 获取列表
         /// </summary>
         /// <returns>用户列表信息</returns>

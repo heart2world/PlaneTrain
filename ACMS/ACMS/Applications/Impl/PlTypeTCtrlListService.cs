@@ -45,6 +45,25 @@ namespace ACMS.Applications.Impl
         }
 
         /// <summary>
+        /// 获取机型时控项目清单所有历史记录
+        /// </summary>
+        /// <returns>用户列表信息</returns>
+        public PageResult<V_V_PlTypeTCtrlList_Log> GetAllHistoryList(int pageSize, int pageNo)
+        {
+            PageResult<V_V_PlTypeTCtrlList_Log> list = new PageResult<V_V_PlTypeTCtrlList_Log>();
+
+            if (_dbContext == null)
+            {
+                _dbContext = base.CreateDbContext();
+            }
+            var result = _dbContext.Set<V_V_PlTypeTCtrlList_Log>().Where(a => a.IsActive);
+            list.Total = result.Count();
+            result = result.OrderByDescending(o=>o.PlaneTypeID).OrderByDescending(a => a.ID).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            list.ResultData = result.ToList();
+            return list;
+        }
+
+        /// <summary>
         /// 获取参数
         /// </summary>
         /// <returns>数据列表</returns>

@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper" id="app" @click="cur_index2 = '-1'">
+<div class="wrapper" id="app">
   <header class="main-header">
     <!-- Logo -->
     <a href="javascript:void(0);" class="logo">
@@ -134,67 +134,8 @@
 			</div>
 			记录/页
 		</div>
-		
-		<div class="input-groups pull-right" style="overflow: none;" v-cloak>
+		<div class="input-groups pull-right">
 			<div class="form-group">
-			  <div class="input-wrap">
-				<div class="form-control">
-					<div class="control-title" @click="swicth_select_tab($event,1);" v-text="planetype" v-cloak style="min-width: 100px;"></div>
-					<ul v-show="cur_index2 == 1" class="select-list" v-cloak>
-						<li @click="select_tap($event);">
-							<label>
-								<input type="checkbox" v-model="checked1" @change="cheackAll(1);">
-								<span>全选</span>
-							</label>
-						</li>
-						<li v-for="prop in planetype_data" :value="prop.ID" @click="select_tap($event);">
-							<label>
-								<input type="checkbox" :value="prop.ID" v-model="PlaneTypeID" @change="switch_type($event,1);">
-								<span v-text="prop.PlaneNo"></span>
-							</label>
-						</li>
-						<li class="certain-btn" @click="do_certain_select($event,1);">确 定</li>
-					</ul>
-				</div>
-				<div class="form-control">
-					<div class="control-title" @click="swicth_select_tab($event,2);" v-text="planeno" v-cloak style="min-width: 100px;"></div>
-					<ul v-show="cur_index2 == 2" class="select-list checkAllList" v-cloak>
-						<li @click="select_tap($event);">
-							<label>
-								<input type="checkbox" v-model="checked" @change="cheackAll(2);">
-								<span>全选</span>
-							</label>
-						</li>
-						<li v-for="prop in plane_data" :value="prop.ID" @click="select_tap($event);">
-							<label>
-								<input type="checkbox" :value="prop.ID" v-model="PlaneID" @change="switch_type($event,2);">
-								<span v-text="prop.PlaneNo"></span>
-							</label>
-						</li>
-						<li class="certain-btn" @click="do_certain_select($event,2);">确 定</li>
-					</ul>
-				</div>
-				<div class="form-control">
-					<div class="control-title" @click="swicth_select_tab($event,3);" v-text="listid" v-cloak style="min-width: 100px;"></div>
-					<ul v-show="cur_index2 == 3" class="select-list" v-cloak style="min-width:250px">
-						<li @click="select_tap($event);">
-							<label>
-								<input type="checkbox" v-model="checked3" @change="cheackAll(3);">
-								<span>全选</span>
-							</label>
-						</li>
-						<li v-for="prop in list_data" :value="prop.ID" @click="select_tap($event);" style="height:auto">
-							<label>
-								<input type="checkbox" :value="prop.ID" v-model="ListID" @change="switch_type($event,3);">
-								<span v-text="prop.MainTainName"></span>
-							</label>
-						</li>
-						<li class="certain-btn" @click="do_certain_select($event,3);">确 定</li>
-					</ul>
-				</div>
-			  </div>
-			</div>
-			<!--<div class="form-group">
 			  <div class="input-wrap">
 				  <select class="form-control" v-model="planetype" @change="getlistbyplanetype($event);">
 					  <option value="">请选择机型</option>
@@ -217,7 +158,7 @@
 					  <option v-for="prop in list_data" :value="prop.ID" v-text="prop.MainTainName">
 				 </select>
 			  </div>
-			</div>-->
+			</div>
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="请输入称件号\序号" v-model="keyword"/>
 			</div>
@@ -235,8 +176,9 @@
 		</form>
 		</div>	
 	</section>
-	<section class="content">	
-      <div class="row" v-cloak>
+	<section class="content">
+	  <div class="data-null" v-show="total_page < 1" v-cloak>暂无其他数据</div>			
+      <div v-show="total_page > 0" class="row" v-cloak>
         <div class="col-xs-12">
           <div class="box">
             <!-- /.box-header -->
@@ -271,7 +213,7 @@
 						<th style="text-align: center; height: 28px;">监控参数</th>
 						<th style="text-align: center; height: 28px;">备注</th>
 					</thead>
-					<tbody v-show="total_page > 0">
+					<tbody>
 						 <tr :class="{'checked':cur_index == index}" v-for="(prop,index) in ctrlist_data" :key="index" @click="checked_row_content(prop.ID,index);">
 							<td v-text="index+1" style="text-align: center; height: 28px;"></td>
 							<td v-text="prop.ItemID" style="text-align: center; height: 28px;"></td>
@@ -288,19 +230,19 @@
 								<p v-if="prop.FCheckDate">日期:<span v-text="prop.FCheckDate"></span></p>
 								<p v-if="prop.FAirTime">自新空中时间:<span v-text="prop.FAirTime"></span></p>
 								<p v-if="prop.FOnOffTime">起落次数:<span v-text="prop.FOnOffTime"></span></p>
-								<p v-if="prop.FUpTemprTime">自新加温机时间:<span v-text="prop.FUpTemprTime"></span></p>
+								<p v-if="prop.FUpTemprTime">加温机修后时间TSO:<span v-text="prop.FUpTemprTime"></span></p>
 							</td>
 							<td style="text-align: center; height: 28px;">
 								<p v-if="prop.FCheckDate2">日期:<span v-text="prop.FCheckDate2"></span></p>
 								<p v-if="prop.FAirTime2">自新空中时间:<span v-text="prop.FAirTime2"></span></p>
 								<p v-if="prop.FOnOffTime2">起落次数:<span v-text="prop.FOnOffTime2"></span></p>
-								<p v-if="prop.FUpTemprTime2">自新加温机时间:<span v-text="prop.FUpTemprTime2"></span></p>
+								<p v-if="prop.FUpTemprTime2">加温机修后时间TSO:<span v-text="prop.FUpTemprTime2"></span></p>
 							</td>
 							<td style="text-align: center; height: 28px;">
 								<p v-if="prop.RCheckDate2">日期:<span v-text="prop.RCheckDate2"></span></p>
 								<p v-if="prop.RAirTime2">自新空中时间:<span v-text="prop.RAirTime2"></span></p>
 								<p v-if="prop.ROnOffTime2">起落次数:<span v-text="prop.ROnOffTime2"></span></p>
-								<p v-if="prop.RUpTemprTime2">自新加温机时间:<span v-text="prop.RUpTemprTime2"></span></p>
+								<p v-if="prop.RUpTemprTime2">加温机修后时间TSO:<span v-text="prop.RUpTemprTime2"></span></p>
 							</td>
 							<td v-text="prop.Capacity" style="text-align: center; height: 28px;"></td>
 							<td v-text="prop.ExeCapacity" style="text-align: center; height: 28px;"></td>
@@ -308,19 +250,18 @@
 								<p v-if="prop.RCheckDate">日期:<span v-text="prop.RCheckDate"></span></p>
 								<p v-if="prop.RAirTime">自新空中时间:<span v-text="prop.RAirTime"></span></p>
 								<p v-if="prop.ROnOffTime">起落次数:<span v-text="prop.ROnOffTime"></span></p>
-								<p v-if="prop.RUpTemprTime">自新加温机时间:<span v-text="prop.RUpTemprTime"></span></p>
+								<p v-if="prop.RUpTemprTime">加温机修后时间TSO:<span v-text="prop.RUpTemprTime"></span></p>
 							</td>
 							<td style="text-align: center; height: 28px;">
 								<p v-if="prop.IsWatDate">日期</p>
 								<p v-if="prop.IsWatAirTime">自新空中时间</p>
 								<p v-if="prop.IsWatOnOffTime">起落次数</p>
-								<p v-if="prop.IsWatUpTemprTime">自新加温机时间</p>
+								<p v-if="prop.IsWatUpTemprTime">加温机修后时间TSO</p>
 							</td>
 							<td v-text="prop.Memo" style="text-align: center; height: 28px;"></td>
 						</tr>
 					</tbody>
 				</table>   
-				<div class="data-null" style="padding:20px" v-show="total_page < 1" v-cloak>暂无其他数据</div>		
             </div>
             <!-- /.box-body -->
           </div>
@@ -404,21 +345,12 @@
 	var mvvm = new Vue({
 		el:'#app',
 		data:{
-			cur_index2:'-1',    //3
 			note_num:50,
 			data_type:'1',
-			planetype:'请选择飞机型号',    //2
-			planeno:'请选择飞机机号',
-			listid:'请选择监控项目',
-			PlaneTypeID:[],
-			PlaneID:[],
-			ListID:[],
+			planetype:'',
+			planeno:'',
+			listid:'',
 			keyword:'',
-			//checkAll:false,     //全选按钮
-			childState:[],//选中状态
-			allState:[],//全选状态
-			listLen:0,
-			PlaneAllID:[],
 			total_page:1,
 			cur_page:1,
 			plane_data:[],
@@ -429,10 +361,7 @@
 			cur_index:-1,
 			ctrlist_data:[],
 			list_data:[],
-			menus:[],
-			checked:false,    //机号
-			checked1:false,    //机型
-			checked3:false,    //监控项目
+			menus:[]
 		},
 		mounted:function(){
 			this.$nextTick(function(){
@@ -441,7 +370,7 @@
 				//console.log(loginContext.ticket);
 				this.get_menus();
 				this.getAirplaneOptions();
-				//this.getPlaneOptions();
+				this.getPlaneOptions();
 				this.get_ctrtime_list();
 			});
 		},
@@ -451,202 +380,6 @@
 				this.ctrlist_data = [];
 				this.get_ctrtime_list();
 			},
-
-			switch_type:function(evt,type2){
-				var type = evt.target.value;
-				var self=this;
-				if(type2 == 1){    //机型
-					if(self.PlaneTypeID.length==self.planetype_data.length){
-						self.checked1=true;
-					}
-					//如果不一致，取消全选按钮选择
-					else{
-						self.checked1=false;
-					}
-					self.getlistbyplanetype(evt,type);
-				}
-				if(type2 == 2){    //机号
-					//console.log(self.PlaneID.length);
-					//console.log(self.plane_data.length);
-					//判断当前PlanID长度和所有数据长度是否一致；
-					//如果一致，全选按钮选择
-					if(self.PlaneID.length==self.plane_data.length){
-						self.checked=true;
-					}
-					//如果不一致，取消全选按钮选择
-					else{
-						self.checked=false;
-					}
-					
-					//调用函数
-					self.getlistbyplanetype2(evt,type);
-				}
-				else{    //监控项目
-					if(self.ListID.length==self.list_data.length){
-						self.checked3=true;
-					}
-					//如果不一致，取消全选按钮选择
-					else{
-						self.checked3=false;
-					}
-				}
-			},	
-			
-			//点击全选
-			cheackAll:function(type){
-				var self = this;
-				//console.log(self.PlaneID);
-				//console.log(self.checked);
-				if(type==1){
-					if (!self.checked1) {//实现反选（机型）
-						self.PlaneTypeID = [];
-					}else{//实现反选（机型）
-						self.PlaneTypeID = [];
-						self.planetype_data.forEach(function(item) {
-							console.log(item.ID);
-							self.PlaneTypeID.push(item.ID);
-						});
-					}
-					//console.log(self.PlaneTypeID);
-					self.getlistbyplanetype('','');
-				}
-				else if(type==2){
-					if (!self.checked) {//实现反选（机号）
-						self.PlaneID = [];
-					}else{//实现全选（机号）
-						self.PlaneID = [];
-						self.plane_data.forEach(function(item) {
-							//console.log(item.ID);
-							self.PlaneID.push(item.ID);
-						});
-						//console.log(self.PlaneTypeID);
-						//console.log(self.PlaneID);
-						self.getlistbyplanetype2('','');
-					}
-				}
-				else{
-					if (!self.checked3) {//实现反选（监控项目）
-						self.ListID = [];
-					}else{//实现反选（监控项目）
-						self.ListID = [];
-						self.list_data.forEach(function(item) {
-							//console.log(item.ID);
-							self.ListID.push(item.ID);
-						});
-					}
-				}
-			},
-			//1
-			swicth_select_tab:function(evt,type){
-				//支持多选筛选数据条件
-				evt.stopPropagation();
-				var self = this;
-				if(self.cur_index2 == type){
-					self.cur_index2 = '-1';
-				}else{
-					self.cur_index2 = type;
-				}
-				
-			},
-			select_tap:function(evt){
-				evt.stopPropagation();
-			},
-			do_certain_select:function(evt,type){
-				//判断点击确定是否选取了相应的类型值
-				var self = this;
-				evt.stopPropagation();
-				if(type == 1 && this.PlaneTypeID.length < 1){
-					Common.tips("请选择飞机机型");
-					self.planetype = "请选择飞机型号";
-					return;
-				}
-				if(type == 2 && this.PlaneID.length < 1){
-					Common.tips("请选择飞机机号");
-					self.planeno = "请选择飞机机号";
-					return;
-				}
-				if(type == 3 && this.ListID.length < 1){
-					Common.tips("请选择监控项目");
-					self.listid = "请选择监控项目";
-					return;
-				}
-				console.log(type);
-				
-				if(type == 1){
-					self.planeno='请选择飞机机号';
-					self.listid='请选择监控项目';
-					self.PlaneID=[];
-					self.list_data=[];
-					self.checked=false;
-					self.checked3=false;
-					var textArr = [];
-					$(evt.target).parent().find('li').each(function(i,v){
-						console.log(v);
-						$(v).find("input[type='checkbox']").each(function(j,k){
-							if(k.checked){
-								//如果全选按钮选中，直接显示全选
-								if(self.checked1==true){
-									self.planetype="全选";
-								}
-								//全选按钮未选中，显示当前选中项
-								else{
-									console.log($(k).next().text());
-									textArr.push($(k).next().text());
-									self.planetype = textArr.toString();
-								}
-							}
-						})
-					});
-				}
-				
-				if(type == 2){
-					var textArr = [];
-					self.listid='请选择监控项目';
-					self.checked3=false;
-					$(evt.target).parent().find('li').each(function(i,v){
-						console.log(v);
-						$(v).find("input[type='checkbox']").each(function(j,k){
-							if(k.checked){
-								//如果全选按钮选中，直接显示全选
-								if(self.checked==true){
-									self.planeno="全选";
-								}
-								//全选按钮未选中，显示当前选中项
-								else{
-									console.log($(k).next().text());
-									textArr.push($(k).next().text());
-									self.planeno = textArr.toString();
-								}
-							}
-						})
-					});
-				}
-				
-				if(type == 3){
-					var textArr = [];
-					$(evt.target).parent().find('li').each(function(i,v){
-						console.log(v);
-						$(v).find("input[type='checkbox']").each(function(j,k){
-							if(k.checked){
-								//如果全选按钮选中，直接显示全选
-								if(self.checked3==true){
-									self.listid="全选";
-								}
-								//全选按钮未选中，显示当前选中项
-								else{
-									console.log($(k).next().text());
-									textArr.push($(k).next().text());
-									self.listid = textArr.toString();
-								}
-							}
-						})
-					});
-				}
-				//console.log(textArr);
-				this.cur_index2 = '-1';
-			},
-			
-			
 			query_data_list:function(evt){
 				this.ctrlist_data = [];
 				this.get_ctrtime_list();
@@ -709,93 +442,71 @@
 					excelstyles:['text-align','height','padding']
 				});
 			},
-			getlistbyplanetype:function(evt,typeid){
+			getlistbyplanetype:function(evt){
 				var self = this;
-				if(self.PlaneTypeID.length < 1){
-					self.getPlaneOptions();
-					return;
-				}else{
-					$.ajax({
-						type: "get",
-						url: "../../api/planes/getlistbyplanetype",
-						data: {"pageSize":100,"pageNo":1,"planeTypeID":self.PlaneTypeID.toString()},
-						beforeSend:function(XHR){
-							//发送ajax请求之前向http的header里面加入验证信息
-							XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
-						},
-						success: function (data, status) {
-							//console.log(data);
-							setTimeout(function(){
-								self.plane_data = [];
-								console.log(data.ResultData)
-								data.ResultData.forEach(function(n,m){
-									if(m <= data.ResultData.length){
-										self.plane_data.push({
-											'ID': n.ID,
-											'PlaneNo':n.PlaneNo
-										});
-										self.PlaneAllID.push({
-											'ID': n.ID,
-											'PlaneNo':n.PlaneNo
-										});
-									}
-								});
-							},0);
-						},
-						error: function (e) {
-							Common.tips("请求失败");
-							location.href="login.html?auth=error";
-						},
-						complete: function () {
+				$.ajax({
+					type: "get",
+					url: "../../api/planes/getlistbyplanetype",
+					data: {"pageSize":100,"pageNo":1,"planeTypeID":self.planetype},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						//console.log(data);
+						setTimeout(function(){
+							self.plane_data = [];
+							data.ResultData.forEach(function(n,m){
+								if(m <= data.ResultData.length){
+									self.plane_data.push({
+										'ID': n.ID,
+										'PlaneNo':n.PlaneNo
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
 
-						}
-					});
-				}
+					}
+				});
 			},
-			getlistbyplanetype2:function(evt,typeid){
+			getlistbyplanetype2:function(evt){
 				var self = this;
-				console.log(11111);
-				console.log(self.PlaneTypeID);
-				console.log(self.PlaneID);
-				var finalID='"'+self.PlaneTypeID.toString()+'"';
-				console.log(finalID);
-				if(self.PlaneID.length < 1){
-					//self.getPlaneOptions();
-					return;
-				}else{
-					console.log(22222);
-					$.ajax({
-						type: "get",
-						url: "../../api/PlTypeTCtrlList/getlistbyplanetype",
-						data: {"pageSize":100,"pageNo":1,"planeTypeID":self.PlaneTypeID.toString()},
-						beforeSend:function(XHR){
-							//发送ajax请求之前向http的header里面加入验证信息
-							XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
-						},
-						success: function (data, status) {
-							console.log(data);
-							setTimeout(function(){
-								self.list_data = [];
-								console.log(data.ResultData);
-								data.ResultData.forEach(function(n,m){
-									if(m <= data.ResultData.length){
-										self.list_data.push({
-											'ID': n.ID,
-											'MainTainName':n.MainTainName
-										});
-									}
-								});
-							},0);
-						},
-						error: function (e) {
-							Common.tips("请求失败");
-							location.href="login.html?auth=error";
-						},
-						complete: function () {
+				$.ajax({
+					type: "get",
+					url: "../../api/PlTypeTCtrlList/getlistbyplanetype",
+					data: {"pageSize":100,"pageNo":1,"planeTypeID":self.planetype},
+					beforeSend:function(XHR){
+						//发送ajax请求之前向http的header里面加入验证信息
+						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
+					},
+					success: function (data, status) {
+						//console.log(data);
+						setTimeout(function(){
+							self.list_data = [];
+							data.ResultData.forEach(function(n,m){
+								if(m <= data.ResultData.length){
+									self.list_data.push({
+										'ID': n.ID,
+										'MainTainName':n.MainTainName
+									});
+								}
+							});
+						},0);
+					},
+					error: function (e) {
+						Common.tips("请求失败");
+						location.href="login.html?auth=error";
+					},
+					complete: function () {
 
-						}
-					});
-				}
+					}
+				});
 			},
 			getAirplaneOptions:function(){
 				var self = this;
@@ -866,29 +577,21 @@
 			get_ctrtime_list:function(){
 				var self = this;
 				$.ajax({
-					type: "post",
+					type: "get",
 					url: "../../api/PlanesTCtrlItem/getlist",
-					data: {
-						"pageSize":self.note_num,
-						"pageNo":self.cur_page,
-						"planeTypeID":self.PlaneTypeID.toString(),
-						"planeNo":self.PlaneID.toString(),
-						"listID":self.ListID.toString(),
-						'keyWord':self.keyword
-					},
+					data: {"pageSize":self.note_num,"pageNo":self.cur_page,"planeTypeID":self.planetype,"planeNo":self.planeno,"listID":self.listid,'keyWord':self.keyword},
 					beforeSend: function (XHR) {
                     //发送ajax请求之前向http的head里面加入验证信息
 						XHR.setRequestHeader('Authorization', 'BasicAuth ' + loginContext.ticket);
 					},
 					success: function (data, status) {
 						//console.log(data);
-						console.log(data.ResultData);
 						self.total_page = Math.ceil(data.Total/self.note_num);
 						setTimeout(function(){
 							data.ResultData.forEach(function(m,n){
 								if(n <= data.ResultData.length){
 									self.ctrlist_data.push({
-										 ItemID:m.RowNo,
+										 ItemID:m.PlTypeTCtrl,
 										 ID:m.ID,
 										 PlaneTypeID:m.PlaneTypeID,
 										 TypeName:m.TypeName,
