@@ -244,6 +244,9 @@
     <Compile Include="EF\PlanesTCtrlItem.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\PlanesTCtrlItem_Log.cs">
+      <DependentUpon>ACMSEFEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\PlanesTCtrlItem_ReList.cs">
       <DependentUpon>ACMSEFEntities.tt</DependentUpon>
     </Compile>

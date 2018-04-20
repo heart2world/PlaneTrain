@@ -29,9 +29,9 @@
         <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem" Width="1.5" PointX="13.375" PointY="4.75" />
         <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Check" Width="1.5" PointX="5.375" PointY="13.75" />
         <EntityTypeShape EntityType="ACMSModel.PlTypeTCtrlList_Log" Width="1.5" PointX="7.75" PointY="10.75" />
-        <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem_Log" Width="1.5" PointX="7.75" PointY="16.75" />
         <EntityTypeShape EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" Width="1.5" PointX="2.75" PointY="19.75" />
         <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Log" Width="1.5" PointX="19.375" PointY="5.75" />
+        <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem_Log" Width="1.5" PointX="7.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

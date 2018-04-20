@@ -56,9 +56,9 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_V_PlTypeTCtrlList_Log>().Where(a => a.IsActive);
+            var result = _dbContext.Set<V_V_PlTypeTCtrlList_Log>().Where(a => 1 == 1);
             list.Total = result.Count();
-            result = result.OrderByDescending(o=>o.PlaneTypeID).OrderByDescending(a => a.ID).Skip((pageNo - 1) * pageSize).Take(pageSize);
+            result = result.OrderByDescending(o => o.PlaneTypeID).OrderByDescending(a => a.ID).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
             return list;
         }

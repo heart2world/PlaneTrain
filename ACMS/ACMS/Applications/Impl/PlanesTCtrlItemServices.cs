@@ -212,7 +212,7 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_PlanesTCtrlItem_Log>().Where(a => a.IsActive);
+            var result = _dbContext.Set<V_PlanesTCtrlItem_Log>().Where(x => 1 == 1);
             list.Total = result.Count();
             result = result.OrderByDescending(a => a.PlaneTypeID).ThenByDescending(a => a.PlaneNo).Skip((pageNo - 1) * pageSize).Take(pageSize);
             list.ResultData = result.ToList();
