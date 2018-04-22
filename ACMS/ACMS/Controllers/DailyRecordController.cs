@@ -141,6 +141,18 @@ namespace ACMS.Controllers
         }
 
 
+        /// <summary>
+        /// 根据飞机号获取每个飞机最新的逐日登记数据
+        /// </summary>
+        /// <param name="planeNos"></param>
+        /// <returns></returns>
+        [HttpPost, Route("cessna172r/getLastRecordByPlaneNo")]
+        public IHttpActionResult GetLastCESSNA172RDailyRecordByPlaneNo(List<string> planeNoList)
+        {
+            return this.Ok(_dailyRecordService.GetLastCESSNA172RDailyRecordByPlaneNo(planeNoList));
+        }
+
+
         [HttpGet, Route("cessna172r/download/{type}/{planeID}/{startDate}/{endDate}")]
         [AllowAnonymous]
         public HttpResponseMessage DownloadCESSNA172RDailyRecord(string type, string planeID, string startDate, string endDate)
@@ -234,6 +246,17 @@ namespace ACMS.Controllers
         public IHttpActionResult GetLastPA44_180DailyRecordByPlaneID(string planeID)
         {
             return this.Ok(_dailyRecordService.GetLastPA44_180DailyRecordByPlaneID(planeID));
+        }
+
+        /// <summary>
+        /// 根据飞机号获取每个飞机最新的逐日登记数据
+        /// </summary>
+        /// <param name="planeNos"></param>
+        /// <returns></returns>
+        [HttpPost, Route("pa44-180/getLastRecordByPlaneNo")]
+        public IHttpActionResult GetLastPA44_180DailyRecordByPlaneNo(List<string> planeNoList)
+        {
+            return this.Ok(_dailyRecordService.GetLastPA44_180DailyRecordByPlaneNo(planeNoList));
         }
 
 

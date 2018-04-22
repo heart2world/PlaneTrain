@@ -749,6 +749,31 @@ namespace ACMS.Applications.Impl
             return query;
         }
 
+
+        /// <summary>
+        /// 根据飞机号获取每个飞机最新的逐日登记数据
+        /// </summary>
+        /// <param name="planeNos"></param>
+        /// <returns></returns>
+        public List<CESSNA172RDailyRecord> GetLastCESSNA172RDailyRecordByPlaneNo(List<string> planeNos)
+        {
+            List<CESSNA172RDailyRecord> result = new List<CESSNA172RDailyRecord>();
+            var planesList = _dbContext.Set<Planes>().ToList();
+            foreach (var planeNo in planeNos)
+            {
+                var planeQuery = planesList.Where(x => x.PlaneNo == planeNo && x.IsActive).FirstOrDefault();
+                if (planeQuery != null)
+                {
+                    var query = GetLastCESSNA172RDailyRecordByPlaneID(planeQuery.ID);
+                    if (query != null)
+                    {
+                        result.Add(query);
+                    }
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// 获取上一条记录（不分数据类型）
         /// </summary>
@@ -1661,6 +1686,30 @@ namespace ACMS.Applications.Impl
         {
             var query = _dbContext.Set<PA44_180DailyRecord>().Where(x => x.PlanID == planeID && x.IsActive).OrderByDescending(o => o.InputDate).ThenByDescending(o => o.CreateTime).FirstOrDefault();
             return query;
+        }
+
+        /// <summary>
+        /// 根据飞机号获取每个飞机最新的逐日登记数据
+        /// </summary>
+        /// <param name="planeNos"></param>
+        /// <returns></returns>
+        public List<PA44_180DailyRecord> GetLastPA44_180DailyRecordByPlaneNo(List<string> planeNos)
+        {
+            List<PA44_180DailyRecord> result = new List<PA44_180DailyRecord>();
+            var planesList = _dbContext.Set<Planes>().ToList();
+            foreach (var planeNo in planeNos)
+            {
+                var planeQuery = planesList.Where(x => x.PlaneNo == planeNo && x.IsActive).FirstOrDefault();
+                if (planeQuery != null)
+                {
+                    var query = GetLastPA44_180DailyRecordByPlaneID(planeQuery.ID);
+                    if (query != null)
+                    {
+                        result.Add(query);
+                    }
+                }
+            }
+            return result;
         }
 
         /// <summary>

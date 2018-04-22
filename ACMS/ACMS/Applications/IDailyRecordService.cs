@@ -128,6 +128,13 @@ namespace ACMS.Applications
         /// <returns></returns>
         CESSNA172RDailyRecord GetLatestCESSNA172RDailyRecord(string planeID);
 
+        /// <summary>
+        /// 根据飞机号获取每个飞机最新的逐日登记数据
+        /// </summary>
+        /// <param name="planeNos"></param>
+        /// <returns></returns>
+        List<CESSNA172RDailyRecord> GetLastCESSNA172RDailyRecordByPlaneNo(List<string> planeNos);
+
         HttpResponseMessage GetCESSNA172RDownloadFileStream(string type, string planeID, string startDate, string endDate);
 
         #endregion
@@ -206,6 +213,13 @@ namespace ACMS.Applications
         /// </summary>
         /// <returns></returns>
         PA44_180DailyRecord GetLastPA44_180DailyRecordByPlaneID(string planeID);
+
+        /// <summary>
+        /// 根据飞机号获取每个飞机最新的逐日登记数据
+        /// </summary>
+        /// <param name="planeNos"></param>
+        /// <returns></returns>
+        List<PA44_180DailyRecord> GetLastPA44_180DailyRecordByPlaneNo(List<string> planeNos);
 
 
         HttpResponseMessage GetPA44_180DownloadFileStream(string type, string planeID, string startDate, string endDate);
