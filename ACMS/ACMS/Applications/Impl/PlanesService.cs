@@ -82,7 +82,7 @@ namespace ACMS.Applications.Impl
             }
 
             list.Total = tempResult.Count();
-            tempResult = tempResult.OrderByDescending(a => a.CreateTime).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+            tempResult = tempResult.OrderBy(a => a.PlaneNo).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
             list.ResultData = tempResult.ToList();
             return list;
         }
@@ -102,6 +102,7 @@ namespace ACMS.Applications.Impl
             var result = (from a in _dbContext.Set<Planes>()
                           join b in _dbContext.Set<PlaneType>() on a.PlaneTypeID equals b.ID
                           where a.IsActive && b.TypeName.ToLower() == SpecialPlaneType.ToLower()
+                          orderby a.PlaneNo
                           select a).ToList();
 
             return result;
