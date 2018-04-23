@@ -617,12 +617,13 @@ namespace ACMS.Applications.Impl
 
                 //汇总每日每个飞机的登记数据
                 var result3 = (from item in result2
-                               group item by new { item.PlaneNo, item.InputDate }
+                               group item by new { item.PlaneNo, item.InputDate, item.TypeName }
                                    into temp
                                    select new
                                    {
                                        InputDate = temp.Key.InputDate,
                                        PlaneNo = temp.Key.PlaneNo,
+                                       PlaneTypeName = temp.Key.TypeName,
                                        Count = temp.Count()
                                    }).ToList();
                 //汇总每飞机的总飞行天数 有条件查询的
@@ -632,9 +633,13 @@ namespace ACMS.Applications.Impl
                                       {
                                           InputDate = a.InputDate,
                                           PlaneNo = a.PlaneNo,
+                                          PlaneTypeName = a.PlaneTypeName,
                                           Count = a.Count
                                       }).ToList();
-                list.TotalPagesCount = test.GroupBy(m => m.InputDate).Count();//返回所有飞机总飞行天数 临时借用下这个字段
+                list.TotalFlyCount = test.GroupBy(m => m.InputDate).Count();//返回所有飞机总飞行天数 临时借用下这个字段
+                list.PFlyCount = test.Where(x => x.PlaneTypeName == "CESSNA172R").GroupBy(m => m.InputDate).Count();
+                list.CFlyCount = test.Where(x => x.PlaneTypeName == "PA44-180").GroupBy(m => m.InputDate).Count();
+
                 foreach (var item in list.ResultData)
                 {
                     item.FlightDays = result3.Where(m => m.PlaneNo == item.PlaneNo).Count();

@@ -23,5 +23,8 @@ namespace ACMS.Models
         public List<T> ResultData { get; set; }
         public int Total { get; set; }
         public int TotalPagesCount { get; set; }
+        public int PFlyCount { get; set; }
+        public int CFlyCount { get; set; }
+        public int TotalFlyCount { get; set; }
     }
 }
