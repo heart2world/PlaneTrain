@@ -57,7 +57,7 @@ namespace ACMS.Applications.Impl
 
             if (allPlaneTypeList.Count > 0)
             {
-                var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive);
+                var result = _dbContext.Set<V_DailyRecordReport>().Where(a => a.IsActive && a.Type == 2);//初值不统计
                 if (!string.IsNullOrEmpty(startDate))
                 {
                     result = result.Where(x => string.Compare(x.InputDate, startDate) >= 0);
