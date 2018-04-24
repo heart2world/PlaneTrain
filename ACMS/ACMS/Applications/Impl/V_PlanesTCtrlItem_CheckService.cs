@@ -40,7 +40,7 @@ namespace ACMS.Applications.Impl
             {
                 _dbContext = base.CreateDbContext();
             }
-            var result = _dbContext.Set<V_PlanesTCtrlItem_Check>().Where(a => a.IsActive && a.IsPrinted == isPrinted);
+            var result = _dbContext.Set<V_PlanesTCtrlItem_Check>().Where(a => a.IsActive && a.IsCtrl && a.IsPrinted == isPrinted);
 
             result = result.Where(a => (days != null ? a.DateDiffValue <= days && a.IsWatDate.Value : 1 == 1) ||
             (airTime != null ? a.IsWatAirTime.Value && a.RAirTime - a.PlanNewAirTime <= airTime : 1 == 1)

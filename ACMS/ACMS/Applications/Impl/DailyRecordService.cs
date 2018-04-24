@@ -637,8 +637,8 @@ namespace ACMS.Applications.Impl
                                           Count = a.Count
                                       }).ToList();
                 list.TotalFlyCount = test.GroupBy(m => m.InputDate).Count();//返回所有飞机总飞行天数 临时借用下这个字段
-                list.PFlyCount = test.Where(x => x.PlaneTypeName == "CESSNA172R").GroupBy(m => m.InputDate).Count();
-                list.CFlyCount = test.Where(x => x.PlaneTypeName == "PA44-180").GroupBy(m => m.InputDate).Count();
+                list.CFlyCount = test.Where(x => x.PlaneTypeName == "CESSNA172R").GroupBy(m => m.InputDate).Count();
+                list.PFlyCount = test.Where(x => x.PlaneTypeName == "PA44-180").GroupBy(m => m.InputDate).Count();
 
                 foreach (var item in list.ResultData)
                 {
