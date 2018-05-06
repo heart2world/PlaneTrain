@@ -111,5 +111,68 @@ namespace ACMS.Applications.Impl
                 };
             }
         }
+
+
+        /// <summary>
+        /// 增加年份打印数量
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="addCount"></param>
+        /// <returns></returns>
+        public OperationResult AddPrintCount(int year, int addCount)
+        {
+            var query = _dbContext.Set<PrintCount>().Where(x => x.Year == year).FirstOrDefault();
+            if (query != null)
+            {
+                query.Count += addCount;
+                _dbContext.SaveChanges();
+                return new OperationResult()
+                {
+                    Result = true
+                };
+            }
+            try
+            {
+                var item = new PrintCount();
+                item.ID = Guid.NewGuid().ToString();
+                item.Year = year;
+                item.Count = addCount;
+                _dbContext.Set<PrintCount>().Add(item);
+                _dbContext.SaveChanges();
+                return new OperationResult()
+                {
+                    Result = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult()
+                {
+                    Result = false,
+                    ResultMsg = ex.Message
+                };
+            }
+        }
+
+
+        /// <summary>
+        /// 根据年份，以及需要打印的数量获取最大打印数量
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public int GetPrintCountByYear(int year)
+        {
+            var query = _dbContext.Set<PrintCount>().Where(x => x.Year == year).FirstOrDefault();
+            //如果不为空，则返回表中的数量+打印数量，否则返回打印数量
+            if (query != null)
+            {
+                return query.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

@@ -174,8 +174,8 @@
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.PlanesTCtrlItem_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.PlanesTCtrlItem_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="PlanesTCtrlItem_Log">
           <Key>
             <PropertyRef Name="ID" />
@@ -292,6 +292,14 @@ warning 6002: The table/view 'ACMS.dbo.PlanesTCtrlItem_Log' does not have a prim
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="OperateType" Type="int" />
         </EntityType>
+        <EntityType Name="PrintCount">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Count" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ReportRecord">
           <Key>
             <PropertyRef Name="ID" />
@@ -371,8 +379,8 @@ warning 6002: The table/view 'ACMS.dbo.PlanesTCtrlItem_Log' does not have a prim
           <Property Name="UpdateTime" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_DailyRecordReport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_DailyRecordReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_DailyRecordReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -407,8 +415,8 @@ warning 6002: The table/view 'ACMS.dbo.V_DailyRecordReport' does not have a prim
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="PlaneTypeID" Type="varchar" MaxLength="128" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_EngineReport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_EngineReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_EngineReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -440,8 +448,8 @@ warning 6002: The table/view 'ACMS.dbo.V_EngineReport' does not have a primary k
           <Property Name="PlanDayAirTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_Planes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_Planes”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_Planes">
           <Key>
             <PropertyRef Name="ID" />
@@ -473,8 +481,8 @@ warning 6002: The table/view 'ACMS.dbo.V_Planes' does not have a primary key def
           <Property Name="Updator" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_PlanesTCtrlItem">
           <Key>
             <PropertyRef Name="ID" />
@@ -532,8 +540,8 @@ warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem' does not have a primar
           <Property Name="ROnOffTime2" Type="int" />
           <Property Name="RUpTemprTime2" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem_Check' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem_Check”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_PlanesTCtrlItem_Check">
           <Key>
             <PropertyRef Name="ID" />
@@ -598,8 +606,8 @@ warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem_Check' does not have a 
           <Property Name="IsPrinted" Type="int" Nullable="false" />
           <Property Name="DateDiffValue" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_PlanesTCtrlItem_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_PlanesTCtrlItem_Log">
           <Key>
             <PropertyRef Name="ID" />
@@ -658,8 +666,8 @@ warning 6002: The table/view 'ACMS.dbo.V_PlanesTCtrlItem_Log' does not have a pr
           <Property Name="Updator" Type="nvarchar" MaxLength="50" />
           <Property Name="OperateType" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_PlTypeTCtrlList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_PlTypeTCtrlList”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_PlTypeTCtrlList">
           <Key>
             <PropertyRef Name="ID" />
@@ -694,8 +702,8 @@ warning 6002: The table/view 'ACMS.dbo.V_PlTypeTCtrlList' does not have a primar
           <Property Name="PlaneTypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="Memo" Type="nvarchar" MaxLength="200" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_RecordMonthReport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_RecordMonthReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_RecordMonthReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -735,8 +743,8 @@ warning 6002: The table/view 'ACMS.dbo.V_RecordMonthReport' does not have a prim
           <Property Name="PlanNewRiseAndFallNum" Type="int" />
           <Property Name="PlanNewHeatingMachineTime" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ACMS.dbo.V_V_PlTypeTCtrlList_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“ACMS.dbo.V_V_PlTypeTCtrlList_Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="V_V_PlTypeTCtrlList_Log">
           <Key>
             <PropertyRef Name="TCtrlID" />
@@ -785,6 +793,7 @@ warning 6002: The table/view 'ACMS.dbo.V_V_PlTypeTCtrlList_Log' does not have a 
           <EntitySet Name="PlaneType" EntityType="Self.PlaneType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlTypeTCtrlList" EntityType="Self.PlTypeTCtrlList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlTypeTCtrlList_Log" EntityType="Self.PlTypeTCtrlList_Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrintCount" EntityType="Self.PrintCount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportRecord" EntityType="Self.ReportRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
@@ -1142,6 +1151,7 @@ warning 6002: The table/view 'ACMS.dbo.V_V_PlTypeTCtrlList_Log' does not have a 
           <EntitySet Name="V_V_PlTypeTCtrlList_Log" EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" />
           <EntitySet Name="V_PlanesTCtrlItem_Log" EntityType="ACMSModel.V_PlanesTCtrlItem_Log" />
           <EntitySet Name="PlanesTCtrlItem_Log" EntityType="ACMSModel.PlanesTCtrlItem_Log" />
+          <EntitySet Name="PrintCount" EntityType="ACMSModel.PrintCount" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -1870,6 +1880,14 @@ warning 6002: The table/view 'ACMS.dbo.V_V_PlTypeTCtrlList_Log' does not have a 
           <Property Name="Updator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="OperateType" Type="Int32" />
         </EntityType>
+        <EntityType Name="PrintCount">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Count" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2545,6 +2563,15 @@ warning 6002: The table/view 'ACMS.dbo.V_V_PlTypeTCtrlList_Log' does not have a 
                 <ScalarProperty Name="PlaneNo" ColumnName="PlaneNo" />
                 <ScalarProperty Name="PlaneTypeID" ColumnName="PlaneTypeID" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrintCount">
+            <EntityTypeMapping TypeName="ACMSModel.PrintCount">
+              <MappingFragment StoreEntitySet="PrintCount">
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

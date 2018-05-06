@@ -32,6 +32,7 @@
         <EntityTypeShape EntityType="ACMSModel.V_V_PlTypeTCtrlList_Log" Width="1.5" PointX="2.75" PointY="19.75" />
         <EntityTypeShape EntityType="ACMSModel.V_PlanesTCtrlItem_Log" Width="1.5" PointX="19.375" PointY="5.75" />
         <EntityTypeShape EntityType="ACMSModel.PlanesTCtrlItem_Log" Width="1.5" PointX="7.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ACMSModel.PrintCount" Width="1.5" PointX="10.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

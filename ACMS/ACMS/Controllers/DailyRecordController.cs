@@ -147,9 +147,9 @@ namespace ACMS.Controllers
         /// <param name="planeNos"></param>
         /// <returns></returns>
         [HttpPost, Route("cessna172r/getLastRecordByPlaneNo")]
-        public IHttpActionResult GetLastCESSNA172RDailyRecordByPlaneNo(List<string> planeNoList)
+        public IHttpActionResult GetLastCESSNA172RDailyRecordByPlaneNo(GetParam param)
         {
-            return this.Ok(_dailyRecordService.GetLastCESSNA172RDailyRecordByPlaneNo(planeNoList));
+            return this.Ok(_dailyRecordService.GetLastCESSNA172RDailyRecordByPlaneNo(param.planeNoList));
         }
 
 
@@ -254,9 +254,9 @@ namespace ACMS.Controllers
         /// <param name="planeNos"></param>
         /// <returns></returns>
         [HttpPost, Route("pa44-180/getLastRecordByPlaneNo")]
-        public IHttpActionResult GetLastPA44_180DailyRecordByPlaneNo(List<string> planeNoList)
+        public IHttpActionResult GetLastPA44_180DailyRecordByPlaneNo(GetParam param)
         {
-            return this.Ok(_dailyRecordService.GetLastPA44_180DailyRecordByPlaneNo(planeNoList));
+            return this.Ok(_dailyRecordService.GetLastPA44_180DailyRecordByPlaneNo(param.planeNoList));
         }
 
 
@@ -268,5 +268,12 @@ namespace ACMS.Controllers
         }
 
         #endregion
+
     }
+
+    public class GetParam
+    {
+        public List<string> planeNoList { get; set; }
+    }
+
 }

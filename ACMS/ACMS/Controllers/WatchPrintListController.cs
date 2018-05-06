@@ -35,6 +35,18 @@ namespace ACMS.Controllers
         {
             return Ok(_service.AddList(param.list, base.CurrentUserId));
         }
+
+        [HttpGet, Route("addPrintCount")]
+        public IHttpActionResult AddPrintCount(int year, int addCount)
+        {
+            return Ok(_service.AddPrintCount(year, addCount));
+        }
+
+        [HttpGet, Route("getPrintCountByYear")]
+        public IHttpActionResult GetPrintCountByYear(int year)
+        {
+            return Ok(_service.GetPrintCountByYear(year));
+        }
     }
 
     public class Params
